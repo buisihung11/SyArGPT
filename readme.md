@@ -32,8 +32,12 @@ An AI Application that generates diagram from user system requirements
 
 ## ⌨️ Development
 
+### Component Architect
+[![][component-arch]][deployment-link]
+
 TODO
 
 
 [image-banner]: https://github.com/buisihung11/SyArGPT/blob/main/assets/banner.png?raw=true
+[component-arch]: https://github.com/buisihung11/SyArGPT/blob/main/assets/ComponentArchitect.png?raw=true
 [deployment-link]: https://github.com/buisihung11/SyArGPT
