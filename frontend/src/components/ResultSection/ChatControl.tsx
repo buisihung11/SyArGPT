@@ -11,18 +11,18 @@ import { CornerDownLeft, Mic, Paperclip } from "lucide-react"
 const ChatControl = () => {
   return (
     <div
-      className="flex flex-col relativeoverflow-hidden rounded-lg bg-background"
+      className="flex flex-col h-full gap-4 relativeoverflow-hidden rounded-lg bg-background"
       x-chunk="dashboard-03-chunk-1"
     >
-      <div className="p-4">
-        <h4 className="scroll-m-20 text-lg font-semibold tracking-tight mb-2">Describe your prompt</h4>
+      <div className="p-4 flex-1">
+        <h4 className="scroll-m-20 text-sm font-semibold tracking-tight mb-2">Describe your prompt</h4>
         <Label htmlFor="message" className="sr-only">
           Message
         </Label>
         <Textarea
           id="message"
           placeholder="Type your message here..."
-          className="resize-none min-h-60 h-full border p-3 focus-visible:ring-0 shadow-none flex-1"
+          className="resize-none h-full border p-3 focus-visible:ring-0 shadow-none flex-1"
         />
       </div>
 

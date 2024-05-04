@@ -150,7 +150,7 @@ const ResultSection = () => {
   const [isLoaded, setIsLoaded] = useState(false)
   const [fetchingXMLFile, setFetchingXMLFile] = useState(false)
   const drawioRef = useRef<DrawIoEmbedRef>(null)
-  const downloadRef = useRef<AnchorProps | null>(null)
+  const downloadRef = useRef<HTMLAnchorElement | null>(null)
 
   useEffect(() => {
     if (drawioRef.current && isLoaded) {

@@ -171,10 +171,10 @@ export default function Dashboard() {
           </header>
           <main className="flex-1 overflow-auto">
             <ResizablePanelGroup
-              autoSaveId="persitentResize"
+              // autoSaveId="persitentResize"
               direction="horizontal"
             >
-              <ResizablePanel minSize={15} defaultValue={20}>
+              <ResizablePanel minSize={20} defaultValue={20}>
                 <ChatControl />
               </ResizablePanel>
               <ResizableHandle withHandle />
