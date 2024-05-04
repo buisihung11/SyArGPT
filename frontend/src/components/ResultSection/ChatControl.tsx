@@ -1,49 +1,39 @@
-import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import { CornerDownLeft, Mic, Paperclip } from "lucide-react";
+import { Button } from "@/components/ui/button"
+import { Label } from "@/components/ui/label"
+import { Textarea } from "@/components/ui/textarea"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger
+} from "@/components/ui/tooltip"
+import { CornerDownLeft, Mic, Paperclip } from "lucide-react"
 
 const ChatControl = () => {
   return (
-    <form
-      className="relative overflow-hidden rounded-lg border bg-background focus-within:ring-1 focus-within:ring-ring"
+    <div
+      className="flex flex-col relativeoverflow-hidden rounded-lg bg-background"
       x-chunk="dashboard-03-chunk-1"
     >
-      <Label htmlFor="message" className="sr-only">
-        Message
-      </Label>
-      <Textarea
-        id="message"
-        placeholder="Type your message here..."
-        className="min-h-12 resize-none border-0 p-3 shadow-none focus-visible:ring-0"
-      />
-      <div className="flex items-center p-3 pt-0">
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button variant="ghost" size="icon">
-              <Paperclip className="size-4" />
-              <span className="sr-only">Attach file</span>
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent side="top">Attach File</TooltipContent>
-        </Tooltip>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button variant="ghost" size="icon">
-              <Mic className="size-4" />
-              <span className="sr-only">Use Microphone</span>
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent side="top">Use Microphone</TooltipContent>
-        </Tooltip>
-        <Button type="submit" size="sm" className="ml-auto gap-1.5">
+      <div className="p-4">
+        <h4 className="scroll-m-20 text-lg font-semibold tracking-tight mb-2">Describe your prompt</h4>
+        <Label htmlFor="message" className="sr-only">
+          Message
+        </Label>
+        <Textarea
+          id="message"
+          placeholder="Type your message here..."
+          className="resize-none min-h-60 h-full border p-3 focus-visible:ring-0 shadow-none flex-1"
+        />
+      </div>
+
+      <div className="p-4 w-full">
+        <Button type="submit" size="sm" className="ml-auto gap-1.5 w-full">
           Send Message
           <CornerDownLeft className="size-3.5" />
         </Button>
       </div>
-    </form>
-  );
-};
+    </div>
+  )
+}
 
-export default ChatControl;
+export default ChatControl

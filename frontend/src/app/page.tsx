@@ -29,6 +29,7 @@ import {
 } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
 import { TooltipProvider } from "@/components/ui/tooltip"
+import ChatControl from "@/components/ResultSection/ChatControl"
 
 export default function Dashboard() {
   return (
@@ -173,8 +174,8 @@ export default function Dashboard() {
               autoSaveId="persitentResize"
               direction="horizontal"
             >
-              <ResizablePanel defaultValue={20}>
-                <HistorySection />
+              <ResizablePanel minSize={15} defaultValue={20}>
+                <ChatControl />
               </ResizablePanel>
               <ResizableHandle withHandle />
               <ResizablePanel defaultSize={60}>
