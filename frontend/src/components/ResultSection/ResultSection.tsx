@@ -1,20 +1,18 @@
 "use client"
 
+import { Edit2, File } from "lucide-react"
+import Image from "next/image"
 import {
   useEffect,
   useRef,
-  useState,
-  AnchorHTMLAttributes,
-  HTMLProps
+  useState
 } from "react"
 import { DrawIoEmbed, DrawIoEmbedRef, EventExport } from "react-drawio"
-import ChatControl from "./ChatControl"
-import Image from "next/image"
+import { GridBackgroundDemo } from "../GridBackground/GridBackground"
+import HistorySection from "../HistorySection/HistorySection"
 import { AspectRatio } from "../ui/aspect-ratio"
 import { Button } from "../ui/button"
-import { GridBackgroundDemo } from "../GridBackground/GridBackground"
-import { Edit2, File } from "lucide-react"
-import HistorySection from "../HistorySection/HistorySection"
+import { useBoundStore } from "@/stores/useBoundStore"
 
 const sampleXMLDiagram = `
 <mxfile modified="2024-05-02T14:17:57.052Z" host="app.diagrams.net" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36" etag="u8erhl7UundKnxo3WJF2" version="24.3.1" type="google">
@@ -142,10 +140,11 @@ const sampleXMLDiagram = `
   </diagram>
 </mxfile>
 `
-type AnchorProps = AnchorHTMLAttributes<HTMLAnchorElement>
 
 const ResultSection = () => {
-  const [isInit, setisInit] = useState(true)
+  const currentMessage = useBoundStore(state => state.currentMessage)
+  const isInit = !currentMessage;
+
   const [viewMode, setViewMode] = useState<"image" | "edit">("image")
   const [isLoaded, setIsLoaded] = useState(false)
   const [fetchingXMLFile, setFetchingXMLFile] = useState(false)

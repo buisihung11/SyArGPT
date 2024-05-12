@@ -25,10 +25,13 @@ An AI Application that generates diagram from user system requirements
 
 ## ✨ Features
 
-### `1` Import document
-### `2` Generate diagram from prompt
-### `3` Justify result from system
-### `4` Export result to draw.io
+### `1` Generate diagram from prompt
+### `2` Justify result from system
+### `3` Export result to draw.io or mermaid format
+### `4` Generate explanation/document for diagram
+### `5` Generate code templates based on design
+### `6` Import document
+
 
 ## ⌨️ Development
 
