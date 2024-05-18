@@ -174,7 +174,7 @@ export default function Dashboard() {
               // autoSaveId="persitentResize"
               direction="horizontal"
             >
-              <ResizablePanel minSize={20} defaultValue={20}>
+              <ResizablePanel minSize={20} defaultSize={20}>
                 <ChatControl />
               </ResizablePanel>
               <ResizableHandle withHandle />
@@ -182,7 +182,7 @@ export default function Dashboard() {
                 <ResultSection />
               </ResizablePanel>
               <ResizableHandle withHandle />
-              <ResizablePanel defaultValue={20}>
+              <ResizablePanel defaultSize={20}>
                 <ExplainSection />
               </ResizablePanel>
             </ResizablePanelGroup>

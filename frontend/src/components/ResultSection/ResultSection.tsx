@@ -2,11 +2,7 @@
 
 import { Edit2, File } from "lucide-react"
 import Image from "next/image"
-import {
-  useEffect,
-  useRef,
-  useState
-} from "react"
+import { useEffect, useRef, useState } from "react"
 import { DrawIoEmbed, DrawIoEmbedRef, EventExport } from "react-drawio"
 import { GridBackgroundDemo } from "../GridBackground/GridBackground"
 import HistorySection from "../HistorySection/HistorySection"
@@ -143,7 +139,7 @@ const sampleXMLDiagram = `
 
 const ResultSection = () => {
   const currentMessage = useBoundStore(state => state.currentMessage)
-  const isInit = !currentMessage;
+  const isInit = !currentMessage
 
   const [viewMode, setViewMode] = useState<"image" | "edit">("image")
   const [isLoaded, setIsLoaded] = useState(false)
@@ -182,6 +178,7 @@ const ResultSection = () => {
               height={40}
               src="/assets/images/wave_hand.webp"
               alt="Online collaboration"
+              unoptimized
             />
             <h1 className="text-4xl font-semibold mt-1">Welcome to SyArGPT!</h1>
           </div>
