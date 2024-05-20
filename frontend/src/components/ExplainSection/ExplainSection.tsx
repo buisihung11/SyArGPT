@@ -8,6 +8,7 @@ import rehypeHighlight from "rehype-highlight"
 import rehypeRaw from "rehype-raw"
 import rehypeSanitize from "rehype-sanitize"
 import remarkGfm from "remark-gfm"
+import CustomTabsContent from "./CustomTabsContent"
 
 const markdown = `
 <div align="center"><a name="readme-top"></a>
@@ -63,30 +64,28 @@ const ExplainSection = () => {
   const editorTheme = theme === "light" ? "light" : "vs-dark"
 
   return (
-    <div className="relative flex h-full flex-col p-4">
-      <Tabs defaultValue="explain" className="h-full">
-        <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="explain">Explain</TabsTrigger>
-          <TabsTrigger value="password">Code</TabsTrigger>
-        </TabsList>
-        <TabsContent value="explain">
-          <ReactMarkdown
-            rehypePlugins={[rehypeHighlight, rehypeRaw, rehypeSanitize]}
-            remarkPlugins={[remarkGfm]}
-          >
-            {markdown}
-          </ReactMarkdown>
-        </TabsContent>
-        <TabsContent value="password">
-          <Editor
-            height="80vh"
-            defaultLanguage="python"
-            defaultValue="// some comment"
-            theme={editorTheme}
-          />
-        </TabsContent>
-      </Tabs>
-    </div>
+    <Tabs defaultValue="explain" className="h-full relative flex flex-col p-4">
+      <TabsList className="grid w-full grid-cols-2">
+        <TabsTrigger value="explain">Explain</TabsTrigger>
+        <TabsTrigger value="password">Code</TabsTrigger>
+      </TabsList>
+      <CustomTabsContent value="explain">
+        <ReactMarkdown
+          rehypePlugins={[rehypeHighlight, rehypeRaw, rehypeSanitize]}
+          remarkPlugins={[remarkGfm]}
+        >
+          {markdown}
+        </ReactMarkdown>
+      </CustomTabsContent>
+      <CustomTabsContent value="password">
+        <Editor
+          height="80vh"
+          defaultLanguage="python"
+          defaultValue="// some comment"
+          theme={editorTheme}
+        />
+      </CustomTabsContent>
+    </Tabs>
   )
 }
 

@@ -13,7 +13,7 @@ const ChatControl = () => {
 
   return (
     <div
-      className="flex flex-col h-full gap-4 relativeoverflow-hidden rounded-lg bg-background"
+      className="flex flex-col h-full gap-4 rounded-lg bg-background"
       x-chunk="dashboard-03-chunk-1"
     >
       <div className="p-4 flex-1">
