@@ -44,6 +44,7 @@ const ChatControl = () => {
       }
     },
     onError: e => {
+      console.log(e)
       toast({
         title: e.message
       })

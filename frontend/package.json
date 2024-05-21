@@ -9,6 +9,20 @@
     "lint": "next lint",
     "prettier": "prettier --write */*/*.{js,jsx,ts,tsx}"
   },
+  "browser": {
+    "child_process": false
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "overrides": {
+    "@langchain/core": "0.1.5"
+  },
+  "pnpm": {
+    "overrides": {
+      "@langchain/core": "0.1.5"
+    }
+  },
   "dependencies": {
     "@aws-crypto/sha256-js": "^5.2.0",
     "@aws-sdk/credential-provider-node": "^3.577.0",
