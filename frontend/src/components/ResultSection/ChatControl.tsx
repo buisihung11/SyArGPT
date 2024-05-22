@@ -68,7 +68,7 @@ const ChatControl = () => {
             // value={prompt}
             value={input}
             id="message"
-            placeholder="Type your message here..."
+            placeholder="Type your requirements here..."
             className="resize-none h-full border p-3 focus-visible:ring-0 shadow-none flex-1"
             // onChange={e => onInputPrompt(e.target.value)}
             onChange={handleInputChange}
