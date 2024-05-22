@@ -9,7 +9,10 @@ const CustomTabsContent: FC<CustomTabsContentType> = ({
   className
 }) => {
   return (
-    <TabsContent value={value} className={cn("overflow-scroll", className)}>
+    <TabsContent
+      value={value}
+      className={cn("overflow-scroll overflow-x-hidden h-full", className)}
+    >
       {children}
     </TabsContent>
   )
