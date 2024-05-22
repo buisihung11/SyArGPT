@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { useBoundStore } from "@/stores/useBoundStore"
-import { CornerDownLeft } from "lucide-react"
+import { CornerDownLeft, Loader2 } from "lucide-react"
 import { useToast } from "../ui/use-toast"
 import { costEstimate } from "@/app/actions"
 
@@ -14,7 +14,9 @@ const ChatControl = () => {
   const onInputPrompt = useBoundStore(state => state.onInputPrompt)
   const prompt = useBoundStore(state => state.prompt)
   const onConversation = useBoundStore(state => state.onConversation)
-  const { setCostResult, setIsLoading } = useBoundStore(state => state)
+  const { setCostResult, setIsLoading, isLoading } = useBoundStore(
+    state => state
+  )
 
   const handleSubmit = async e => {
     e.preventDefault()
@@ -23,7 +25,7 @@ const ChatControl = () => {
       toast({
         title: "No prompt",
         description: "Please enter a prompt to continue.",
-        status: "error"
+        variant: "destructive"
       })
       return
     }
@@ -41,6 +43,11 @@ const ChatControl = () => {
   const fetchCost = async () => {
     setIsLoading(true)
     const data = await costEstimate({ input: prompt })
+    toast({
+      title: "Cost Estimate",
+      description: JSON.stringify(data, null, 2)
+    })
+    console.log("data", data)
     setCostResult(data)
     setIsLoading(false)
   }
@@ -68,9 +75,18 @@ const ChatControl = () => {
         </div>
 
         <div className="p-4 w-full">
-          <Button type="submit" size="sm" className="ml-auto gap-1.5 w-full">
+          <Button
+            disabled={isLoading}
+            type="submit"
+            size="sm"
+            className="ml-auto gap-1.5 w-full cursor-pointer"
+          >
             Send Message
-            <CornerDownLeft className="size-3.5" />
+            {isLoading ? (
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            ) : (
+              <CornerDownLeft className="size-3.5" />
+            )}
           </Button>
         </div>
       </form>
