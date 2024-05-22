@@ -34,7 +34,7 @@ import ChatControl from "@/components/ResultSection/ChatControl"
 export default function Dashboard() {
   return (
     <TooltipProvider>
-      <div className="grid h-screen w-full pl-[56px]">
+      <div className="h-screen w-full">
         <Nav />
         <div className="flex flex-col">
           <header className="sticky top-0 z-10 flex h-[57px] items-center gap-1 border-b bg-background px-4">
@@ -170,10 +170,7 @@ export default function Dashboard() {
             </div>
           </header>
           <main className="flex-1 overflow-auto">
-            <ResizablePanelGroup
-              // autoSaveId="persitentResize"
-              direction="horizontal"
-            >
+            <ResizablePanelGroup direction="horizontal">
               <ResizablePanel minSize={20} defaultSize={20}>
                 <ChatControl />
               </ResizablePanel>
