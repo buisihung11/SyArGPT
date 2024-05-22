@@ -15,21 +15,14 @@
   "engines": {
     "node": ">=18"
   },
-  "overrides": {
-    "@langchain/core": "0.1.5"
-  },
-  "pnpm": {
-    "overrides": {
-      "@langchain/core": "0.1.5"
-    }
-  },
   "dependencies": {
     "@aws-crypto/sha256-js": "^5.2.0",
+    "@aws-sdk/client-sts": "^3.577.0",
     "@aws-sdk/credential-provider-node": "^3.577.0",
     "@aws-sdk/types": "^3.577.0",
     "@hookform/resolvers": "^3.3.4",
     "@langchain/community": "^0.2.0",
-    "@langchain/core": "^0.2.0",
+    "@langchain/core": "0.1.5",
     "@langchain/openai": "^0.0.33",
     "@monaco-editor/react": "^4.6.0",
     "@radix-ui/react-accordion": "^1.1.2",
