@@ -25,5 +25,10 @@ export const createBearSlice: StateCreator<ChatSlice, [], [], ChatSlice> = (
       }
     })
   },
-  currentMessage: null
+  currentMessage: null,
+  costResult: {
+    summary: "",
+    rows: [],
+    columns: []
+  }
 })

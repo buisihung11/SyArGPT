@@ -5,8 +5,6 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { useBoundStore } from "@/stores/useBoundStore"
 import { CornerDownLeft } from "lucide-react"
-import { useChat } from "ai/react"
-import { useState } from "react"
 import { useToast } from "../ui/use-toast"
 
 const ChatControl = () => {
@@ -15,41 +13,44 @@ const ChatControl = () => {
   const onInputPrompt = useBoundStore(state => state.onInputPrompt)
   const prompt = useBoundStore(state => state.prompt)
   const onConversation = useBoundStore(state => state.onConversation)
+  const { setCostResult, setIsLoading } = useBoundStore(state => state)
 
-  const [sourcesForMessages, setSourcesForMessages] = useState<
-    Record<string, any>
-  >({})
-
-  const {
-    messages,
-    input,
-    setInput,
-    handleInputChange,
-    handleSubmit,
-    isLoading: chatEndpointIsLoading,
-    setMessages
-  } = useChat({
-    api: "/api/chat",
-    onResponse(response) {
-      const sourcesHeader = response.headers.get("x-sources")
-      const sources = sourcesHeader
-        ? JSON.parse(Buffer.from(sourcesHeader, "base64").toString("utf8"))
-        : []
-      const messageIndexHeader = response.headers.get("x-message-index")
-      if (sources.length && messageIndexHeader !== null) {
-        setSourcesForMessages({
-          ...sourcesForMessages,
-          [messageIndexHeader]: sources
-        })
-      }
-    },
-    onError: e => {
-      console.log(e)
+  const handleSubmit = async e => {
+    e.preventDefault()
+    const input = prompt
+    if (!input) {
       toast({
-        title: e.message
+        title: "No prompt",
+        description: "Please enter a prompt to continue.",
+        status: "error"
       })
+      return
     }
-  })
+
+    const messages = await onConversation({
+      role: "user",
+      content: input
+    })
+
+    // TODO: Call API to generate the diagram + explanation
+    fetchCost()
+    // TODO: Use the generated diagram to trigger terraform generation
+  }
+
+  const fetchCost = async () => {
+    setIsLoading(true)
+    const result = await fetch("/api/chat", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ input: prompt })
+    })
+
+    const data = await result.json()
+    setCostResult(data)
+    setIsLoading(false)
+  }
 
   return (
     <div
@@ -65,27 +66,12 @@ const ChatControl = () => {
             Message
           </Label>
           <Textarea
-            // value={prompt}
-            value={input}
+            value={prompt}
             id="message"
             placeholder="Type your requirements here..."
             className="resize-none h-full border p-3 focus-visible:ring-0 shadow-none flex-1"
-            // onChange={e => onInputPrompt(e.target.value)}
-            onChange={handleInputChange}
+            onChange={e => onInputPrompt(e.target.value)}
           />
-          <div>
-            Output
-            {messages.length > 0
-              ? [...messages].reverse().map((m, i) => {
-                  const sourceKey = (messages.length - 1 - i).toString()
-                  return (
-                    <div key={m.id}>
-                      {m.role}: {m.content}
-                    </div>
-                  )
-                })
-              : ""}
-          </div>
         </div>
 
         <div className="p-4 w-full">

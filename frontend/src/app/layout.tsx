@@ -6,10 +6,23 @@ import "./globals.css"
 import { Toaster } from "@/components/ui/toaster"
 
 const inter = Inter({ subsets: ["latin"] })
+const title = "SyArGPT"
+const description =
+  "An AI Application that generates diagram from user system requirements"
 
 export const metadata: Metadata = {
-  title: "SyArGPT",
-  description: "An AI Application that generates diagram from user system requirements"
+  title,
+  description,
+  openGraph: {
+    title,
+    description
+  },
+  twitter: {
+    title,
+    description,
+    card: "summary_large_image",
+    creator: "@hunghcc"
+  }
 }
 
 export default function RootLayout({
