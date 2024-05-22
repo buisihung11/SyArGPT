@@ -1,30 +1,12 @@
-import { NextRequest, NextResponse } from "next/server";
-import { z } from "zod";
+"use server"
 
+import { z } from "zod"
 
-import { BedrockChat } from "@langchain/community/chat_models/bedrock";
-import { PromptTemplate } from "@langchain/core/prompts";
-import {
-  StructuredOutputParser
-} from "langchain/output_parsers";
+import { BedrockChat } from "@langchain/community/chat_models/bedrock"
+import { PromptTemplate } from "@langchain/core/prompts"
+import { StructuredOutputParser } from "langchain/output_parsers"
 
 // export const runtime = "edge";
-
-
-const TEMPLATE = `
-  Given the following diagram:
-
-  \`\`\`
-  {{diagram}}
-  \`\`\`
-
-  What is the cost of this diagram using the AWS Pricing Calculator?
-
-  Answer the users question as best as possible.\n{format_instructions}
-
-llm: |
-  AI:
-`
 
 /**
  * This handler initializes and calls a simple chain with a prompt,
@@ -32,9 +14,23 @@ llm: |
  *
  * https://js.langchain.com/docs/guides/expression_language/cookbook#prompttemplate--llm--outputparser
  */
-export async function POST(req: NextRequest) {
+export async function costEstimate(body: { input: string }) {
   try {
-    const body = await req.json()
+    const TEMPLATE = `
+        Given the following diagram:
+
+        \`\`\`
+        {{diagram}}
+        \`\`\`
+
+        What is the cost of this diagram using the AWS Pricing Calculator?
+
+        Answer the users question as best as possible.\n{format_instructions}
+
+        llm: |
+        AI:
+        `
+
     const input = `
         from diagrams import Cluster, Diagram
         from diagrams.aws.compute import ECS, EKS, Lambda
@@ -82,7 +78,7 @@ export async function POST(req: NextRequest) {
       z.object({
         columns: z.array(z.string()).describe("columns of the table"),
         rows: z.array(z.array(z.string())).describe("rows of the table"),
-        summary: z.string().describe("summary of the table cost"),
+        summary: z.string().describe("summary of the table cost")
       })
     )
 
@@ -93,8 +89,8 @@ export async function POST(req: NextRequest) {
       diagram: input
     })
 
-    return NextResponse.json(result, { status: 200 })
+    return result
   } catch (e: any) {
-    return NextResponse.json({ error: e.message }, { status: e.status ?? 500 })
+    return e.message
   }
 }

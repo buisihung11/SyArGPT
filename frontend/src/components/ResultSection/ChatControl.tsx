@@ -6,6 +6,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { useBoundStore } from "@/stores/useBoundStore"
 import { CornerDownLeft } from "lucide-react"
 import { useToast } from "../ui/use-toast"
+import { costEstimate } from "@/app/actions"
 
 const ChatControl = () => {
   const { toast } = useToast()
@@ -39,15 +40,7 @@ const ChatControl = () => {
 
   const fetchCost = async () => {
     setIsLoading(true)
-    const result = await fetch("/api/chat", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ input: prompt })
-    })
-
-    const data = await result.json()
+    const data = await costEstimate({ input: prompt })
     setCostResult(data)
     setIsLoading(false)
   }
