@@ -1,0 +1,56 @@
+service: syargpt
+provider:
+  name: aws
+  stage: ${opt:stage, 'staging'}
+  runtime: python3.11
+  architecture: arm64
+  region: us-west-2
+  memorySize: 1024
+  logRetentionInDays: 30
+  role: "arn:aws:iam::891377350689:role/Lambda_role"
+  deploymentBucket:
+    name: hdduytran-deploy-bucket
+    maxPreviousDeploymentArtifacts: 10
+
+resources:
+  Description: "Resources for the SyarGPT bot that uses Bedrock to generate aws diagrams"
+
+package:
+  include:
+    - ./core/**
+    - functions/syargpt/**
+    - "!**/.pytest_cache/**"
+    - "**/__pycache__/**"
+  exclude:
+    - ./**
+
+plugins:
+  - serverless-python-requirements
+
+custom:
+  pythonRequirements:
+    usePipenv: false
+    useDownloadCache: false
+    fileName: requirements.txt
+    useStaticCache: false
+    dockerizePip: non-linux
+    layer:
+      name: ${self:service}-layer
+      description: "Python requirements for Lambda layer"
+      compatibleRuntimes:
+        - python3.12
+    noDeploy:
+      - pytest
+
+functions:
+  syargpt-chat-service:
+    name: "syargpt-chat-service-${opt:stage, 'staging'}"
+    handler: functions/syargpt/lambda_handler.lambda_handler
+    maximumEventAge: 600
+    maximumRetryAttempts: "0"
+    description: "SyarGPT chat service"
+    timeout: 900
+    layers:
+      - Ref: PythonRequirementsLambdaLayer
+    environment:
+      MODEL_ID: "anthropic.claude-3-sonnet-20240229-v1:0"

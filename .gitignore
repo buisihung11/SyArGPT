@@ -1,0 +1,11 @@
+.serverless
+.vscode
+.test
+node_modules
+/*png
+package-lock.json
+package.json
+# txt and yml file in the root only not in the subdirectories
+/requirements.txt
+/serverless.yml
+__pycache__
