@@ -68,7 +68,7 @@ const CostTab: FC<CostTabType> = ({ costResult, isCostTabLoading }) => {
 function TableSkeleton() {
   return (
     <div className="border rounded-lg w-full">
-      <div className="relative w-full overflow-auto">
+      <div className="relative w-full overflow-hidden">
         <Table>
           <TableHeader>
             <TableRow>

@@ -70,8 +70,8 @@ export async function costEstimate(body: { input: string }) {
       credentials: {
         accessKeyId: process.env.BEDROCK_AWS_ACCESS_KEY_ID!,
         secretAccessKey: process.env.BEDROCK_AWS_SECRET_ACCESS_KEY!
-      }
-      // modelKwargs: {},
+      },
+      modelKwargs: { temperature: 0.5 }
     })
 
     const parser = StructuredOutputParser.fromZodSchema(
