@@ -1,14 +1,12 @@
 "use client"
 
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import Editor from "@monaco-editor/react"
-import { useTheme } from "next-themes"
-import ReactMarkdown from "react-markdown"
-import rehypeHighlight from "rehype-highlight"
-import rehypeRaw from "rehype-raw"
-import rehypeSanitize from "rehype-sanitize"
-import remarkGfm from "remark-gfm"
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
+
+import { useBoundStore } from "@/stores/useBoundStore"
+import CostTab from "./CostTab"
 import CustomTabsContent from "./CustomTabsContent"
+import ExplainTab from "./ExplainTab"
+import CodeTab from "./CodeTab"
 
 const markdown = `
 <div align="center"><a name="readme-top"></a>
@@ -77,31 +75,29 @@ TODO
 [deployment-link]: https://github.com/buisihung11/SyArGPT
 `
 
+const editorText = `// some comment`
+
 const ExplainSection = () => {
-  const { theme } = useTheme()
-  const editorTheme = theme === "light" ? "light" : "vs-dark"
+  const { isLoading, costResult } = useBoundStore(state => state)
 
   return (
     <Tabs defaultValue="explain" className="h-full relative flex flex-col p-4">
-      <TabsList className="grid w-full grid-cols-2">
+      <TabsList className="grid w-full grid-cols-3">
         <TabsTrigger value="explain">Explain</TabsTrigger>
-        <TabsTrigger value="password">Code</TabsTrigger>
+        <TabsTrigger value="code">Code</TabsTrigger>
+        <TabsTrigger value="cost">Cost</TabsTrigger>
       </TabsList>
+
       <CustomTabsContent value="explain">
-        <ReactMarkdown
-          rehypePlugins={[rehypeHighlight, rehypeRaw, rehypeSanitize]}
-          remarkPlugins={[remarkGfm]}
-        >
-          {markdown}
-        </ReactMarkdown>
+        <ExplainTab markdown={markdown} />
       </CustomTabsContent>
-      <CustomTabsContent value="password">
-        <Editor
-          height="80vh"
-          defaultLanguage="python"
-          defaultValue="// some comment"
-          theme={editorTheme}
-        />
+
+      <CustomTabsContent value="code">
+        <CodeTab editorText={editorText} />
+      </CustomTabsContent>
+
+      <CustomTabsContent value="cost">
+        <CostTab costResult={costResult} isCostTabLoading={isLoading} />
       </CustomTabsContent>
     </Tabs>
   )

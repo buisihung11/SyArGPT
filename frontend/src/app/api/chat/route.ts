@@ -1,15 +1,11 @@
-import { NextRequest, NextResponse } from "next/server";
-import { z } from "zod";
+import { NextRequest, NextResponse } from "next/server"
+import { z } from "zod"
 
-
-import { BedrockChat } from "@langchain/community/chat_models/bedrock";
-import { PromptTemplate } from "@langchain/core/prompts";
-import {
-  StructuredOutputParser
-} from "langchain/output_parsers";
+import { BedrockChat } from "@langchain/community/chat_models/bedrock"
+import { PromptTemplate } from "@langchain/core/prompts"
+import { StructuredOutputParser } from "@langchain/core/output_parsers"
 
 // export const runtime = "edge";
-
 
 const TEMPLATE = `
   Given the following diagram:
@@ -82,7 +78,7 @@ export async function POST(req: NextRequest) {
       z.object({
         columns: z.array(z.string()).describe("columns of the table"),
         rows: z.array(z.array(z.string())).describe("rows of the table"),
-        summary: z.string().describe("summary of the table cost"),
+        summary: z.string().describe("summary of the table cost")
       })
     )
 

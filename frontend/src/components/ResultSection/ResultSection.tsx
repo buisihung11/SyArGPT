@@ -168,7 +168,6 @@ const ResultSection = () => {
 
   return (
     <div className="relative flex h-full min-h-[50vh] flex-col">
-      <div className="absolute top-0 right-0 p-4">Cost: 1000$</div>
       <a ref={downloadRef} className="hidden" />
       <GridBackgroundDemo />
       {isInit ? (

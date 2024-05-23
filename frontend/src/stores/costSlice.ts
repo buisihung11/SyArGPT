@@ -7,22 +7,22 @@ export type CostResult = {
 }
 
 export type CostSlice = {
-  costResult: CostResult | null
+  costResult?: CostResult
   isLoading: boolean
   setCostResult: (costResult: CostResult) => void
-  setIsLoading: (isLoading: boolean) => void
+  setIsCostLoading: (isLoading: boolean) => void
 }
 
 export const createCostSlice: StateCreator<CostSlice, [], [], CostSlice> = (
   set,
   get
 ) => ({
-  costResult: null,
+  costResult: undefined,
   isLoading: false,
   setCostResult: (costResult: CostResult) => {
     set(state => ({ costResult }))
   },
-  setIsLoading: (isLoading: boolean) => {
+  setIsCostLoading: (isLoading: boolean) => {
     set(state => ({ isLoading }))
   }
 })
