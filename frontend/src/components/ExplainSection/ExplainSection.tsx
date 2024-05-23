@@ -86,6 +86,7 @@ const ExplainSection = () => {
       <TabsList className="grid w-full grid-cols-2">
         <TabsTrigger value="explain">Explain</TabsTrigger>
         <TabsTrigger value="password">Code</TabsTrigger>
+        <TabsTrigger value="cost">Cost</TabsTrigger>
       </TabsList>
       <CustomTabsContent value="explain">
         <ReactMarkdown
@@ -96,6 +97,14 @@ const ExplainSection = () => {
         </ReactMarkdown>
       </CustomTabsContent>
       <CustomTabsContent value="password">
+        <Editor
+          height="80vh"
+          defaultLanguage="python"
+          defaultValue="// some comment"
+          theme={editorTheme}
+        />
+      </CustomTabsContent>
+      <CustomTabsContent value="cost">
         <Editor
           height="80vh"
           defaultLanguage="python"
