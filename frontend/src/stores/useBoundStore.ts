@@ -1,8 +1,8 @@
 import { create } from "zustand"
 import { ChatSlice, createBearSlice } from "./chatSlice"
-import { CostSlice, createCostSlice } from "./costSlice"
+import { AppSlice, createAppSlice } from "./costSlice"
 
-export const useBoundStore = create<ChatSlice & CostSlice>((...a) => ({
+export const useBoundStore = create<ChatSlice & AppSlice>((...a) => ({
   ...createBearSlice(...a),
-  ...createCostSlice(...a)
+  ...createAppSlice(...a)
 }))

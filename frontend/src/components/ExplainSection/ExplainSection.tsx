@@ -78,7 +78,7 @@ TODO
 const editorText = `// some comment`
 
 const ExplainSection = () => {
-  const { isLoading, costResult } = useBoundStore(state => state)
+  const { isAppLoading, costResult } = useBoundStore(state => state)
 
   return (
     <Tabs defaultValue="explain" className="h-full relative flex flex-col p-4">
@@ -97,7 +97,7 @@ const ExplainSection = () => {
       </CustomTabsContent>
 
       <CustomTabsContent value="cost">
-        <CostTab costResult={costResult} isCostTabLoading={isLoading} />
+        <CostTab costResult={costResult} isCostTabLoading={isAppLoading} />
       </CustomTabsContent>
     </Tabs>
   )

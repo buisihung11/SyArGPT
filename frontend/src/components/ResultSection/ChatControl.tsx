@@ -14,7 +14,7 @@ const ChatControl = () => {
   const onInputPrompt = useBoundStore(state => state.onInputPrompt)
   const prompt = useBoundStore(state => state.prompt)
   const onConversation = useBoundStore(state => state.onConversation)
-  const { setCostResult, setIsCostLoading, isLoading } = useBoundStore(
+  const { setCostResult, setIsAppLoading, isAppLoading } = useBoundStore(
     state => state
   )
 
@@ -41,7 +41,7 @@ const ChatControl = () => {
   }
 
   const fetchCost = async () => {
-    setIsCostLoading(true)
+    setIsAppLoading(true)
     const data = await costEstimate({ input: prompt })
     toast({
       title: "Cost Estimate",
@@ -49,7 +49,7 @@ const ChatControl = () => {
     })
     console.log("data", data)
     setCostResult(data)
-    setIsCostLoading(false)
+    setIsAppLoading(false)
   }
 
   return (
@@ -76,13 +76,13 @@ const ChatControl = () => {
 
         <div className="p-4 w-full">
           <Button
-            disabled={isLoading}
+            disabled={isAppLoading}
             type="submit"
             size="sm"
             className="ml-auto gap-1.5 w-full cursor-pointer"
           >
             Send Message
-            {isLoading ? (
+            {isAppLoading ? (
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
             ) : (
               <CornerDownLeft className="size-3.5" />

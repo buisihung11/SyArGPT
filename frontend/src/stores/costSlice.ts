@@ -6,23 +6,23 @@ export type CostResult = {
   columns: string[]
 }
 
-export type CostSlice = {
+export type AppSlice = {
   costResult?: CostResult
-  isLoading: boolean
+  isAppLoading: boolean
   setCostResult: (costResult: CostResult) => void
-  setIsCostLoading: (isLoading: boolean) => void
+  setIsAppLoading: (isAppLoading: boolean) => void
 }
 
-export const createCostSlice: StateCreator<CostSlice, [], [], CostSlice> = (
+export const createAppSlice: StateCreator<AppSlice, [], [], AppSlice> = (
   set,
   get
 ) => ({
   costResult: undefined,
-  isLoading: false,
+  isAppLoading: false,
   setCostResult: (costResult: CostResult) => {
     set(state => ({ costResult }))
   },
-  setIsCostLoading: (isLoading: boolean) => {
-    set(state => ({ isLoading }))
+  setIsAppLoading: (isAppLoading: boolean) => {
+    set(state => ({ isAppLoading }))
   }
 })
