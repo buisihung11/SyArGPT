@@ -11,11 +11,8 @@ dependencies:
   '@aws-crypto/sha256-js':
     specifier: ^5.2.0
     version: 5.2.0
-  '@aws-sdk/client-sts':
-    specifier: ^3.577.0
-    version: 3.582.0
   '@aws-sdk/credential-provider-node':
-    specifier: ^3.577.0
+    specifier: ^3.582.0
     version: 3.582.0(@aws-sdk/client-sso-oidc@3.582.0)(@aws-sdk/client-sts@3.582.0)
   '@aws-sdk/types':
     specifier: ^3.577.0
@@ -351,13 +348,13 @@ packages:
       tslib: 2.6.2
     dev: false
 
-  /@aws-sdk/client-sso-oidc@3.582.0(@aws-sdk/client-sts@3.582.0):
+  /@aws-sdk/client-sso-oidc@3.582.0:
     resolution: {integrity: sha512-g4uiD4GUR03CqY6LwdocJxO+fHSBk/KNXBGJv1ENCcPmK3jpEI8xBggIQOQl3NWjDeP07bpIb8+UhgSoYAYtkg==}
     engines: {node: '>=16.0.0'}
     dependencies:
       '@aws-crypto/sha256-browser': 3.0.0
       '@aws-crypto/sha256-js': 3.0.0
-      '@aws-sdk/client-sts': 3.582.0
+      '@aws-sdk/client-sts': 3.582.0(@aws-sdk/client-sso-oidc@3.582.0)
       '@aws-sdk/core': 3.582.0
       '@aws-sdk/credential-provider-node': 3.582.0(@aws-sdk/client-sso-oidc@3.582.0)(@aws-sdk/client-sts@3.582.0)
       '@aws-sdk/middleware-host-header': 3.577.0
@@ -396,7 +393,6 @@ packages:
       '@smithy/util-utf8': 3.0.0
       tslib: 2.6.2
     transitivePeerDependencies:
-      - '@aws-sdk/client-sts'
       - aws-crt
     dev: false
 
@@ -446,13 +442,13 @@ packages:
       - aws-crt
     dev: false
 
-  /@aws-sdk/client-sts@3.582.0:
+  /@aws-sdk/client-sts@3.582.0(@aws-sdk/client-sso-oidc@3.582.0):
     resolution: {integrity: sha512-3gaYyQkt8iTSStnjv6kJoPGDJUaPbhcgBOrXhUNbWUgAlgw7Y1aI1MYt3JqvVN4jtiCLwjuiAQATU/8elbqPdQ==}
     engines: {node: '>=16.0.0'}
     dependencies:
       '@aws-crypto/sha256-browser': 3.0.0
       '@aws-crypto/sha256-js': 3.0.0
-      '@aws-sdk/client-sso-oidc': 3.582.0(@aws-sdk/client-sts@3.582.0)
+      '@aws-sdk/client-sso-oidc': 3.582.0
       '@aws-sdk/core': 3.582.0
       '@aws-sdk/credential-provider-node': 3.582.0(@aws-sdk/client-sso-oidc@3.582.0)(@aws-sdk/client-sts@3.582.0)
       '@aws-sdk/middleware-host-header': 3.577.0
@@ -491,6 +487,7 @@ packages:
       '@smithy/util-utf8': 3.0.0
       tslib: 2.6.2
     transitivePeerDependencies:
+      - '@aws-sdk/client-sso-oidc'
       - aws-crt
     dev: false
 
@@ -538,7 +535,7 @@ packages:
     peerDependencies:
       '@aws-sdk/client-sts': ^3.582.0
     dependencies:
-      '@aws-sdk/client-sts': 3.582.0
+      '@aws-sdk/client-sts': 3.582.0(@aws-sdk/client-sso-oidc@3.582.0)
       '@aws-sdk/credential-provider-env': 3.577.0
       '@aws-sdk/credential-provider-process': 3.577.0
       '@aws-sdk/credential-provider-sso': 3.582.0(@aws-sdk/client-sso-oidc@3.582.0)
@@ -609,7 +606,7 @@ packages:
     peerDependencies:
       '@aws-sdk/client-sts': ^3.577.0
     dependencies:
-      '@aws-sdk/client-sts': 3.582.0
+      '@aws-sdk/client-sts': 3.582.0(@aws-sdk/client-sso-oidc@3.582.0)
       '@aws-sdk/types': 3.577.0
       '@smithy/property-provider': 3.0.0
       '@smithy/types': 3.0.0
@@ -674,7 +671,7 @@ packages:
     peerDependencies:
       '@aws-sdk/client-sso-oidc': ^3.577.0
     dependencies:
-      '@aws-sdk/client-sso-oidc': 3.582.0(@aws-sdk/client-sts@3.582.0)
+      '@aws-sdk/client-sso-oidc': 3.582.0
       '@aws-sdk/types': 3.577.0
       '@smithy/property-provider': 3.0.0
       '@smithy/shared-ini-file-loader': 3.0.0
