@@ -14,7 +14,7 @@ const ChatControl = () => {
   const onInputPrompt = useBoundStore(state => state.onInputPrompt)
   const prompt = useBoundStore(state => state.prompt)
   const onConversation = useBoundStore(state => state.onConversation)
-  const { setCostResult, setIsLoading, isLoading } = useBoundStore(
+  const { setCostResult, setIsCostLoading, isLoading } = useBoundStore(
     state => state
   )
 
@@ -41,7 +41,7 @@ const ChatControl = () => {
   }
 
   const fetchCost = async () => {
-    setIsLoading(true)
+    setIsCostLoading(true)
     const data = await costEstimate({ input: prompt })
     toast({
       title: "Cost Estimate",
@@ -49,7 +49,7 @@ const ChatControl = () => {
     })
     console.log("data", data)
     setCostResult(data)
-    setIsLoading(false)
+    setIsCostLoading(false)
   }
 
   return (
