@@ -12,6 +12,7 @@ import {
   TableRow
 } from "@/components/ui/table"
 import { CostResult } from "@/stores/costSlice"
+import { Skeleton } from "../ui/skeleton"
 
 type CostTabType = {
   costResult?: CostResult
@@ -20,7 +21,7 @@ type CostTabType = {
 
 const CostTab: FC<CostTabType> = ({ costResult, isCostTabLoading }) => {
   if (isCostTabLoading) {
-    return <h1>loading...</h1>
+    return <TableSkeleton />
   }
 
   if (!costResult) {
@@ -61,6 +62,39 @@ const CostTab: FC<CostTabType> = ({ costResult, isCostTabLoading }) => {
         </TableRow>
       </TableFooter>
     </Table>
+  )
+}
+
+function TableSkeleton() {
+  return (
+    <div className="border rounded-lg w-full">
+      <div className="relative w-full overflow-auto">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead className="w-[100px]">Service</TableHead>
+              <TableHead>Cost</TableHead>
+              <TableHead className="text-right">Montly Cost</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {new Array(5).fill(undefined).map((_, idx) => (
+              <TableRow key={idx}>
+                <TableCell>
+                  <Skeleton className="h-4 w-[80px]" />
+                </TableCell>
+                <TableCell>
+                  <Skeleton className="h-4 w-[80px]" />
+                </TableCell>
+                <TableCell>
+                  <Skeleton className="h-4 w-[100px] ml-auto" />
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
+    </div>
   )
 }
 

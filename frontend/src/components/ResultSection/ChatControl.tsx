@@ -54,10 +54,10 @@ const ChatControl = () => {
 
   return (
     <div
-      className="flex flex-col h-full gap-4 rounded-lg bg-background"
+      className="rounded-lg bg-background h-full"
       x-chunk="dashboard-03-chunk-1"
     >
-      <form onSubmit={handleSubmit}>
+      <form className="flex flex-col h-full gap-4 " onSubmit={handleSubmit}>
         <div className="p-4 flex-1">
           <h4 className="scroll-m-20 text-sm font-semibold tracking-tight mb-2">
             Describe your prompt

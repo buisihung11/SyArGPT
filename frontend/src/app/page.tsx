@@ -160,11 +160,17 @@ export default function Dashboard() {
             </Drawer>
             <div className="ml-auto gap-1.5 text-sm">
               <Button
+                size="sm"
+                className="mr-2 gap-1.5 text-sm"
+              >
+                New Generation
+              </Button>
+              <Button
                 variant="outline"
                 size="sm"
                 className="ml-auto gap-1.5 text-sm"
               >
-                <Share className="size-3.5" />
+                <Share className="size-3" />
                 Share
               </Button>
             </div>
