@@ -18,7 +18,7 @@ const ChatControl = () => {
     state => state
   )
 
-  const handleSubmit = async e => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     const input = prompt
     if (!input) {

@@ -4,7 +4,7 @@ import { z } from "zod"
 
 import { BedrockChat } from "@langchain/community/chat_models/bedrock"
 import { PromptTemplate } from "@langchain/core/prompts"
-import { StructuredOutputParser } from "langchain/output_parsers"
+import { StructuredOutputParser } from "@langchain/core/output_parsers"
 
 // export const runtime = "edge";
 
