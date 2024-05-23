@@ -38,7 +38,7 @@ const CostTab: FC<CostTabType> = ({ costResult, isCostTabLoading }) => {
   })
   return (
     <Table>
-      <TableCaption>A list of your recent invoices.</TableCaption>
+      <TableCaption>Cost Table.</TableCaption>
       <TableHeader>
         <TableRow>
           <TableHead className="w-[100px]">{columns[0]}</TableHead>
