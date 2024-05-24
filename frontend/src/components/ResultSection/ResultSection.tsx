@@ -196,8 +196,8 @@ const ResultSection = () => {
           >
             <AspectRatio ratio={16 / 9} className="bg-muted shadow-md">
               <Image
-                src="/assets/images/sample_diagram.png"
-                alt="Photo by Drew Beamer"
+                src="/assets/images/event_processing_diagram.png"
+                alt="Cloud Architecture Diagram"
                 fill
                 className="rounded-md object-cover cursor-pointer"
               />

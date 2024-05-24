@@ -7,6 +7,7 @@ import CostTab from "./CostTab"
 import CustomTabsContent from "./CustomTabsContent"
 import ExplainTab from "./ExplainTab"
 import CodeTab from "./CodeTab"
+import TerraformTab from "./TerraformTab"
 
 const markdown = `
 <div align="center"><a name="readme-top"></a>
@@ -81,11 +82,12 @@ const ExplainSection = () => {
   const { isLoading, costResult } = useBoundStore(state => state)
 
   return (
-    <Tabs defaultValue="explain" className="h-full relative flex flex-col p-4">
-      <TabsList className="grid w-full grid-cols-3">
+    <Tabs defaultValue="explain" className="h-full relative flex flex-col p-4 max-h-full">
+      <TabsList className="grid w-full grid-cols-4">
         <TabsTrigger value="explain">Explain</TabsTrigger>
         <TabsTrigger value="code">Code</TabsTrigger>
         <TabsTrigger value="cost">Cost</TabsTrigger>
+        <TabsTrigger value="terraform">Terraform</TabsTrigger>
       </TabsList>
 
       <CustomTabsContent value="explain">
@@ -98,6 +100,10 @@ const ExplainSection = () => {
 
       <CustomTabsContent value="cost">
         <CostTab costResult={costResult} isCostTabLoading={isLoading} />
+      </CustomTabsContent>
+
+      <CustomTabsContent value="terraform">
+        <TerraformTab />
       </CustomTabsContent>
     </Tabs>
   )

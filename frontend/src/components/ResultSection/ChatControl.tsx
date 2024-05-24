@@ -1,12 +1,13 @@
 "use client"
 
-import { costEstimate } from "@/app/actions"
+import { costEstimate, generateTerraformCode } from "@/app/actions"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { useBoundStore } from "@/stores/useBoundStore"
+import { useBoundStore, useTerraformStore } from "@/stores/useBoundStore"
 import { CornerDownLeft, Loader2 } from "lucide-react"
 import { useToast } from "../ui/use-toast"
+import { useState } from "react"
 
 const ChatControl = () => {
   const { toast } = useToast()
@@ -17,6 +18,10 @@ const ChatControl = () => {
   const { setCostResult, setIsCostLoading, isLoading } = useBoundStore(
     state => state
   )
+  const setLogs = useTerraformStore(state => state.setLogs)
+
+  const setTerraformLoading = useTerraformStore(state => state.setIsLoading)
+  const setTerraformResult = useTerraformStore(state => state.setCode)
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -37,19 +42,71 @@ const ChatControl = () => {
 
     // TODO: Call API to generate the diagram + explanation
     fetchCost()
-    // TODO: Use the generated diagram to trigger terraform generation
+    fetchTerraform()
   }
 
   const fetchCost = async () => {
     setIsCostLoading(true)
     const data = await costEstimate({ input: prompt })
-    toast({
-      title: "Cost Estimate",
-      description: JSON.stringify(data, null, 2)
-    })
     console.log("data", data)
     setCostResult(data)
     setIsCostLoading(false)
+  }
+
+  const fetchTerraform = async () => {
+    setTerraformLoading(true)
+    setLogs([])
+    const data = await generateTerraformCode({ diagramCode: prompt })
+    setTerraformResult(data)
+    console.log("terraformData", data)
+    setTerraformLoading(false)
+
+    const requestData = {
+      sessionId: "123",
+      files: data.files.map((f: any) => ({
+        fileName: f.name,
+        fileContent: f.content
+      }))
+    }
+
+    // call to POST localhost:80/update to test the terraform code
+    // checkTerraform(requestData) Wait until deploy the backend
+  }
+
+  const checkTerraform = async (requestData: any) => {
+    try {
+      const response = await fetch("http://localhost:80/upload", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(requestData)
+      })
+
+      if (!response.body) {
+        console.error("ReadableStream not yet supported in this browser.")
+        return
+      }
+
+      const reader = response.body.getReader()
+      const decoder = new TextDecoder()
+
+      const readStream = async () => {
+        let result
+        while (!(result = await reader.read()).done) {
+          const chunk = decoder.decode(result.value, { stream: true })
+          const logEntries = chunk
+            .split("\n")
+            .filter(line => line)
+            .map(line => JSON.parse(line))
+          setLogs([...logEntries])
+        }
+      }
+
+      readStream()
+    } catch (error) {
+      console.error("Error uploading files:", error)
+    }
   }
 
   return (

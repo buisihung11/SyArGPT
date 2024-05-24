@@ -12,6 +12,7 @@ const retriever = new TavilySearchAPIRetriever({
 })
 
 import { CostEstimationAISchema } from "@/stores/costSlice"
+import { TerraformAISchema } from "@/stores/terraformSlice"
 
 // export const runtime = "edge";
 
@@ -72,14 +73,23 @@ export async function costEstimate({ input }: { input: string }) {
 export async function generateTerraformCode(body: { diagramCode: string }) {
   try {
     const TEMPLATE = `
-        Given the following diagram:
+        As a cloud architect, you have been tasked with generating terraform code from a cloud architecture
+        diagram using the code syntax from https://diagrams.mingrammer.com/. Please ensure the following:
+
+        1. Include all components from the diagram in the terraform code.
+        2. Use valid AWS component names for all services.
+        3. Should have connection between components when there is a connection in the diagram.
+        4. The terraform code should be in a valid format.
+        5. You can have multiple files in the terraform code if needed.
+        6. The terraform code should be able to be run on AWS.
+        7. The terraform code should follow terraform bestpractice.
+        Here is the cloud architecture diagram:
 
         \`\`\`
         {{diagram}}
         \`\`\`
 
         Generate the terraform code for this diagram.\n{format_instructions}
-
         llm: |
         AI:
         `
@@ -94,14 +104,11 @@ export async function generateTerraformCode(body: { diagramCode: string }) {
         accessKeyId: process.env.BEDROCK_AWS_ACCESS_KEY_ID!,
         secretAccessKey: process.env.BEDROCK_AWS_SECRET_ACCESS_KEY!
       },
-      modelKwargs: { temperature: 0.5 }
+      modelKwargs: { temperature: 0.5 },
+      maxTokens: 4000
     })
 
-    const parser = StructuredOutputParser.fromZodSchema(
-      z.object({
-        code: z.string().describe("terraform code")
-      })
-    )
+    const parser = StructuredOutputParser.fromZodSchema(TerraformAISchema)
 
     const chain = prompt.pipe(model).pipe(parser)
 
