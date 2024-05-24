@@ -1,10 +1,15 @@
+import { z } from "zod"
 import { StateCreator } from "zustand"
 
-export type CostResult = {
-  summary: string
-  rows: string[]
-  columns: string[]
-}
+export const CostEstimationAISchema =  z.object({
+  columns: z.array(z.string()).describe("columns of the table"),
+  rows: z.array(z.array(z.string())).describe("rows of the table"),
+  summary: z.string().describe("summary of the table cost"),
+  monthlyCost: z.number().describe("monthly cost"),
+  yearlyCost: z.number().describe("yearly cost")
+})
+
+export type CostResult = z.infer<typeof CostEstimationAISchema>
 
 export type CostSlice = {
   costResult?: CostResult

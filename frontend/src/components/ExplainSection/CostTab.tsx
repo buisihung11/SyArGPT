@@ -30,35 +30,50 @@ const CostTab: FC<CostTabType> = ({ costResult, isCostTabLoading }) => {
 
   const { summary, rows, columns } = costResult
 
-  const mappedCostList = rows.map(row => {
-    return {
-      service: row[0],
-      costCalculation: row[1],
-      monthlyCost: row[2]
-    }
-  })
   return (
     <Table>
       <TableCaption>Cost Table.</TableCaption>
       <TableHeader>
         <TableRow>
-          <TableHead className="w-[100px]">{columns[0]}</TableHead>
-          <TableHead>{columns[1]}</TableHead>
-          <TableHead className="text-right">{columns[2]}</TableHead>
+          {columns.map((column, idx) => (
+            <TableHead
+              className={
+                idx === 0
+                  ? "w-[100px]"
+                  : idx === columns.length - 1
+                  ? "text-right"
+                  : ""
+              }
+              key={idx}
+            >
+              {column}
+            </TableHead>
+          ))}
         </TableRow>
       </TableHeader>
       <TableBody>
-        {mappedCostList.map(cost => (
-          <TableRow key={cost.service}>
-            <TableCell className="font-medium">{cost.service}</TableCell>
-            <TableCell>{cost.costCalculation}</TableCell>
-            <TableCell className="text-right">{cost.monthlyCost}</TableCell>
+        {rows.map(cost => (
+          <TableRow key={cost[0]}>
+            {cost.map((cell, idx) => (
+              <TableCell
+                key={idx}
+                className={
+                  idx === 0
+                    ? "w-[100px]"
+                    : idx === cost.length - 1
+                    ? "text-right"
+                    : ""
+                }
+              >
+                {cell}
+              </TableCell>
+            ))}
           </TableRow>
         ))}
       </TableBody>
       <TableFooter>
         <TableRow>
-          <TableCell colSpan={3}>{summary}</TableCell>
+          <TableCell colSpan={columns.length}>{summary}</TableCell>
         </TableRow>
       </TableFooter>
     </Table>

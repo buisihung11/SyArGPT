@@ -5,6 +5,13 @@ import { z } from "zod"
 import { BedrockChat } from "@langchain/community/chat_models/bedrock"
 import { PromptTemplate } from "@langchain/core/prompts"
 import { StructuredOutputParser } from "@langchain/core/output_parsers"
+import { TavilySearchAPIRetriever } from "@langchain/community/retrievers/tavily_search_api"
+
+const retriever = new TavilySearchAPIRetriever({
+  k: 3
+})
+
+import { CostEstimationAISchema } from "@/stores/costSlice"
 
 // export const runtime = "edge";
 
@@ -14,53 +21,26 @@ import { StructuredOutputParser } from "@langchain/core/output_parsers"
  *
  * https://js.langchain.com/docs/guides/expression_language/cookbook#prompttemplate--llm--outputparser
  */
-export async function costEstimate(body: { input: string }) {
+export async function costEstimate({ input }: { input: string }) {
   try {
     const TEMPLATE = `
-        Given the following diagram:
+      As a cloud architect, you have been tasked with providing a cost estimate from a cloud architecture 
+      using the code syntax from https://diagrams.mingrammer.com/. Please ensure the following:
+
+        1. Include all components from the diagram in the cost estimate.
+        2. Use valid AWS component names for all services.
+        3. Please use default configurations for each service. Please give detail on the configuration summary.
+        4. The cost estimate table should have the following columns: Service Name, Monthly Cost, Region, and Config Summary.
+        5. Provide a summary of the total cost estimate.
+        Here is the cloud architecture diagram:
 
         \`\`\`
         {{diagram}}
         \`\`\`
 
-        What is the cost of this diagram using the AWS Pricing Calculator?
-
-        Answer the users question as best as possible.\n{format_instructions}
-
-        llm: |
-        AI:
+        Answer the user's question as best as possible with this format\n{format_instructions}
         `
 
-    const input = `
-        from diagrams import Cluster, Diagram
-        from diagrams.aws.compute import ECS, EKS, Lambda
-        from diagrams.aws.database import Redshift
-        from diagrams.aws.integration import SQS
-        from diagrams.aws.storage import S3
-        
-        with Diagram("Event Processing", show=False):
-            source = EKS("k8s source")
-        
-            with Cluster("Event Flows"):
-                with Cluster("Event Workers"):
-                    workers = [ECS("worker1"),
-                              ECS("worker2"),
-                              ECS("worker3")]
-        
-                queue = SQS("event queue")
-        
-                with Cluster("Processing"):
-                    handlers = [Lambda("proc1"),
-                                Lambda("proc2"),
-                                Lambda("proc3")]
-        
-            store = S3("events store")
-            dw = Redshift("analytics")
-        
-            source >> workers >> queue >> handlers
-            handlers >> store
-            handlers >> dw
-      `
     const prompt = PromptTemplate.fromTemplate(TEMPLATE)
 
     const model = new BedrockChat({
@@ -74,13 +54,7 @@ export async function costEstimate(body: { input: string }) {
       modelKwargs: { temperature: 0.5 }
     })
 
-    const parser = StructuredOutputParser.fromZodSchema(
-      z.object({
-        columns: z.array(z.string()).describe("columns of the table"),
-        rows: z.array(z.array(z.string())).describe("rows of the table"),
-        summary: z.string().describe("summary of the table cost")
-      })
-    )
+    const parser = StructuredOutputParser.fromZodSchema(CostEstimationAISchema)
 
     const chain = prompt.pipe(model).pipe(parser)
 
