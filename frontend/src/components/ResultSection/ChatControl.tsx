@@ -1,12 +1,14 @@
 "use client"
 
-import { costEstimate } from "@/app/actions"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { useBoundStore } from "@/stores/useBoundStore"
+
+import { v4 } from "uuid"
 import { CornerDownLeft, Loader2 } from "lucide-react"
 import { useToast } from "../ui/use-toast"
+import { AppResponse } from "@/types"
 
 const ChatControl = () => {
   const { toast } = useToast()
@@ -14,9 +16,14 @@ const ChatControl = () => {
   const onInputPrompt = useBoundStore(state => state.onInputPrompt)
   const prompt = useBoundStore(state => state.prompt)
   const onConversation = useBoundStore(state => state.onConversation)
-  const { setCostResult, setIsAppLoading, isAppLoading } = useBoundStore(
-    state => state
-  )
+  const {
+    setExplainResult,
+    setCodeResult,
+    setCostResult,
+    setImageResult,
+    setIsAppLoading,
+    isAppLoading
+  } = useBoundStore(state => state)
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -30,26 +37,47 @@ const ChatControl = () => {
       return
     }
 
-    const messages = await onConversation({
-      role: "user",
-      content: input
-    })
-
     // TODO: Call API to generate the diagram + explanation
-    fetchCost()
+    fetchAppData()
     // TODO: Use the generated diagram to trigger terraform generation
   }
 
-  const fetchCost = async () => {
-    setIsAppLoading(true)
-    const data = await costEstimate({ input: prompt })
-    toast({
-      title: "Cost Estimate",
-      description: JSON.stringify(data, null, 2)
-    })
-    console.log("data", data)
-    setCostResult(data)
-    setIsAppLoading(false)
+  const fetchAppData = async () => {
+    try {
+      setIsAppLoading(true)
+
+      const url = `/api/appData`
+      const method = "POST"
+
+      const res = await fetch(url, {
+        method,
+        headers: {
+          Accept: "application/json"
+        },
+        body: JSON.stringify({
+          session_id: v4(),
+          message:
+            "help me design a web crawler architecture, include data lake and warehouse"
+        })
+      })
+
+      const resJSON: AppResponse = await res.json()
+
+      const { cost, codeBlock, explain, image } = resJSON
+
+      console.log({ resJSON })
+
+      const verifyImg = image || ""
+
+      setCodeResult(codeBlock)
+      setExplainResult(explain)
+      setImageResult(new URL(verifyImg))
+      setCostResult(cost)
+    } catch (error) {
+      throw error
+    } finally {
+      setIsAppLoading(false)
+    }
   }
 
   return (
