@@ -139,6 +139,7 @@ const sampleXMLDiagram = `
 
 const ResultSection = () => {
   const currentMessage = useBoundStore(state => state.currentMessage)
+  const imgURL = useBoundStore(state => state.imageResult)
   const isInit = !currentMessage
 
   const [viewMode, setViewMode] = useState<"image" | "edit">("image")
@@ -196,7 +197,7 @@ const ResultSection = () => {
           >
             <AspectRatio ratio={16 / 9} className="bg-muted shadow-md">
               <Image
-                src="/assets/images/sample_diagram.png"
+                src={imgURL?.href || ""}
                 alt="Photo by Drew Beamer"
                 fill
                 className="rounded-md object-cover cursor-pointer"

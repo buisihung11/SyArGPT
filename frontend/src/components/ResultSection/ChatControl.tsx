@@ -38,11 +38,11 @@ const ChatControl = () => {
     }
 
     // TODO: Call API to generate the diagram + explanation
-    fetchAppData()
+    fetchAppData(prompt)
     // TODO: Use the generated diagram to trigger terraform generation
   }
 
-  const fetchAppData = async () => {
+  const fetchAppData = async (prompt: string) => {
     try {
       setIsAppLoading(true)
 
@@ -56,8 +56,7 @@ const ChatControl = () => {
         },
         body: JSON.stringify({
           session_id: v4(),
-          message:
-            "help me design a web crawler architecture, include data lake and warehouse"
+          message: prompt
         })
       })
 
