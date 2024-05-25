@@ -171,14 +171,7 @@ const sampleData = [
   },
   {
     name: "Wallet Application",
-    prompt: `
-    The Wallet application aims to offer users a secure and convenient way to manage their finances, including storing, sending, and receiving money,
-     paying for services, and tracking financial activities. Key features include user authentication (via email, phone, Google, Facebook),
-      money management (add money, send/receive money, request money), payment services (QR code payments, direct payments), transaction history (view and filter transactions), security features (two-factor authentication, activity monitoring, data encryption), and customer support (in-app chat and email support).
-
-      The application will leverage various AWS services: AWS Cognito for user authentication, Amazon RDS for data storage, AWS Lambda for payment processing, AWS CloudTrail and Shield for security and monitoring, Amazon SageMaker for machine learning, Amazon QuickSight for analytics, 
-      and Amazon SNS/SQS for messaging and notifications. The technology stack includes React.js for the frontend, Node.js for the backend, MySQL/PostgreSQL with Amazon RDS for the database, and Stripe for payment processing. This setup ensures a robust, scalable, and secure financial management platform.
-    `
+    prompt: `The Wallet application aims to offer users a secure and convenient way to manage their finances, including storing, sending, and receiving money, paying for services, and tracking financial activities. Key features include user authentication (via email, phone, Google, Facebook),money management (add money, send/receive money, request money), payment services (QR code payments, direct payments), transaction history (view and filter transactions), security features (two-factor authentication, activity monitoring, data encryption), and customer support (in-app chat and email support).\nThe application will leverage various AWS services: AWS Cognito for user authentication, Amazon RDS for data storage, AWS Lambda for payment processing, AWS CloudTrail and Shield for security and monitoring, Amazon SageMaker for machine learning, Amazon QuickSight for analytics, and Amazon SNS/SQS for messaging and notifications. The technology stack includes React.js for the frontend, Node.js for the backend, MySQL/PostgreSQL with Amazon RDS for the database, and Stripe for payment processing. This setup ensures a robust, scalable, and secure financial management platform.`
   }
 ]
 

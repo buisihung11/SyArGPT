@@ -3,13 +3,8 @@
 import { BedrockChat } from "@langchain/community/chat_models/bedrock"
 import { PromptTemplate } from "@langchain/core/prompts"
 import { StructuredOutputParser } from "@langchain/core/output_parsers"
-import { TavilySearchAPIRetriever } from "@langchain/community/retrievers/tavily_search_api"
 import { TerraformAISchema } from "@/stores"
 import { CostEstimationAISchema } from "@/types"
-
-const retriever = new TavilySearchAPIRetriever({
-  k: 3
-})
 
 // export const runtime = "edge";
 
@@ -43,7 +38,7 @@ export async function costEstimate({ input }: { input: string }) {
 
     const model = new BedrockChat({
       model: "anthropic.claude-3-sonnet-20240229-v1:0", // You can also do e.g. "anthropic.claude-v2"
-      region: "ap-southeast-2",
+      region: "us-west-2",
       credentials: {
         accessKeyId: process.env.BEDROCK_AWS_ACCESS_KEY_ID!,
         secretAccessKey: process.env.BEDROCK_AWS_SECRET_ACCESS_KEY!
@@ -96,7 +91,7 @@ export async function generateTerraformCode(body: { diagramCode: string }) {
 
     const model = new BedrockChat({
       model: "anthropic.claude-3-sonnet-20240229-v1:0", // You can also do e.g. "anthropic.claude-v2"
-      region: "ap-southeast-2",
+      region: "us-west-2",
       // endpointUrl: "custom.amazonaws.com",
       credentials: {
         accessKeyId: process.env.BEDROCK_AWS_ACCESS_KEY_ID!,
