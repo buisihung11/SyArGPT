@@ -4,18 +4,17 @@ import { costEstimate, generateTerraformCode } from "@/app/actions"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { useBoundStore, useTerraformStore } from "@/stores/useBoundStore"
+import { useAppStore, useChatStore, useTerraformStore } from "@/stores"
 import { CornerDownLeft, Loader2 } from "lucide-react"
 import { useToast } from "../ui/use-toast"
-import { useState } from "react"
 
 const ChatControl = () => {
   const { toast } = useToast()
 
-  const onInputPrompt = useBoundStore(state => state.onInputPrompt)
-  const prompt = useBoundStore(state => state.prompt)
-  const onConversation = useBoundStore(state => state.onConversation)
-  const { setCostResult, setIsCostLoading, isLoading } = useBoundStore(
+  const onInputPrompt = useChatStore(state => state.onInputPrompt)
+  const prompt = useChatStore(state => state.prompt)
+  const onConversation = useChatStore(state => state.onConversation)
+  const { setCostResult, setIsCostLoading, isLoading } = useAppStore(
     state => state
   )
   const setLogs = useTerraformStore(state => state.setLogs)

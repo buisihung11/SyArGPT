@@ -1,9 +1,9 @@
 "use client"
 
-import { useBoundStore } from "@/stores/useBoundStore"
+import { useChatStore } from "@/stores"
 
 const HistorySection = () => {
-  const messages = useBoundStore(state => state.messages)
+  const messages = useChatStore(state => state.messages)
 
   return (
     <div className="relative flex h-36 flex-col p-4 bg-background border-t-2">

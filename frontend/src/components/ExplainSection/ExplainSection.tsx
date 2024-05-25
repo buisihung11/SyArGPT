@@ -2,12 +2,12 @@
 
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
-import { useBoundStore } from "@/stores/useBoundStore"
 import CostTab from "./CostTab"
 import CustomTabsContent from "./CustomTabsContent"
 import ExplainTab from "./ExplainTab"
 import CodeTab from "./CodeTab"
 import TerraformTab from "./TerraformTab"
+import { useAppStore } from "@/stores"
 
 const markdown = `
 <div align="center"><a name="readme-top"></a>
@@ -79,10 +79,13 @@ TODO
 const editorText = `// some comment`
 
 const ExplainSection = () => {
-  const { isLoading, costResult } = useBoundStore(state => state)
+  const { isLoading, costResult } = useAppStore(state => state)
 
   return (
-    <Tabs defaultValue="explain" className="h-full relative flex flex-col p-4 max-h-full">
+    <Tabs
+      defaultValue="explain"
+      className="h-full relative flex flex-col p-4 max-h-full"
+    >
       <TabsList className="grid w-full grid-cols-4">
         <TabsTrigger value="explain">Explain</TabsTrigger>
         <TabsTrigger value="code">Code</TabsTrigger>

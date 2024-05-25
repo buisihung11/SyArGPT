@@ -11,8 +11,8 @@ import {
   TableHeader,
   TableRow
 } from "@/components/ui/table"
-import { CostResult } from "@/stores/costSlice"
 import { Skeleton } from "../ui/skeleton"
+import { CostResult } from "@/stores"
 
 type CostTabType = {
   costResult?: CostResult
