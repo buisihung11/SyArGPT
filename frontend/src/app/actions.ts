@@ -105,7 +105,7 @@ export async function generateTerraformCode(body: { diagramCode: string }) {
         secretAccessKey: process.env.BEDROCK_AWS_SECRET_ACCESS_KEY!
       },
       modelKwargs: { temperature: 0.5 },
-      maxTokens: 4000
+      maxTokens: 4096
     })
 
     const parser = StructuredOutputParser.fromZodSchema(TerraformAISchema)
