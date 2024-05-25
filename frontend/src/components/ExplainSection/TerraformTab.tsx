@@ -1,11 +1,10 @@
 "use client"
 
-import { TerraformResult } from "@/stores/terraformSlice"
-import { useTerraformStore } from "@/stores/useBoundStore"
 import { Editor } from "@monaco-editor/react"
 import { useTheme } from "next-themes"
 import { LazyLog } from "@melloware/react-logviewer"
 import { useEffect, useState } from "react"
+import { useTerraformStore } from "@/stores"
 
 /**
  * v0 by Vercel.
@@ -87,7 +86,7 @@ export default function TerraformTab() {
             text={logs.map(l => l.log).join("\n")}
           />
         </div>
-      ): null}
+      ) : null}
     </div>
   )
 }

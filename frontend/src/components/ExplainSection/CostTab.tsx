@@ -11,11 +11,11 @@ import {
   TableHeader,
   TableRow
 } from "@/components/ui/table"
-import { CostResult } from "@/stores/costSlice"
 import { Skeleton } from "../ui/skeleton"
+import { Cost } from "@/types"
 
 type CostTabType = {
-  costResult?: CostResult
+  costResult?: Cost
   isCostTabLoading: boolean
 }
 

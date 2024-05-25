@@ -2,87 +2,34 @@
 
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
-import { useBoundStore } from "@/stores/useBoundStore"
+import { Cost } from "@/types"
+import { FC } from "react"
+import CodeTab from "./CodeTab"
 import CostTab from "./CostTab"
 import CustomTabsContent from "./CustomTabsContent"
 import ExplainTab from "./ExplainTab"
-import CodeTab from "./CodeTab"
 import TerraformTab from "./TerraformTab"
 
-const markdown = `
-<div align="center"><a name="readme-top"></a>
+type ExplainSectionType = {
+  isExplainCodeImageLoading: boolean
+  isCostLoading: boolean
+  costResult?: Cost
+  codeResult?: string
+  explainResult?: string
+}
 
-[![][image-banner]][deployment-link]
-
-<br/>
-
-# SyArGPT
-
-An AI Application that generates diagram from user system requirements
-
-</div>
-
-## 👋🏻 Getting Started
-
-### Requirements 
-
-- Generate System Architecture from User requirements
-- Follow AWS Well Architecture
-- Can export result to **drawio** or **Mermaid** 
-- Support **justification/explanation** where user can add more input from first result 
-- Leverage the power of generative AI and 
-    - open knowledge on Internet (for example: architecture blueprint shared by AWS, etc.)
-    - on Intranet 
-- The design output must consider the security, maintainability, scalability,...
-
-## ✨ Features
-
-### "1" Generate diagram from prompt
-### "2" Justify result from system
-### "3" Export result to draw.io or mermaid format
-### "4" Generate explanation/document for diagram
-### "5" Generate code templates based on design
-### "6" Import document
-### "1" Generate diagram from prompt
-### "2" Justify result from system
-### "3" Export result to draw.io or mermaid format
-### "4" Generate explanation/document for diagram
-### "5" Generate code templates based on design
-### "6" Import document
-### "1" Generate diagram from prompt
-### "2" Justify result from system
-### "3" Export result to draw.io or mermaid format
-### "4" Generate explanation/document for diagram
-### "5" Generate code templates based on design
-### "6" Import document
-### "1" Generate diagram from prompt
-### "2" Justify result from system
-### "3" Export result to draw.io or mermaid format
-### "4" Generate explanation/document for diagram
-### "5" Generate code templates based on design
-### "6" Import document
-
-
-## ⌨️ Development
-
-### Component Architect
-[![][component-arch]][deployment-link]
-
-TODO
-
-
-[image-banner]: https://github.com/buisihung11/SyArGPT/blob/main/assets/banner.png?raw=true
-[component-arch]: https://github.com/buisihung11/SyArGPT/blob/main/assets/ComponentArchitect.png?raw=true
-[deployment-link]: https://github.com/buisihung11/SyArGPT
-`
-
-const editorText = `// some comment`
-
-const ExplainSection = () => {
-  const { isLoading, costResult } = useBoundStore(state => state)
-
+const ExplainSection: FC<ExplainSectionType> = ({
+  isExplainCodeImageLoading,
+  isCostLoading,
+  costResult,
+  codeResult,
+  explainResult
+}) => {
   return (
-    <Tabs defaultValue="explain" className="h-full relative flex flex-col p-4 max-h-full">
+    <Tabs
+      defaultValue="explain"
+      className="h-full relative flex flex-col p-4 max-h-full"
+    >
       <TabsList className="grid w-full grid-cols-4">
         <TabsTrigger value="explain">Explain</TabsTrigger>
         <TabsTrigger value="code">Code</TabsTrigger>
@@ -91,15 +38,21 @@ const ExplainSection = () => {
       </TabsList>
 
       <CustomTabsContent value="explain">
-        <ExplainTab markdown={markdown} />
+        <ExplainTab
+          markdown={explainResult}
+          isExplainTabLoading={isExplainCodeImageLoading}
+        />
       </CustomTabsContent>
 
       <CustomTabsContent value="code">
-        <CodeTab editorText={editorText} />
+        <CodeTab
+          editorText={codeResult}
+          isCodeTabLoading={isExplainCodeImageLoading}
+        />
       </CustomTabsContent>
 
       <CustomTabsContent value="cost">
-        <CostTab costResult={costResult} isCostTabLoading={isLoading} />
+        <CostTab costResult={costResult} isCostTabLoading={isCostLoading} />
       </CustomTabsContent>
 
       <CustomTabsContent className="overflow-y-hidden" value="terraform">

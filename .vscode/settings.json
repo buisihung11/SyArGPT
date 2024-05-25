@@ -1,7 +1,10 @@
 {
     "cSpell.words": [
         "docco",
+        "Kwargs",
+        "langchain",
         "rehype",
+        "Tavily",
         "unoptimized"
     ]
 }
