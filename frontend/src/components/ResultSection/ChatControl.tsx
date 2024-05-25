@@ -4,10 +4,16 @@ import { costEstimate, generateTerraformCode } from "@/app/actions"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { useAppStore, useChatStore, useTerraformStore } from "@/stores"
+import {
+  AppSlice,
+  useAppStore,
+  useChatStore,
+  useTerraformStore
+} from "@/stores"
 import { CornerDownLeft, Loader2 } from "lucide-react"
 import { useToast } from "../ui/use-toast"
-import { AppResponse } from "@/types"
+import { v4 } from "uuid"
+import { AppResponse, Cost } from "@/types"
 
 const ChatControl = () => {
   const { toast } = useToast()
@@ -15,9 +21,15 @@ const ChatControl = () => {
   const onInputPrompt = useChatStore(state => state.onInputPrompt)
   const prompt = useChatStore(state => state.prompt)
   const onConversation = useChatStore(state => state.onConversation)
-  const { setCostResult, setIsCostLoading, isLoading } = useAppStore(
-    (state: any) => state
-  )
+  const {
+    setCostResult,
+    setIsCostLoading,
+    isExplainCodeImageLoading,
+    setExplainResult,
+    setCodeResult,
+    setImageResult,
+    setIsExplainCodeImageLoading
+  } = useAppStore((state: AppSlice) => state)
   const setLogs = useTerraformStore(state => state.setLogs)
 
   const setTerraformLoading = useTerraformStore(state => state.setIsLoading)
@@ -36,16 +48,70 @@ const ChatControl = () => {
     }
 
     // TODO: Call API to generate the diagram + explanation
-    fetchCost()
-    fetchTerraform()
+    await fetchCost(prompt)
+    await fetchAppData(prompt)
+    await fetchTerraform()
   }
 
-  const fetchCost = async () => {
-    setIsCostLoading(true)
-    const data = await costEstimate({ input: prompt })
-    console.log("data", data)
-    setCostResult(data)
-    setIsCostLoading(false)
+  const fetchAppData = async (prompt: string) => {
+    try {
+      setIsExplainCodeImageLoading(true)
+
+      const url = `/api/appData`
+      const method = "POST"
+
+      const res = await fetch(url, {
+        method,
+        headers: {
+          Accept: "application/json"
+        },
+        body: JSON.stringify({
+          session_id: v4(),
+          message: prompt
+        })
+      })
+
+      const resJSON: AppResponse = await res.json()
+
+      const { codeBlock, explain, imageURL } = resJSON
+
+      setCodeResult(codeBlock)
+      setExplainResult(explain)
+      setImageResult(imageURL)
+    } catch (error) {
+      throw error
+    } finally {
+      setIsExplainCodeImageLoading(false)
+    }
+  }
+
+  const fetchCost = async (prompt: string) => {
+    try {
+      setIsCostLoading(true)
+
+      const url = `/api/cost`
+      const method = "POST"
+
+      const res = await fetch(url, {
+        method,
+        headers: {
+          Accept: "application/json"
+        },
+        body: JSON.stringify({
+          message: prompt
+        })
+      })
+
+      const resJSON: Cost = await res.json()
+
+      console.log({ resJSON })
+
+      setCostResult(resJSON)
+    } catch (error) {
+      throw error
+    } finally {
+      setIsCostLoading(false)
+    }
   }
 
   const fetchTerraform = async () => {
@@ -128,13 +194,13 @@ const ChatControl = () => {
 
         <div className="p-4 w-full">
           <Button
-            disabled={isAppLoading}
+            disabled={isExplainCodeImageLoading}
             type="submit"
             size="sm"
             className="ml-auto gap-1.5 w-full cursor-pointer"
           >
             Send Message
-            {isAppLoading ? (
+            {isExplainCodeImageLoading ? (
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
             ) : (
               <CornerDownLeft className="size-3.5" />

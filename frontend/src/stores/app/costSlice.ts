@@ -1,20 +1,10 @@
-import { z } from "zod"
+import { Cost } from "@/types"
 import { StateCreator } from "zustand"
 
-export const CostEstimationAISchema = z.object({
-  columns: z.array(z.string()).describe("columns of the table"),
-  rows: z.array(z.array(z.string())).describe("rows of the table"),
-  summary: z.string().describe("summary of the table cost"),
-  monthlyCost: z.number().describe("monthly cost"),
-  yearlyCost: z.number().describe("yearly cost")
-})
-
-export type CostResult = z.infer<typeof CostEstimationAISchema>
-
 export type CostSlice = {
-  costResult?: CostResult
+  costResult?: Cost
   isCostLoading: boolean
-  setCostResult: (costResult: CostResult) => void
+  setCostResult: (costResult: Cost) => void
   setIsCostLoading: (isCostLoading: boolean) => void
 }
 
@@ -24,7 +14,7 @@ export const createCostSlice: StateCreator<CostSlice, [], [], CostSlice> = (
 ) => ({
   costResult: undefined,
   isCostLoading: false,
-  setCostResult: (costResult: CostResult) => {
+  setCostResult: (costResult: Cost) => {
     set(state => ({ costResult }))
   },
   setIsCostLoading: (isCostLoading: boolean) => {

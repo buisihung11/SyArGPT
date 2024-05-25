@@ -1,4 +1,8 @@
-export type RequestWithSessionIdAndMessage = Request & {
-  session_id: string
+export type RequestWithMessage = Request & {
   message: string
 }
+
+export type RequestWithSessionIdAndMessage = Request &
+  RequestWithMessage & {
+    session_id: string
+  }

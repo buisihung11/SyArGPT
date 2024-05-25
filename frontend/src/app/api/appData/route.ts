@@ -1,11 +1,11 @@
-import { costEstimate } from "@/app/actions"
+import { NextResponse } from "next/server"
+
 import { safeParseJSON } from "@/lib/utils"
 import {
-  RequestWithSessionIdAndMessage,
+  AppResponse,
   AppResponseFromDownStream,
-  AppResponse
+  RequestWithSessionIdAndMessage
 } from "@/types"
-import { NextResponse } from "next/server"
 
 const url =
   "https://d5pwmtbqsjjpobgmezncgl3nbm0ejoqr.lambda-url.us-west-2.on.aws/"
@@ -14,8 +14,6 @@ export async function POST(request: RequestWithSessionIdAndMessage) {
   try {
     const reqJSON = await request.json()
     const { session_id, message } = reqJSON
-
-    const cost = await costEstimate({ input: message })
 
     const method = "POST"
 
@@ -43,10 +41,9 @@ export async function POST(request: RequestWithSessionIdAndMessage) {
     const { code_block: codeBlock, explain, image } = bodyJSON
 
     return NextResponse.json<AppResponse>({
-      cost,
       codeBlock,
       explain,
-      image: new URL(image)
+      imageURL: new URL(image || "")
     })
   } catch (e: any) {
     return NextResponse.json({ error: e.message }, { status: e.status ?? 500 })

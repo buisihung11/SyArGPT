@@ -1,8 +1,10 @@
+"use client"
+
 import { Bird, Rabbit, Settings, Share, Turtle } from "lucide-react"
 
 import ExplainSection from "@/components/ExplainSection/ExplainSection"
-import HistorySection from "@/components/HistorySection/HistorySection"
 import Nav from "@/components/Nav"
+import ChatControl from "@/components/ResultSection/ChatControl"
 import ResultSection from "@/components/ResultSection/ResultSection"
 import { Button } from "@/components/ui/button"
 import {
@@ -29,9 +31,17 @@ import {
 } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
 import { TooltipProvider } from "@/components/ui/tooltip"
-import ChatControl from "@/components/ResultSection/ChatControl"
+import { AppSlice, useAppStore } from "@/stores"
 
 export default function Dashboard() {
+  const {
+    isExplainCodeImageLoading,
+    isCostLoading,
+    costResult,
+    codeResult,
+    explainResult
+  } = useAppStore((state: AppSlice) => state)
+
   return (
     <TooltipProvider>
       <div className="h-screen w-full pl-[56px]">
@@ -159,10 +169,7 @@ export default function Dashboard() {
               </DrawerContent>
             </Drawer>
             <div className="ml-auto gap-1.5 text-sm">
-              <Button
-                size="sm"
-                className="mr-2 gap-1.5 text-sm"
-              >
+              <Button size="sm" className="mr-2 gap-1.5 text-sm">
                 New Generation
               </Button>
               <Button
@@ -186,7 +193,13 @@ export default function Dashboard() {
               </ResizablePanel>
               <ResizableHandle withHandle />
               <ResizablePanel defaultSize={20}>
-                <ExplainSection />
+                <ExplainSection
+                  isExplainCodeImageLoading={isExplainCodeImageLoading}
+                  isCostLoading={isCostLoading}
+                  costResult={costResult}
+                  codeResult={codeResult}
+                  explainResult={explainResult}
+                />
               </ResizablePanel>
             </ResizablePanelGroup>
           </main>

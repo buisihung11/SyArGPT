@@ -4,7 +4,8 @@ import { BedrockChat } from "@langchain/community/chat_models/bedrock"
 import { PromptTemplate } from "@langchain/core/prompts"
 import { StructuredOutputParser } from "@langchain/core/output_parsers"
 import { TavilySearchAPIRetriever } from "@langchain/community/retrievers/tavily_search_api"
-import { CostEstimationAISchema, TerraformAISchema } from "@/stores"
+import { TerraformAISchema } from "@/stores"
+import { CostEstimationAISchema } from "@/types"
 
 const retriever = new TavilySearchAPIRetriever({
   k: 3

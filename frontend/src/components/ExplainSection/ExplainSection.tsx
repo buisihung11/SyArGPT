@@ -2,17 +2,29 @@
 
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
+import { Cost } from "@/types"
+import { FC } from "react"
+import CodeTab from "./CodeTab"
 import CostTab from "./CostTab"
 import CustomTabsContent from "./CustomTabsContent"
 import ExplainTab from "./ExplainTab"
-import CodeTab from "./CodeTab"
 import TerraformTab from "./TerraformTab"
-import { useAppStore } from "@/stores"
 
-const ExplainSection = () => {
-  const { isExplainCodeImageLoading, costResult, codeResult, explainResult } =
-    useAppStore((state: any) => state)
+type ExplainSectionType = {
+  isExplainCodeImageLoading: boolean
+  isCostLoading: boolean
+  costResult?: Cost
+  codeResult?: string
+  explainResult?: string
+}
 
+const ExplainSection: FC<ExplainSectionType> = ({
+  isExplainCodeImageLoading,
+  isCostLoading,
+  costResult,
+  codeResult,
+  explainResult
+}) => {
   return (
     <Tabs
       defaultValue="explain"
@@ -26,18 +38,21 @@ const ExplainSection = () => {
       </TabsList>
 
       <CustomTabsContent value="explain">
-        <ExplainTab markdown={explainResult} />
+        <ExplainTab
+          markdown={explainResult}
+          isExplainTabLoading={isExplainCodeImageLoading}
+        />
       </CustomTabsContent>
 
       <CustomTabsContent value="code">
-        <CodeTab editorText={codeResult} />
+        <CodeTab
+          editorText={codeResult}
+          isCodeTabLoading={isExplainCodeImageLoading}
+        />
       </CustomTabsContent>
 
       <CustomTabsContent value="cost">
-        <CostTab
-          costResult={costResult}
-          isCostTabLoading={isExplainCodeImageLoading}
-        />
+        <CostTab costResult={costResult} isCostTabLoading={isCostLoading} />
       </CustomTabsContent>
 
       <CustomTabsContent value="terraform">

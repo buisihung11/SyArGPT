@@ -12,10 +12,10 @@ import {
   TableRow
 } from "@/components/ui/table"
 import { Skeleton } from "../ui/skeleton"
-import { CostResult } from "@/stores"
+import { Cost } from "@/types"
 
 type CostTabType = {
-  costResult?: CostResult
+  costResult?: Cost
   isCostTabLoading: boolean
 }
 
@@ -89,7 +89,7 @@ function TableSkeleton() {
             <TableRow>
               <TableHead className="w-[100px]">Service</TableHead>
               <TableHead>Cost</TableHead>
-              <TableHead className="text-right">Montly Cost</TableHead>
+              <TableHead className="text-right">Monthly Cost</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
