@@ -48,9 +48,10 @@ const ChatControl = () => {
     }
 
     // TODO: Call API to generate the diagram + explanation
-    await fetchCost(prompt)
-    await fetchAppData(prompt)
-    await fetchTerraform()
+    const { explain } = await fetchAppData(prompt)
+  
+    await fetchCost(explain)
+    await fetchTerraform(explain)
   }
 
   const fetchAppData = async (prompt: string) => {
@@ -78,6 +79,12 @@ const ChatControl = () => {
       setCodeResult(codeBlock)
       setExplainResult(explain)
       setImageResult(imageURL)
+
+      return {
+        codeBlock,
+        explain,
+        imageURL
+      }
     } catch (error) {
       throw error
     } finally {
@@ -114,7 +121,7 @@ const ChatControl = () => {
     }
   }
 
-  const fetchTerraform = async () => {
+  const fetchTerraform = async (prompt: string) => {
     setTerraformLoading(true)
     setLogs([])
     const data = await generateTerraformCode({ diagramCode: prompt })
@@ -132,7 +139,7 @@ const ChatControl = () => {
 
     // call to POST localhost:80/update to test the terraform code
     // Wait until deploy the backend
-    // checkTerraform(requestData)
+    checkTerraform(requestData)
   }
 
   const checkTerraform = async (requestData: any) => {
@@ -185,7 +192,7 @@ const ChatControl = () => {
       setLogs([response])
     } catch (error) {
       console.error("Error uploading files:", error)
-    }finally{
+    } finally {
       setTerraformLoading(false)
     }
   }

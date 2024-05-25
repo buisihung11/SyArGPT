@@ -22,8 +22,8 @@ const retriever = new TavilySearchAPIRetriever({
 export async function costEstimate({ input }: { input: string }) {
   try {
     const TEMPLATE = `
-      As a cloud architect, you have been tasked with providing a cost estimate from a cloud architecture 
-      using the code syntax from https://diagrams.mingrammer.com/. Please ensure the following:
+      As a cloud architect, you have been tasked with providing a cost estimate from a description of a system.
+      Please ensure the following:
 
         1. Make sure you include all components from the diagram in the cost estimate and the number of instances.
         2. Use valid AWS component names for all services.
@@ -70,7 +70,7 @@ export async function generateTerraformCode(body: { diagramCode: string }) {
   try {
     const TEMPLATE = `
         As a cloud architect, you have been tasked with generating terraform code from a cloud architecture
-        diagram using the code syntax from https://diagrams.mingrammer.com/. Please ensure the following:
+        document. Please ensure the following:
 
         1. Include all components from the diagram in the terraform code.
         2. Use valid AWS component names for all services.
