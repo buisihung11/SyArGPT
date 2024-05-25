@@ -7,6 +7,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { useAppStore, useChatStore, useTerraformStore } from "@/stores"
 import { CornerDownLeft, Loader2 } from "lucide-react"
 import { useToast } from "../ui/use-toast"
+import { AppResponse } from "@/types"
 
 const ChatControl = () => {
   const { toast } = useToast()
@@ -15,7 +16,7 @@ const ChatControl = () => {
   const prompt = useChatStore(state => state.prompt)
   const onConversation = useChatStore(state => state.onConversation)
   const { setCostResult, setIsCostLoading, isLoading } = useAppStore(
-    state => state
+    (state: any) => state
   )
   const setLogs = useTerraformStore(state => state.setLogs)
 
@@ -33,11 +34,6 @@ const ChatControl = () => {
       })
       return
     }
-
-    const messages = await onConversation({
-      role: "user",
-      content: input
-    })
 
     // TODO: Call API to generate the diagram + explanation
     fetchCost()
@@ -132,13 +128,13 @@ const ChatControl = () => {
 
         <div className="p-4 w-full">
           <Button
-            disabled={isLoading}
+            disabled={isAppLoading}
             type="submit"
             size="sm"
             className="ml-auto gap-1.5 w-full cursor-pointer"
           >
             Send Message
-            {isLoading ? (
+            {isAppLoading ? (
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
             ) : (
               <CornerDownLeft className="size-3.5" />

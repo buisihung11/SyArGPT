@@ -11,23 +11,40 @@ export const CostEstimationAISchema =  z.object({
 
 export type CostResult = z.infer<typeof CostEstimationAISchema>
 
-export type CostSlice = {
+export type AppSlice = {
+  explainResult?: string
+  codeResult?: string
   costResult?: CostResult
-  isLoading: boolean
+  imageResult?: URL
+  isAppLoading: boolean
+  setExplainResult: (explainResult: string) => void
+  setCodeResult: (codeResult: string) => void
   setCostResult: (costResult: CostResult) => void
-  setIsCostLoading: (isLoading: boolean) => void
+  setImageResult: (imageResult: URL) => void
+  setIsAppLoading: (isAppLoading: boolean) => void
 }
 
-export const createCostSlice: StateCreator<CostSlice, [], [], CostSlice> = (
+export const createAppSlice: StateCreator<AppSlice, [], [], AppSlice> = (
   set,
   get
 ) => ({
+  explainResult: undefined,
+  codeResult: undefined,
   costResult: undefined,
-  isLoading: false,
+  isAppLoading: false,
+  setExplainResult: (explainResult: string) => {
+    set(state => ({ explainResult }))
+  },
+  setCodeResult: (codeResult: string) => {
+    set(state => ({ codeResult }))
+  },
   setCostResult: (costResult: CostResult) => {
     set(state => ({ costResult }))
   },
-  setIsCostLoading: (isLoading: boolean) => {
-    set(state => ({ isLoading }))
+  setImageResult: (imageResult: URL) => {
+    set(state => ({ imageResult }))
+  },
+  setIsAppLoading: (isAppLoading: boolean) => {
+    set(state => ({ isAppLoading }))
   }
 })
