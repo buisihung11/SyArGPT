@@ -81,29 +81,52 @@ const CostTab: FC<CostTabType> = ({ costResult, isCostTabLoading }) => {
 }
 
 function TableSkeleton() {
+  const mockColumns = [
+    "Service Name",
+    "Monthly Cost",
+    "Region",
+    "Config Summary"
+  ]
+
   return (
     <div className="border rounded-lg w-full">
       <div className="relative w-full overflow-hidden">
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="w-[100px]">Service</TableHead>
-              <TableHead>Cost</TableHead>
-              <TableHead className="text-right">Montly Cost</TableHead>
+              {mockColumns.map((column, idx) => (
+                <TableHead
+                  className={
+                    idx === 0
+                      ? "w-[100px]"
+                      : idx === mockColumns.length - 1
+                      ? "text-right"
+                      : ""
+                  }
+                  key={idx}
+                >
+                  {column}
+                </TableHead>
+              ))}
             </TableRow>
           </TableHeader>
-          <TableBody>
+          <TableBody className="bg-muted">
             {new Array(5).fill(undefined).map((_, idx) => (
               <TableRow key={idx}>
-                <TableCell>
-                  <Skeleton className="h-4 w-[80px]" />
-                </TableCell>
-                <TableCell>
-                  <Skeleton className="h-4 w-[80px]" />
-                </TableCell>
-                <TableCell>
-                  <Skeleton className="h-4 w-[100px] ml-auto" />
-                </TableCell>
+                {mockColumns.map((_, idx) => (
+                  <TableCell
+                    key={idx}
+                    className={
+                      idx === 0
+                        ? "w-[100px]"
+                        : idx === mockColumns.length - 1
+                        ? "text-right"
+                        : ""
+                    }
+                  >
+                    <Skeleton />
+                  </TableCell>
+                ))}
               </TableRow>
             ))}
           </TableBody>
