@@ -70,7 +70,8 @@ const ChatControl = () => {
     }
 
     // call to POST localhost:80/update to test the terraform code
-    // checkTerraform(requestData) Wait until deploy the backend
+    // Wait until deploy the backend
+    // checkTerraform(requestData)
   }
 
   const checkTerraform = async (requestData: any) => {
@@ -99,6 +100,7 @@ const ChatControl = () => {
             .split("\n")
             .filter(line => line)
             .map(line => JSON.parse(line))
+          console.log("logEntries", logEntries)
           setLogs([...logEntries])
         }
       }
@@ -106,6 +108,24 @@ const ChatControl = () => {
       readStream()
     } catch (error) {
       console.error("Error uploading files:", error)
+    }
+  }
+
+  const checkTerraformSync = async (requestData: any) => {
+    try {
+      const response = await fetch("http://localhost:80/upload-sync", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(requestData)
+      }).then(res => res.json())
+      console.log("response", response)
+      setLogs([response])
+    } catch (error) {
+      console.error("Error uploading files:", error)
+    }finally{
+      setTerraformLoading(false)
     }
   }
 
