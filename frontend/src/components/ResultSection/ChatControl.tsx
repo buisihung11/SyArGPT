@@ -185,7 +185,7 @@ const ChatControl = () => {
       setLogs([response])
     } catch (error) {
       console.error("Error uploading files:", error)
-    }finally{
+    } finally {
       setTerraformLoading(false)
     }
   }

@@ -13,5 +13,5 @@ export type Cost = z.infer<typeof CostEstimationAISchema>
 export type AppResponse = {
   codeBlock: string
   explain: string
-  imageURL: URL
+  imageURL: URL | null
 }
