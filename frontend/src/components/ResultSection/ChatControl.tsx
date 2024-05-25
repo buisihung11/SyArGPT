@@ -14,13 +14,14 @@ import { CornerDownLeft, Loader2 } from "lucide-react"
 import { useToast } from "../ui/use-toast"
 import { v4 } from "uuid"
 import { AppResponse, Cost } from "@/types"
+import { set } from "zod"
 
 const ChatControl = () => {
   const { toast } = useToast()
 
   const onInputPrompt = useChatStore(state => state.onInputPrompt)
   const prompt = useChatStore(state => state.prompt)
-  const onConversation = useChatStore(state => state.onConversation)
+  
   const {
     setCostResult,
     setIsCostLoading,
@@ -34,6 +35,7 @@ const ChatControl = () => {
 
   const setTerraformLoading = useTerraformStore(state => state.setIsLoading)
   const setTerraformResult = useTerraformStore(state => state.setCode)
+  const cleanLogs = useTerraformStore(state => state.cleanLogs)
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -47,9 +49,14 @@ const ChatControl = () => {
       return
     }
 
+    cleanLogs()
+    setTerraformLoading(true)
+    setCostResult(null)
+    setIsCostLoading(true)
+
     // TODO: Call API to generate the diagram + explanation
     const { explain } = await fetchAppData(prompt)
-  
+
     await fetchCost(explain)
     await fetchTerraform(explain)
   }
@@ -139,63 +146,9 @@ const ChatControl = () => {
 
     // call to POST localhost:80/update to test the terraform code
     // Wait until deploy the backend
-    checkTerraform(requestData)
   }
 
-  const checkTerraform = async (requestData: any) => {
-    try {
-      const response = await fetch("http://localhost:80/upload", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(requestData)
-      })
-
-      if (!response.body) {
-        console.error("ReadableStream not yet supported in this browser.")
-        return
-      }
-
-      const reader = response.body.getReader()
-      const decoder = new TextDecoder()
-
-      const readStream = async () => {
-        let result
-        while (!(result = await reader.read()).done) {
-          const chunk = decoder.decode(result.value, { stream: true })
-          const logEntries = chunk
-            .split("\n")
-            .filter(line => line)
-            .map(line => JSON.parse(line))
-          console.log("logEntries", logEntries)
-          setLogs([...logEntries])
-        }
-      }
-
-      readStream()
-    } catch (error) {
-      console.error("Error uploading files:", error)
-    }
-  }
-
-  const checkTerraformSync = async (requestData: any) => {
-    try {
-      const response = await fetch("http://localhost:80/upload-sync", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(requestData)
-      }).then(res => res.json())
-      console.log("response", response)
-      setLogs([response])
-    } catch (error) {
-      console.error("Error uploading files:", error)
-    } finally {
-      setTerraformLoading(false)
-    }
-  }
+  
 
   return (
     <div

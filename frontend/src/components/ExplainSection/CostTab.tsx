@@ -15,7 +15,7 @@ import { Skeleton } from "../ui/skeleton"
 import { Cost } from "@/types"
 
 type CostTabType = {
-  costResult?: Cost
+  costResult?: Cost | null
   isCostTabLoading: boolean
 }
 

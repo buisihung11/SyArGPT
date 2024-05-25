@@ -141,6 +141,47 @@ type ResultSectionType = {
   imageResult?: URL | null
 }
 
+const sampleData = [
+  {
+    name: "PDF Ai Chatbot",
+    prompt: `Cloud architecture for a service that can take PDF files and allow users to have AI chat sessions regarding the content of the PDF files.
+
+    - Vectorize the PDF files using AWS Bedrock Embedding API
+    - Store them on a cloud vector database
+    - store the text chunks in a separate storage.
+    
+    During a chat session, when a user asks a question
+    - turn the question in to a vector using AWS Bedrock
+    - query the vector database
+    - Use query result vectors to retrieve the associated text chunks.
+    - Query AWS Bedrock with the retrieved text chunks and the original user question
+    - Return results from AWS Bedrock to the user. 
+    Use AWS infrastructure where applicable.
+    `
+  },
+  {
+    name: "Git Marketplace",
+    prompt: `
+    Cloud architecture for a marketplace for freelance developers to find work. Allow authentication via GitHub and LinkedIn.
+    Use machine learning to recommend listings.
+    Use React for the frontend, Vercel for deployment.
+    Use a graph database to store user activities, use a SQL database for job listings.
+    Allow payments to be directly made on the platform via Stripe. Use AWS infrastructure where applicable.
+    `
+  },
+  {
+    name: "Wallet Application",
+    prompt: `
+    The Wallet application aims to offer users a secure and convenient way to manage their finances, including storing, sending, and receiving money,
+     paying for services, and tracking financial activities. Key features include user authentication (via email, phone, Google, Facebook),
+      money management (add money, send/receive money, request money), payment services (QR code payments, direct payments), transaction history (view and filter transactions), security features (two-factor authentication, activity monitoring, data encryption), and customer support (in-app chat and email support).
+
+      The application will leverage various AWS services: AWS Cognito for user authentication, Amazon RDS for data storage, AWS Lambda for payment processing, AWS CloudTrail and Shield for security and monitoring, Amazon SageMaker for machine learning, Amazon QuickSight for analytics, 
+      and Amazon SNS/SQS for messaging and notifications. The technology stack includes React.js for the frontend, Node.js for the backend, MySQL/PostgreSQL with Amazon RDS for the database, and Stripe for payment processing. This setup ensures a robust, scalable, and secure financial management platform.
+    `
+  }
+]
+
 const ResultSection: FC<ResultSectionType> = ({ imageResult }) => {
   const currentMessage = useChatStore(state => state.currentMessage)
   const isInit = !imageResult
@@ -148,6 +189,7 @@ const ResultSection: FC<ResultSectionType> = ({ imageResult }) => {
   const [viewMode, setViewMode] = useState<"image" | "edit">("image")
   const [isLoaded, setIsLoaded] = useState(false)
   const [fetchingXMLFile, setFetchingXMLFile] = useState(false)
+  const setPrompt = useChatStore(state => state.onInputPrompt)
   const drawioRef = useRef<DrawIoEmbedRef>(null)
   const downloadRef = useRef<HTMLAnchorElement | null>(null)
 
@@ -171,7 +213,7 @@ const ResultSection: FC<ResultSectionType> = ({ imageResult }) => {
   }
 
   return (
-    <div className="relative flex h-full min-h-[50vh] flex-col">
+    <div className="relative flex flex-col h-full min-h-[50vh]">
       <a ref={downloadRef} className="hidden" />
       <GridBackgroundDemo />
       {isInit ? (
@@ -190,35 +232,45 @@ const ResultSection: FC<ResultSectionType> = ({ imageResult }) => {
             Start by creating a new diagram or loading an existing one to begin
             collaborating.
           </p>
+          <div className="mt-4">
+            <h4 className="text-sm font-semibold tracking-tight mb-2">
+              Or try our samples
+            </h4>
+            <div className="flex flex-row gap-2 items-center justify-center">
+              {sampleData.map((data, idx) => (
+                <Button
+                  key={idx}
+                  onClick={() => {
+                    setPrompt(data.prompt)
+                  }}
+                  variant="outline"
+                  size="sm"
+                >
+                  {data.name}
+                </Button>
+              ))}
+            </div>
+          </div>
         </div>
       ) : (
-        <>
+        <div className="flex-1 h-full">
           <div
-            className={`p-4 flex flex-col gap-2 items-center h-full justify-center ${
+            className={`p-4 flex flex-col gap-2 h-full items-center max-h-[80%] w-full justify-center ${
               viewMode !== "image" && "hidden"
             }`}
           >
-            <AspectRatio ratio={16 / 9} className="bg-muted shadow-md">
+            <div className="bg-muted shadow-md w-full h-full max-w-[800px] mx-auto relative">
               {imageResult && (
                 <Image
                   src={imageResult as unknown as string}
                   alt="Cloud Architecture Diagram"
                   fill
+                  objectFit="contain"
                   className="rounded-md object-cover cursor-pointer"
                 />
               )}
-            </AspectRatio>
-            <div className="flex gap-2">
-              <Button
-                onClick={() => {
-                  setViewMode("edit")
-                }}
-                variant="outline"
-                size="sm"
-              >
-                <Edit2 className="mr-2 h-4 w-4" />
-                Edit mode
-              </Button>
+            </div>
+            <div className="flex flex-row gap-2">
               <Button
                 onClick={() => {
                   drawioRef.current?.exportDiagram({
@@ -243,10 +295,11 @@ const ResultSection: FC<ResultSectionType> = ({ imageResult }) => {
               onExport={onExportFile}
             />
           </div>
-        </>
+        </div>
       )}
-      <div className="flex-1" />
-      <HistorySection />
+      <div className="h-36 min-h-36 justify-self-end">
+        <HistorySection />
+      </div>
     </div>
   )
 }

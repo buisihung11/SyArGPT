@@ -80,6 +80,7 @@ export async function generateTerraformCode(body: { diagramCode: string }) {
         variables.tf, data.tf.
         6. The terraform code should be able to be run on AWS.
         7. The terraform code should follow terraform bestpractice.
+        8. If there are any password configuraiton needed, use zaq@1234 as the password.
         Here is the cloud architecture diagram:
 
         \`\`\`

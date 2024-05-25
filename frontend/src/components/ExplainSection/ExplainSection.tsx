@@ -13,7 +13,7 @@ import TerraformTab from "./TerraformTab"
 type ExplainSectionType = {
   isExplainCodeImageLoading: boolean
   isCostLoading: boolean
-  costResult?: Cost
+  costResult?: Cost | null
   codeResult?: string
   explainResult?: string
 }

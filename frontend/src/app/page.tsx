@@ -32,6 +32,17 @@ import {
 import { Textarea } from "@/components/ui/textarea"
 import { TooltipProvider } from "@/components/ui/tooltip"
 import { AppSlice, useAppStore } from "@/stores"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger
+} from "@/components/ui/alert-dialog"
 
 export const maxDuration = 60
 
@@ -172,9 +183,26 @@ export default function Dashboard() {
               </DrawerContent>
             </Drawer>
             <div className="ml-auto gap-1.5 text-sm">
-              <Button size="sm" className="mr-2 gap-1.5 text-sm">
-                New Generation
-              </Button>
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button size="sm" className="mr-2 gap-1.5 text-sm">
+                    New Generation
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Coming Soon</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      We are working hard to bring you something amazing. Stay
+                      tuned!
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+
               <Button
                 variant="outline"
                 size="sm"

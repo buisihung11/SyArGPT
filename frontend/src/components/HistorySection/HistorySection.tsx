@@ -6,7 +6,7 @@ const HistorySection = () => {
   const messages = useChatStore(state => state.messages)
 
   return (
-    <div className="relative flex h-36 flex-col p-4 bg-background border-t-2">
+    <div className="h-full flex flex-col p-4 bg-background border-t-2">
       <h1 className="text-xl font-semibold">History</h1>
       {messages.map((message, index) => (
         <div key={index} className="flex gap-4">
