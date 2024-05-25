@@ -10,6 +10,8 @@ import {
 const url =
   "https://d5pwmtbqsjjpobgmezncgl3nbm0ejoqr.lambda-url.us-west-2.on.aws/"
 
+export const maxDuration = 60
+
 export async function POST(request: RequestWithSessionIdAndMessage) {
   try {
     const reqJSON = await request.json()
