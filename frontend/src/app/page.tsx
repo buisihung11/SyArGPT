@@ -33,7 +33,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { TooltipProvider } from "@/components/ui/tooltip"
 import { AppSlice, useAppStore } from "@/stores"
 
-export const maxDuration = 60;
+export const maxDuration = 60
 
 export default function Dashboard() {
   const {
@@ -41,6 +41,7 @@ export default function Dashboard() {
     isCostLoading,
     costResult,
     codeResult,
+    imageResult,
     explainResult
   } = useAppStore((state: AppSlice) => state)
 
@@ -191,7 +192,7 @@ export default function Dashboard() {
               </ResizablePanel>
               <ResizableHandle withHandle />
               <ResizablePanel defaultSize={60}>
-                <ResultSection />
+                <ResultSection imageResult={imageResult} />
               </ResizablePanel>
               <ResizableHandle withHandle />
               <ResizablePanel defaultSize={20}>

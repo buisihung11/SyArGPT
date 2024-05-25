@@ -2,7 +2,7 @@
 
 import { Edit2, File } from "lucide-react"
 import Image from "next/image"
-import { useEffect, useRef, useState } from "react"
+import { FC, useEffect, useRef, useState } from "react"
 import { DrawIoEmbed, DrawIoEmbedRef, EventExport } from "react-drawio"
 import { GridBackgroundDemo } from "../GridBackground/GridBackground"
 import HistorySection from "../HistorySection/HistorySection"
@@ -137,9 +137,13 @@ const sampleXMLDiagram = `
 </mxfile>
 `
 
-const ResultSection = () => {
+type ResultSectionType = {
+  imageResult?: URL | null
+}
+
+const ResultSection: FC<ResultSectionType> = ({ imageResult }) => {
   const currentMessage = useChatStore(state => state.currentMessage)
-  const isInit = !currentMessage
+  const isInit = !imageResult
 
   const [viewMode, setViewMode] = useState<"image" | "edit">("image")
   const [isLoaded, setIsLoaded] = useState(false)
@@ -195,12 +199,14 @@ const ResultSection = () => {
             }`}
           >
             <AspectRatio ratio={16 / 9} className="bg-muted shadow-md">
-              <Image
-                src="/assets/images/event_processing_diagram.png"
-                alt="Cloud Architecture Diagram"
-                fill
-                className="rounded-md object-cover cursor-pointer"
-              />
+              {imageResult && (
+                <Image
+                  src={imageResult as unknown as string}
+                  alt="Cloud Architecture Diagram"
+                  fill
+                  className="rounded-md object-cover cursor-pointer"
+                />
+              )}
             </AspectRatio>
             <div className="flex gap-2">
               <Button
