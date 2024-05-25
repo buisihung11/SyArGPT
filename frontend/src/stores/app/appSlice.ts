@@ -1,24 +1,26 @@
 import { StateCreator } from "zustand"
 
-export type AppSlice = {
+export type ExplainCodeImageSlice = {
   explainResult?: string
   codeResult?: string
   imageResult?: URL
-  isAppLoading: boolean
+  isExplainCodeImageLoading: boolean
   setExplainResult: (explainResult: string) => void
   setCodeResult: (codeResult: string) => void
   setImageResult: (imageResult: URL) => void
-  setIsAppLoading: (isAppLoading: boolean) => void
+  setIsExplainCodeImageLoading: (isExplainCodeImageLoading: boolean) => void
 }
 
-export const createAppSlice: StateCreator<AppSlice, [], [], AppSlice> = (
-  set,
-  get
-) => ({
+export const createExplainCodeImageSlice: StateCreator<
+  ExplainCodeImageSlice,
+  [],
+  [],
+  ExplainCodeImageSlice
+> = (set, get) => ({
   explainResult: undefined,
   codeResult: undefined,
   costResult: undefined,
-  isAppLoading: false,
+  isExplainCodeImageLoading: false,
   setExplainResult: (explainResult: string) => {
     set(state => ({ explainResult }))
   },
@@ -28,7 +30,7 @@ export const createAppSlice: StateCreator<AppSlice, [], [], AppSlice> = (
   setImageResult: (imageResult: URL) => {
     set(state => ({ imageResult }))
   },
-  setIsAppLoading: (isAppLoading: boolean) => {
-    set(state => ({ isAppLoading }))
+  setIsExplainCodeImageLoading: (isExplainCodeImageLoading: boolean) => {
+    set(state => ({ isExplainCodeImageLoading }))
   }
 })

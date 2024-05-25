@@ -1,8 +1,10 @@
 import { create } from "zustand"
 import { CostSlice, createCostSlice } from "./costSlice"
-import { AppSlice, createAppSlice } from "./appSlice"
+import { ExplainCodeImageSlice, createExplainCodeImageSlice } from "./appSlice"
 
-export const useAppStore = create<CostSlice & AppSlice>((...arg) => ({
+export type AppSlice = CostSlice & ExplainCodeImageSlice
+
+export const useAppStore = create<AppSlice>((...arg) => ({
   ...createCostSlice(...arg),
-  ...createAppSlice(...arg)
+  ...createExplainCodeImageSlice(...arg)
 }))

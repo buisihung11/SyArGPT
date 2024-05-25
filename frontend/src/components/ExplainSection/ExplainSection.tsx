@@ -10,9 +10,8 @@ import TerraformTab from "./TerraformTab"
 import { useAppStore } from "@/stores"
 
 const ExplainSection = () => {
-  const { isAppLoading, costResult, codeResult, explainResult } = useAppStore(
-    (state: any) => state
-  )
+  const { isExplainCodeImageLoading, costResult, codeResult, explainResult } =
+    useAppStore((state: any) => state)
 
   return (
     <Tabs
@@ -35,7 +34,10 @@ const ExplainSection = () => {
       </CustomTabsContent>
 
       <CustomTabsContent value="cost">
-        <CostTab costResult={costResult} isCostTabLoading={isAppLoading} />
+        <CostTab
+          costResult={costResult}
+          isCostTabLoading={isExplainCodeImageLoading}
+        />
       </CustomTabsContent>
 
       <CustomTabsContent value="terraform">
