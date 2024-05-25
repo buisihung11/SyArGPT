@@ -31,7 +31,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { TooltipProvider } from "@/components/ui/tooltip"
 import ChatControl from "@/components/ResultSection/ChatControl"
 
-export const maxDuration = 90;
+export const maxDuration = 60;
 
 export default function Dashboard() {
   return (
