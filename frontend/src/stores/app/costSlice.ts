@@ -1,7 +1,7 @@
 import { z } from "zod"
 import { StateCreator } from "zustand"
 
-export const CostEstimationAISchema =  z.object({
+export const CostEstimationAISchema = z.object({
   columns: z.array(z.string()).describe("columns of the table"),
   rows: z.array(z.array(z.string())).describe("rows of the table"),
   summary: z.string().describe("summary of the table cost"),
@@ -11,40 +11,23 @@ export const CostEstimationAISchema =  z.object({
 
 export type CostResult = z.infer<typeof CostEstimationAISchema>
 
-export type AppSlice = {
-  explainResult?: string
-  codeResult?: string
+export type CostSlice = {
   costResult?: CostResult
-  imageResult?: URL
-  isAppLoading: boolean
-  setExplainResult: (explainResult: string) => void
-  setCodeResult: (codeResult: string) => void
+  isCostLoading: boolean
   setCostResult: (costResult: CostResult) => void
-  setImageResult: (imageResult: URL) => void
-  setIsAppLoading: (isAppLoading: boolean) => void
+  setIsCostLoading: (isCostLoading: boolean) => void
 }
 
-export const createAppSlice: StateCreator<AppSlice, [], [], AppSlice> = (
+export const createCostSlice: StateCreator<CostSlice, [], [], CostSlice> = (
   set,
   get
 ) => ({
-  explainResult: undefined,
-  codeResult: undefined,
   costResult: undefined,
-  isAppLoading: false,
-  setExplainResult: (explainResult: string) => {
-    set(state => ({ explainResult }))
-  },
-  setCodeResult: (codeResult: string) => {
-    set(state => ({ codeResult }))
-  },
+  isCostLoading: false,
   setCostResult: (costResult: CostResult) => {
     set(state => ({ costResult }))
   },
-  setImageResult: (imageResult: URL) => {
-    set(state => ({ imageResult }))
-  },
-  setIsAppLoading: (isAppLoading: boolean) => {
-    set(state => ({ isAppLoading }))
+  setIsCostLoading: (isCostLoading: boolean) => {
+    set(state => ({ isCostLoading }))
   }
 })
