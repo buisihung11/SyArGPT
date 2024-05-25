@@ -102,7 +102,7 @@ const ExplainSection = () => {
         <CostTab costResult={costResult} isCostTabLoading={isLoading} />
       </CustomTabsContent>
 
-      <CustomTabsContent value="terraform">
+      <CustomTabsContent className="overflow-y-hidden" value="terraform">
         <TerraformTab />
       </CustomTabsContent>
     </Tabs>
