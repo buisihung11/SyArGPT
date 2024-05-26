@@ -1,6 +1,6 @@
 "use client"
 
-import { costEstimate, generateTerraformCode } from "@/app/actions"
+import { generateTerraformCode } from "@/app/actions"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
@@ -10,11 +10,11 @@ import {
   useChatStore,
   useTerraformStore
 } from "@/stores"
-import { CornerDownLeft, Loader2 } from "lucide-react"
-import { useToast } from "../ui/use-toast"
-import { v4 } from "uuid"
 import { AppResponse, Cost } from "@/types"
+import { CornerDownLeft, Loader2 } from "lucide-react"
 import { useEffect } from "react"
+import { v4 } from "uuid"
+import { useToast } from "../ui/use-toast"
 
 const ChatControl = () => {
   const { toast } = useToast()
@@ -33,6 +33,7 @@ const ChatControl = () => {
     setImageResult,
     setIsExplainCodeImageLoading
   } = useAppStore((state: AppSlice) => state)
+
   const setLogs = useTerraformStore(state => state.setLogs)
 
   const setTerraformLoading = useTerraformStore(state => state.setIsLoading)
@@ -60,12 +61,21 @@ const ChatControl = () => {
     setCostResult(null)
     setIsCostLoading(true)
 
-    const { explain } = await fetchAppData(prompt)
+    const { explain } = await fetchAppData({
+      prompt,
+      currentSessionId: sessionID!
+    })
 
     await Promise.all([fetchCost(explain), fetchTerraform(explain)])
   }
 
-  const fetchAppData = async (prompt: string) => {
+  const fetchAppData = async ({
+    prompt,
+    currentSessionId
+  }: {
+    prompt: string
+    currentSessionId: string
+  }) => {
     try {
       setIsExplainCodeImageLoading(true)
 
@@ -78,7 +88,7 @@ const ChatControl = () => {
           Accept: "application/json"
         },
         body: JSON.stringify({
-          session_id: sessionID,
+          session_id: currentSessionId,
           message: prompt
         })
       })
