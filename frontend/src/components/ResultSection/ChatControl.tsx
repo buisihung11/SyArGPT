@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import {
   AppSlice,
+  ChatSlice,
   useAppStore,
   useChatStore,
   useTerraformStore
@@ -19,9 +20,10 @@ import { set } from "zod"
 const ChatControl = () => {
   const { toast } = useToast()
 
-  const onInputPrompt = useChatStore(state => state.onInputPrompt)
-  const prompt = useChatStore(state => state.prompt)
-  
+  const { onInputPrompt, prompt, currentSessionId } = useChatStore(
+    (state: ChatSlice) => state
+  )
+
   const {
     setCostResult,
     setIsCostLoading,
@@ -31,6 +33,7 @@ const ChatControl = () => {
     setImageResult,
     setIsExplainCodeImageLoading
   } = useAppStore((state: AppSlice) => state)
+
   const setLogs = useTerraformStore(state => state.setLogs)
 
   const setTerraformLoading = useTerraformStore(state => state.setIsLoading)
@@ -55,13 +58,23 @@ const ChatControl = () => {
     setIsCostLoading(true)
 
     // TODO: Call API to generate the diagram + explanation
-    const { explain } = await fetchAppData(prompt)
+
+    const { explain } = await fetchAppData({
+      prompt,
+      currentSessionId
+    })
 
     await fetchCost(explain)
     await fetchTerraform(explain)
   }
 
-  const fetchAppData = async (prompt: string) => {
+  const fetchAppData = async ({
+    prompt,
+    currentSessionId
+  }: {
+    prompt: string
+    currentSessionId: string
+  }) => {
     try {
       setIsExplainCodeImageLoading(true)
 
@@ -74,7 +87,7 @@ const ChatControl = () => {
           Accept: "application/json"
         },
         body: JSON.stringify({
-          session_id: v4(),
+          session_id: currentSessionId,
           message: prompt
         })
       })
@@ -147,8 +160,6 @@ const ChatControl = () => {
     // call to POST localhost:80/update to test the terraform code
     // Wait until deploy the backend
   }
-
-  
 
   return (
     <div
