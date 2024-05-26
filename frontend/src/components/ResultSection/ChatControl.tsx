@@ -1,28 +1,28 @@
 "use client"
 
-import { costEstimate, generateTerraformCode } from "@/app/actions"
+import { generateTerraformCode } from "@/app/actions"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import {
   AppSlice,
-  ChatSlice,
   useAppStore,
   useChatStore,
   useTerraformStore
 } from "@/stores"
-import { CornerDownLeft, Loader2 } from "lucide-react"
-import { useToast } from "../ui/use-toast"
-import { v4 } from "uuid"
 import { AppResponse, Cost } from "@/types"
-import { set } from "zod"
+import { CornerDownLeft, Loader2 } from "lucide-react"
+import { useEffect } from "react"
+import { v4 } from "uuid"
+import { useToast } from "../ui/use-toast"
 
 const ChatControl = () => {
   const { toast } = useToast()
 
-  const { onInputPrompt, prompt, currentSessionId } = useChatStore(
-    (state: ChatSlice) => state
-  )
+  const onInputPrompt = useChatStore(state => state.onInputPrompt)
+  const prompt = useChatStore(state => state.prompt)
+  const sessionID = useAppStore(state => state.sessionId)
+  const setSessionID = useAppStore(state => state.setSessionId)
 
   const {
     setCostResult,
@@ -39,6 +39,10 @@ const ChatControl = () => {
   const setTerraformLoading = useTerraformStore(state => state.setIsLoading)
   const setTerraformResult = useTerraformStore(state => state.setCode)
   const cleanLogs = useTerraformStore(state => state.cleanLogs)
+
+  useEffect(() => {
+    setSessionID(v4())
+  }, [setSessionID])
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -57,15 +61,12 @@ const ChatControl = () => {
     setCostResult(null)
     setIsCostLoading(true)
 
-    // TODO: Call API to generate the diagram + explanation
-
     const { explain } = await fetchAppData({
       prompt,
-      currentSessionId
+      currentSessionId: sessionID!
     })
 
-    await fetchCost(explain)
-    await fetchTerraform(explain)
+    await Promise.all([fetchCost(explain), fetchTerraform(explain)])
   }
 
   const fetchAppData = async ({
@@ -150,7 +151,7 @@ const ChatControl = () => {
     setTerraformLoading(false)
 
     const requestData = {
-      sessionId: "123",
+      sessionId: sessionID,
       files: data.files.map((f: any) => ({
         fileName: f.name,
         fileContent: f.content

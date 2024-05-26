@@ -20,6 +20,7 @@ export type TerraformSlice = {
   logs: any[]
   setLogs: (logs: any[]) => void
   cleanLogs: () => void
+  refreshTerraformState: () => void
 }
 
 const files = [
@@ -40,14 +41,19 @@ const files = [
   }
 ]
 
+const initialState = {
+  result: { files: [] },
+  isLoading: false,
+  logs: []
+}
+
 export const createTerraformSlice: StateCreator<
   TerraformSlice,
   [],
   [],
   TerraformSlice
 > = (set, get) => ({
-  result: { files: files },
-  isLoading: false,
+  ...initialState,
   setCode: (result: TerraformResult) => {
     set(state => {
       return {
@@ -58,11 +64,13 @@ export const createTerraformSlice: StateCreator<
   setIsLoading: (isLoading: boolean) => {
     set(state => ({ isLoading }))
   },
-  logs: [],
   setLogs: (logs: any[]) => {
     set(state => ({ logs: [...state.logs, ...logs] }))
   },
   cleanLogs: () => {
     set(state => ({ logs: [] }))
+  },
+  refreshTerraformState: () => {
+    set(state => ({ ...initialState }))
   }
 })

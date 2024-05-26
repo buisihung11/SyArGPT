@@ -9,6 +9,14 @@ export type ExplainCodeImageSlice = {
   setCodeResult: (codeResult: string) => void
   setImageResult: (imageResult: URL | null) => void
   setIsExplainCodeImageLoading: (isExplainCodeImageLoading: boolean) => void
+  refreshExplainCodeImageState: () => void
+}
+
+const initialState = {
+  explainResult: undefined,
+  codeResult: undefined,
+  imageResult: undefined,
+  isExplainCodeImageLoading: false
 }
 
 export const createExplainCodeImageSlice: StateCreator<
@@ -17,11 +25,7 @@ export const createExplainCodeImageSlice: StateCreator<
   [],
   ExplainCodeImageSlice
 > = (set, get) => ({
-  explainResult: undefined,
-  codeResult: undefined,
-  imageResult: undefined,
-  costResult: undefined,
-  isExplainCodeImageLoading: false,
+  ...initialState,
   setExplainResult: (explainResult: string) => {
     set(state => ({ explainResult }))
   },
@@ -33,5 +37,8 @@ export const createExplainCodeImageSlice: StateCreator<
   },
   setIsExplainCodeImageLoading: (isExplainCodeImageLoading: boolean) => {
     set(state => ({ isExplainCodeImageLoading }))
+  },
+  refreshExplainCodeImageState: () => {
+    set(state => ({ ...initialState }))
   }
 })
