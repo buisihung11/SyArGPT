@@ -3,11 +3,11 @@ import { StateCreator } from "zustand"
 export type ExplainCodeImageSlice = {
   explainResult?: string
   codeResult?: string
-  imageResult?: URL | null
+  imageResult?: string | null
   isExplainCodeImageLoading: boolean
-  setExplainResult: (explainResult: string) => void
-  setCodeResult: (codeResult: string) => void
-  setImageResult: (imageResult: URL | null) => void
+  setExplainResult: (explainResult?: string) => void
+  setCodeResult: (codeResult?: string) => void
+  setImageResult: (imageResult?: string | null) => void
   setIsExplainCodeImageLoading: (isExplainCodeImageLoading: boolean) => void
   refreshExplainCodeImageState: () => void
 }
@@ -26,13 +26,13 @@ export const createExplainCodeImageSlice: StateCreator<
   ExplainCodeImageSlice
 > = (set, get) => ({
   ...initialState,
-  setExplainResult: (explainResult: string) => {
+  setExplainResult: (explainResult?: string) => {
     set(state => ({ explainResult }))
   },
-  setCodeResult: (codeResult: string) => {
+  setCodeResult: (codeResult?: string) => {
     set(state => ({ codeResult }))
   },
-  setImageResult: (imageResult: URL | null) => {
+  setImageResult: (imageResult?: string | null) => {
     set(state => ({ imageResult }))
   },
   setIsExplainCodeImageLoading: (isExplainCodeImageLoading: boolean) => {

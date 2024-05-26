@@ -1,4 +1,3 @@
-import { v4 } from "uuid"
 import { StateCreator } from "zustand"
 
 export type ChatSlice = {

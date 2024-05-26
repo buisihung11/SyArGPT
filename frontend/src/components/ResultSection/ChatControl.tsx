@@ -6,8 +6,11 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import {
   AppSlice,
+  History,
+  HistorySlice,
   useAppStore,
   useChatStore,
+  useHistoryStore,
   useTerraformStore
 } from "@/stores"
 import { AppResponse, Cost } from "@/types"
@@ -25,6 +28,10 @@ const ChatControl = () => {
   const setSessionID = useAppStore(state => state.setSessionId)
 
   const {
+    explainResult,
+    codeResult,
+    costResult,
+    imageResult,
     setCostResult,
     setIsCostLoading,
     isExplainCodeImageLoading,
@@ -34,8 +41,12 @@ const ChatControl = () => {
     setIsExplainCodeImageLoading
   } = useAppStore((state: AppSlice) => state)
 
-  const setLogs = useTerraformStore(state => state.setLogs)
+  const { history, setHistory } = useHistoryStore(
+    (state: HistorySlice) => state
+  )
 
+  const terraformResult = useTerraformStore(state => state.result)
+  const setLogs = useTerraformStore(state => state.setLogs)
   const setTerraformLoading = useTerraformStore(state => state.setIsLoading)
   const setTerraformResult = useTerraformStore(state => state.setCode)
   const cleanLogs = useTerraformStore(state => state.cleanLogs)
@@ -45,28 +56,54 @@ const ChatControl = () => {
   }, [setSessionID])
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    const input = prompt
-    if (!input) {
-      toast({
-        title: "No prompt",
-        description: "Please enter a prompt to continue.",
-        variant: "destructive"
+    try {
+      e.preventDefault()
+      const input = prompt
+      if (!input) {
+        toast({
+          title: "No prompt",
+          description: "Please enter a prompt to continue.",
+          variant: "destructive"
+        })
+        return
+      }
+
+      cleanLogs()
+      setTerraformLoading(true)
+      setCostResult(null)
+      setIsCostLoading(true)
+
+      const {
+        explain: explainResult,
+        codeBlock: codeResult,
+        imageURL: imageResult
+      } = await fetchAppData({
+        prompt,
+        currentSessionId: sessionID!
       })
-      return
+
+      const [{ costResult }, { terraformResult }] = await Promise.all([
+        fetchCost(explainResult),
+        fetchTerraform(explainResult)
+      ])
+
+      const newHistory: History[] = [
+        ...history,
+        {
+          id: v4(),
+          prompt,
+          imageResult,
+          explainResult,
+          codeResult,
+          costResult,
+          terraformResult
+        }
+      ]
+
+      setHistory(newHistory)
+    } catch (error) {
+      throw error
     }
-
-    cleanLogs()
-    setTerraformLoading(true)
-    setCostResult(null)
-    setIsCostLoading(true)
-
-    const { explain } = await fetchAppData({
-      prompt,
-      currentSessionId: sessionID!
-    })
-
-    await Promise.all([fetchCost(explain), fetchTerraform(explain)])
   }
 
   const fetchAppData = async ({
@@ -75,7 +112,7 @@ const ChatControl = () => {
   }: {
     prompt: string
     currentSessionId: string
-  }) => {
+  }): Promise<AppResponse> => {
     try {
       setIsExplainCodeImageLoading(true)
 
@@ -101,11 +138,7 @@ const ChatControl = () => {
       setExplainResult(explain)
       setImageResult(imageURL)
 
-      return {
-        codeBlock,
-        explain,
-        imageURL
-      }
+      return resJSON
     } catch (error) {
       throw error
     } finally {
@@ -113,7 +146,7 @@ const ChatControl = () => {
     }
   }
 
-  const fetchCost = async (prompt: string) => {
+  const fetchCost = async (prompt: string): Promise<{ costResult: Cost }> => {
     try {
       setIsCostLoading(true)
 
@@ -132,9 +165,8 @@ const ChatControl = () => {
 
       const resJSON: Cost = await res.json()
 
-      console.log({ resJSON })
-
       setCostResult(resJSON)
+      return { costResult: resJSON }
     } catch (error) {
       throw error
     } finally {
@@ -142,7 +174,9 @@ const ChatControl = () => {
     }
   }
 
-  const fetchTerraform = async (prompt: string) => {
+  const fetchTerraform = async (
+    prompt: string
+  ): Promise<{ terraformResult: any }> => {
     setTerraformLoading(true)
     setLogs([])
     const data = await generateTerraformCode({ diagramCode: prompt })
@@ -156,6 +190,10 @@ const ChatControl = () => {
         fileName: f.name,
         fileContent: f.content
       }))
+    }
+
+    return {
+      terraformResult: data
     }
 
     // call to POST localhost:80/update to test the terraform code

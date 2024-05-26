@@ -41,12 +41,11 @@ export async function POST(request: RequestWithSessionIdAndMessage) {
     }
 
     const { code_block: codeBlock, explain, image } = bodyJSON
-    const parsedImage = image ? new URL(image) : null
 
     return NextResponse.json<AppResponse>({
       codeBlock,
       explain,
-      imageURL: parsedImage
+      imageURL: image || null
     })
   } catch (e: any) {
     return NextResponse.json({ error: e.message }, { status: e.status ?? 500 })

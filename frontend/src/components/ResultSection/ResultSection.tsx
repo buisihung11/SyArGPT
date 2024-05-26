@@ -1,7 +1,7 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { useAppStore, useChatStore } from "@/stores"
+import { AppSlice, useAppStore, useChatStore } from "@/stores"
 import { File, RefreshCcw, TriangleAlert } from "lucide-react"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
@@ -9,11 +9,6 @@ import { useEffect, useRef, useState } from "react"
 import { DrawIoEmbedRef, EventExport } from "react-drawio"
 import { GridBackgroundDemo } from "../GridBackground/GridBackground"
 import HistorySection from "../HistorySection/HistorySection"
-
-
-type ResultSectionType = {
-  imageResult?: URL | null
-}
 
 const sampleData = [
   {
@@ -53,7 +48,7 @@ const sampleData = [
 ]
 
 const ResultSection = () => {
-  const { imageResult, codeResult } = useAppStore(state => state)
+  const { imageResult, codeResult } = useAppStore((state: AppSlice) => state)
   const currentMessage = useChatStore(state => state.currentMessage)
   const isInit = !imageResult
 
@@ -166,10 +161,9 @@ const ResultSection = () => {
               </Button>
             </div>
           </div>
-
         </div>
       )}
-      <div className="h-36 min-h-36 justify-self-end">
+      <div className="h-48 min-h-36 justify-self-end">
         <HistorySection />
       </div>
     </div>
