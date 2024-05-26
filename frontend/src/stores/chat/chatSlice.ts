@@ -3,17 +3,23 @@ import { StateCreator } from "zustand"
 export type ChatSlice = {
   messages: Message[]
   prompt: string
+  currentMessage: Message | null
   onInputPrompt: (prompt: string) => void
   onConversation: (message: Message) => void
-  currentMessage: Message | null
+  refreshChatState: () => void
+}
+
+const initialState = {
+  messages: [],
+  prompt: "",
+  currentMessage: null
 }
 
 export const createChatSlice: StateCreator<ChatSlice, [], [], ChatSlice> = (
   set,
   get
 ) => ({
-  messages: [],
-  prompt: "",
+  ...initialState,
   onInputPrompt: prompt => {
     set(state => ({ prompt }))
   },
@@ -26,9 +32,7 @@ export const createChatSlice: StateCreator<ChatSlice, [], [], ChatSlice> = (
     })
   },
   currentMessage: null,
-  costResult: {
-    summary: "",
-    rows: [],
-    columns: []
+  refreshChatState: () => {
+    set(state => ({ ...initialState }))
   }
 })
