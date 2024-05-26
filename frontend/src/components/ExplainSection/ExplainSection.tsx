@@ -2,7 +2,7 @@
 
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
-import { Cost } from "@/types"
+import { useAppStore } from "@/stores"
 import { FC } from "react"
 import CodeTab from "./CodeTab"
 import CostTab from "./CostTab"
@@ -10,21 +10,16 @@ import CustomTabsContent from "./CustomTabsContent"
 import ExplainTab from "./ExplainTab"
 import TerraformTab from "./TerraformTab"
 
-type ExplainSectionType = {
-  isExplainCodeImageLoading: boolean
-  isCostLoading: boolean
-  costResult?: Cost | null
-  codeResult?: string
-  explainResult?: string
-}
 
-const ExplainSection: FC<ExplainSectionType> = ({
-  isExplainCodeImageLoading,
-  isCostLoading,
-  costResult,
-  codeResult,
-  explainResult
-}) => {
+const ExplainSection: FC = () => {
+  const {
+    isExplainCodeImageLoading,
+    isCostLoading,
+    costResult,
+    codeResult,
+    explainResult
+  } = useAppStore((state) => state)
+
   return (
     <Tabs
       defaultValue="explain"

@@ -14,14 +14,16 @@ import { CornerDownLeft, Loader2 } from "lucide-react"
 import { useToast } from "../ui/use-toast"
 import { v4 } from "uuid"
 import { AppResponse, Cost } from "@/types"
-import { set } from "zod"
+import { useEffect } from "react"
 
 const ChatControl = () => {
   const { toast } = useToast()
 
   const onInputPrompt = useChatStore(state => state.onInputPrompt)
   const prompt = useChatStore(state => state.prompt)
-  
+  const sessionID = useAppStore(state => state.sessionId)
+  const setSessionID = useAppStore(state => state.setSessionId)
+
   const {
     setCostResult,
     setIsCostLoading,
@@ -36,6 +38,10 @@ const ChatControl = () => {
   const setTerraformLoading = useTerraformStore(state => state.setIsLoading)
   const setTerraformResult = useTerraformStore(state => state.setCode)
   const cleanLogs = useTerraformStore(state => state.cleanLogs)
+
+  useEffect(() => {
+    setSessionID(v4())
+  }, [setSessionID])
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -54,11 +60,9 @@ const ChatControl = () => {
     setCostResult(null)
     setIsCostLoading(true)
 
-    // TODO: Call API to generate the diagram + explanation
     const { explain } = await fetchAppData(prompt)
 
-    await fetchCost(explain)
-    await fetchTerraform(explain)
+    await Promise.all([fetchCost(explain), fetchTerraform(explain)])
   }
 
   const fetchAppData = async (prompt: string) => {
@@ -74,7 +78,7 @@ const ChatControl = () => {
           Accept: "application/json"
         },
         body: JSON.stringify({
-          session_id: v4(),
+          session_id: sessionID,
           message: prompt
         })
       })
@@ -137,7 +141,7 @@ const ChatControl = () => {
     setTerraformLoading(false)
 
     const requestData = {
-      sessionId: "123",
+      sessionId: sessionID,
       files: data.files.map((f: any) => ({
         fileName: f.name,
         fileContent: f.content
@@ -147,8 +151,6 @@ const ChatControl = () => {
     // call to POST localhost:80/update to test the terraform code
     // Wait until deploy the backend
   }
-
-  
 
   return (
     <div
