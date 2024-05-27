@@ -28,8 +28,6 @@ const HistorySection = () => {
   const { onInputPrompt } = useChatStore((state: ChatSlice) => state)
   const { setCode } = useTerraformStore((state: TerraformSlice) => state)
 
-  console.log({ history })
-
   const handleHistoryItemClick = (history: History): void => {
     const {
       prompt,
@@ -63,6 +61,7 @@ const HistorySection = () => {
               <CarouselItem
                 key={history.id}
                 className="md:basis-1/2 lg:basis-1/3"
+                onClick={() => handleHistoryItemClick(history)}
               >
                 <Card className="max-w-[6rem]">
                   <CardContent className="flex aspect-square items-center justify-center p-6">
@@ -70,15 +69,16 @@ const HistorySection = () => {
                       <Image
                         width={100}
                         height={100}
-                        src={history.imageResult!}
+                        src={history.imageResult}
                         alt="test"
-                        unoptimized
-                        onClick={() => handleHistoryItemClick(history)}
                       />
                     ) : (
-                      <span className="text-sm font-semibold">
-                        No Img provided
-                      </span>
+                      <Image
+                        width={100}
+                        height={100}
+                        src="/asset/noImgErr.webp"
+                        alt="No Image found"
+                      />
                     )}
                   </CardContent>
                 </Card>

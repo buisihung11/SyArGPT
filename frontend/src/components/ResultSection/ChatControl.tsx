@@ -28,10 +28,6 @@ const ChatControl = () => {
   const setSessionID = useAppStore(state => state.setSessionId)
 
   const {
-    explainResult,
-    codeResult,
-    costResult,
-    imageResult,
     setCostResult,
     setIsCostLoading,
     isExplainCodeImageLoading,
@@ -101,8 +97,12 @@ const ChatControl = () => {
       ]
 
       setHistory(newHistory)
-    } catch (error) {
-      throw error
+    } catch (e) {
+      toast({
+        title: "error",
+        description: (e as Error).message,
+        variant: "destructive"
+      })
     }
   }
 
