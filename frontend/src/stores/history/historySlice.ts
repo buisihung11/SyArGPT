@@ -9,13 +9,14 @@ export type History = {
   explainResult?: string
   codeResult?: string
   costResult?: Cost | null
-  terraformResult?: TerraformResult
+  terraformResult?: TerraformResult | null
 }
 
 export type HistorySlice = {
   history: History[]
   setHistory: (history: History[]) => void
-  refreshHistory: () => void
+  refreshHistory: () => void,
+  updateHistory: (history: History) => void
 }
 
 const initialState = {
@@ -34,5 +35,12 @@ export const createHistorySlice: StateCreator<
   },
   refreshHistory: () => {
     set(() => ({ ...initialState }))
+  },
+  updateHistory: history => {
+    set(state => {
+      const index = state.history.findIndex(h => h.id === history.id)
+      state.history[index] = history
+      return { history: state.history }
+    })
   }
 })

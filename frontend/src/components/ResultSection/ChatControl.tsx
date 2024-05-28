@@ -37,7 +37,7 @@ const ChatControl = () => {
     setIsExplainCodeImageLoading
   } = useAppStore((state: AppSlice) => state)
 
-  const { history, setHistory } = useHistoryStore(
+  const { history, setHistory, updateHistory } = useHistoryStore(
     (state: HistorySlice) => state
   )
 
@@ -78,25 +78,32 @@ const ChatControl = () => {
         currentSessionId: sessionID!
       })
 
+      const newHitory: History = {
+        id: v4(),
+        prompt,
+        imageResult,
+        explainResult,
+        codeResult,
+        costResult: null,
+        terraformResult: null
+      }
+
+      const newHistories: History[] = [...history, newHitory]
+      setHistory(newHistories)
+
       const [{ costResult }, { terraformResult }] = await Promise.all([
         fetchCost(explainResult),
         fetchTerraform(explainResult)
       ])
 
-      const newHistory: History[] = [
-        ...history,
-        {
-          id: v4(),
-          prompt,
-          imageResult,
-          explainResult,
-          codeResult,
-          costResult,
-          terraformResult
-        }
-      ]
+      const updatedHistory: History = {
+        ...newHitory,
+        costResult,
+        terraformResult
+      }
 
-      setHistory(newHistory)
+      updateHistory(updatedHistory)
+
     } catch (e) {
       toast({
         title: "error",

@@ -54,7 +54,7 @@ const HistorySection = () => {
           opts={{
             align: "start"
           }}
-          className="w-[70%] self-center"
+          className="w-[80%] self-center"
         >
           <CarouselContent>
             {history.map(history => (
@@ -64,18 +64,19 @@ const HistorySection = () => {
                 onClick={() => handleHistoryItemClick(history)}
               >
                 <Card className="max-w-[6rem]">
-                  <CardContent className="flex aspect-square items-center justify-center p-6">
+                  <CardContent className="flex aspect-square items-center justify-center p-2 text-center w-full h-full relative bg-muted">
                     {history.imageResult ? (
                       <Image
-                        width={100}
-                        height={100}
+                        fill
+                        objectFit="cover"
                         src={history.imageResult}
                         alt="test"
+                        className="p-2 rounded-md object-cover cursor-pointer"
                       />
                     ) : (
                       <Image
-                        width={100}
-                        height={100}
+                        fill
+                        objectFit="contain"
                         src="/asset/noImgErr.webp"
                         alt="No Image found"
                       />
