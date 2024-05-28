@@ -11,15 +11,10 @@ import {
   useHistoryStore,
   useTerraformStore
 } from "@/stores"
-import Image from "next/image"
-import { Badge } from "../ui/badge"
-import { Card, CardContent } from "../ui/card"
 import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger
+  TooltipProvider
 } from "../ui/tooltip"
+import HistoryItem from "./HistoryItem"
 
 const HistorySection = () => {
   const { history } = useHistoryStore((state: HistorySlice) => state)
@@ -69,58 +64,5 @@ const HistorySection = () => {
   )
 }
 
-const HistoryItem = ({
-  history,
-  onClick,
-  idx
-}: {
-  history: History
-  onClick: () => void
-  idx: number
-}) => {
-  return (
-    <Tooltip>
-      <Card onClick={onClick} className=" w-36 h-24 relative">
-        <Badge className="absolute  bottom-1 left-1 z-50 flex h-6 w-8 items-center justify-center rounded-sm border px-2 font-mono text-xs leading-none" variant="secondary">
-          v{idx}
-        </Badge>
-        <TooltipTrigger asChild>
-          <CardContent className="flex aspect-square items-center justify-center p-1 text-center w-full h-full relative bg-muted">
-            <HistoryImage history={history} />
-          </CardContent>
-        </TooltipTrigger>
-
-        <TooltipContent className=" w-72 h-58 p-2">
-          <div className="w-full h-32 relative">
-            <HistoryImage history={history} />
-          </div>
-          <p className="line-clamp-5 text-sm font-semibold mb-2">
-            Prompt {history.prompt}
-          </p>
-          <p className="text-gray-400 text-xs">2 hours ago</p>
-        </TooltipContent>
-      </Card>
-    </Tooltip>
-  )
-}
-
-const HistoryImage = ({ history }: { history: History }) => {
-  return history.imageResult ? (
-    <Image
-      fill
-      objectFit="cover"
-      src={history.imageResult}
-      alt="test"
-      className="p-2 rounded-md object-cover cursor-pointer"
-    />
-  ) : (
-    <Image
-      fill
-      objectFit="contain"
-      src="/asset/noImgErr.webp"
-      alt="No Image found"
-    />
-  )
-}
 
 export default HistorySection
