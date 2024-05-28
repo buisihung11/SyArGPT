@@ -2,7 +2,13 @@
 
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { useAppStore, useChatStore, useTerraformStore } from "@/stores"
+import {
+  HistorySlice,
+  useAppStore,
+  useChatStore,
+  useHistoryStore,
+  useTerraformStore
+} from "@/stores"
 import { Share } from "lucide-react"
 import { v4 } from "uuid"
 
@@ -20,11 +26,14 @@ const Header = () => {
     state => state.refreshTerraformState
   )
 
+  const { refreshHistory } = useHistoryStore((state: HistorySlice) => state)
+
   const handleNewGeneration = () => {
     refreshCostState()
     refreshExplainCodeImageState()
     refreshTerraformState()
     refreshChatState()
+    refreshHistory()
 
     setSessionId(v4())
   }

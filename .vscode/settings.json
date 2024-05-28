@@ -7,6 +7,7 @@
         "rehype",
         "syargpt",
         "Tavily",
-        "unoptimized"
+        "unoptimized",
+        "webp"
     ]
 }
