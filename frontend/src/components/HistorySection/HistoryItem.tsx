@@ -7,6 +7,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { History } from "@/stores"
 import HistoryImage from "./HistoryImage"
+import { FC } from "react"
 
 export type HistoryItemProps = {
   history: History
@@ -14,7 +15,7 @@ export type HistoryItemProps = {
   idx: number
 }
 
-const HistoryItem = ({ history, onClick, idx }: HistoryItemProps) => {
+const HistoryItem: FC<HistoryItemProps> = ({ history, onClick, idx }) => {
   return (
     <Tooltip>
       <Card onClick={onClick} className=" w-36 h-24 relative">

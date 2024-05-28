@@ -1,9 +1,10 @@
 import { History } from "@/stores"
 import Image from "next/image"
+import { FC } from "react"
 
 export type HistoryImageProps = { history: History }
 
-const HistoryImage = ({ history }: HistoryImageProps) => {
+const HistoryImage: FC<HistoryImageProps> = ({ history }) => {
   return history.imageResult ? (
     <Image
       fill
