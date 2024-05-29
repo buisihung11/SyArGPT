@@ -22,12 +22,12 @@ const ExplainSection: FC = () => {
 
   return (
     <Tabs
-      defaultValue="explain"
+      defaultValue="diagram"
       className="h-full relative flex flex-col p-4 max-h-full"
     >
       <TabsList className="grid w-full grid-cols-4">
-        <TabsTrigger value="explain">Explain</TabsTrigger>
-        <TabsTrigger value="code">Code</TabsTrigger>
+        <TabsTrigger value="code">Diagram</TabsTrigger>
+        <TabsTrigger value="explain">Explaination</TabsTrigger>
         <TabsTrigger value="cost">Cost</TabsTrigger>
         <TabsTrigger value="terraform">Terraform</TabsTrigger>
       </TabsList>
@@ -39,7 +39,7 @@ const ExplainSection: FC = () => {
         />
       </CustomTabsContent>
 
-      <CustomTabsContent value="code">
+      <CustomTabsContent value="diagram">
         <CodeTab
           editorText={codeResult}
           isCodeTabLoading={isExplainCodeImageLoading}

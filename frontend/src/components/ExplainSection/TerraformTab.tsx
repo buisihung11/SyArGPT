@@ -103,6 +103,7 @@ export default function TerraformTab() {
         variant: "destructive"
       })
       console.error("Error uploading files:", error)
+      setIsLoadingLog(false)
     }
   }
 
