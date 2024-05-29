@@ -11,15 +11,10 @@ import {
   useHistoryStore,
   useTerraformStore
 } from "@/stores"
-import Image from "next/image"
-import { Card, CardContent } from "../ui/card"
 import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious
-} from "../ui/carousel"
+  TooltipProvider
+} from "../ui/tooltip"
+import HistoryItem from "./HistoryItem"
 
 const HistorySection = () => {
   const { history } = useHistoryStore((state: HistorySlice) => state)
@@ -47,53 +42,27 @@ const HistorySection = () => {
   }
 
   return (
-    <div className="h-full flex flex-col p-4 gap-4 bg-background border-t-2">
-      <h1 className="text-xl font-semibold">History</h1>
-      {history.length > 0 ? (
-        <Carousel
-          opts={{
-            align: "start"
-          }}
-          className="w-[80%] self-center"
-        >
-          <CarouselContent>
-            {history.map(history => (
-              <CarouselItem
+    <TooltipProvider>
+      <div className="h-full flex flex-col p-4 gap-4 bg-background border-t-2">
+        <h1 className="text-xl font-semibold">History</h1>
+        {history.length > 0 ? (
+          <div className="flex gap-4 flex-row w-full overflow-auto">
+            {history.map((history, idx) => (
+              <HistoryItem
                 key={history.id}
-                className="md:basis-1/2 lg:basis-1/3"
+                history={history}
+                idx={idx}
                 onClick={() => handleHistoryItemClick(history)}
-              >
-                <Card className="max-w-[6rem]">
-                  <CardContent className="flex aspect-square items-center justify-center p-2 text-center w-full h-full relative bg-muted">
-                    {history.imageResult ? (
-                      <Image
-                        fill
-                        objectFit="cover"
-                        src={history.imageResult}
-                        alt="test"
-                        className="p-2 rounded-md object-cover cursor-pointer"
-                      />
-                    ) : (
-                      <Image
-                        fill
-                        objectFit="contain"
-                        src="/asset/noImgErr.webp"
-                        alt="No Image found"
-                      />
-                    )}
-                  </CardContent>
-                </Card>
-              </CarouselItem>
+              />
             ))}
-          </CarouselContent>
-          <CarouselPrevious />
-          <CarouselNext />
-        </Carousel>
-      ) : (
-        <p>No history recorded</p>
-      )}
-    </div>
+          </div>
+        ) : (
+          <p>No history recorded</p>
+        )}
+      </div>
+    </TooltipProvider>
   )
 }
+
 
 export default HistorySection
