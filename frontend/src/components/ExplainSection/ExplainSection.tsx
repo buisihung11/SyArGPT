@@ -26,8 +26,8 @@ const ExplainSection: FC = () => {
       className="h-full relative flex flex-col p-4 max-h-full"
     >
       <TabsList className="grid w-full grid-cols-4">
-        <TabsTrigger value="explain">Explain</TabsTrigger>
-        <TabsTrigger value="code">Code</TabsTrigger>
+        <TabsTrigger value="code">Diagram</TabsTrigger>
+        <TabsTrigger value="explain">Explaination</TabsTrigger>
         <TabsTrigger value="cost">Cost</TabsTrigger>
         <TabsTrigger value="terraform">Terraform</TabsTrigger>
       </TabsList>
