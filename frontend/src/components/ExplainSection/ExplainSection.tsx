@@ -22,7 +22,7 @@ const ExplainSection: FC = () => {
 
   return (
     <Tabs
-      defaultValue="explain"
+      defaultValue="diagram"
       className="h-full relative flex flex-col p-4 max-h-full"
     >
       <TabsList className="grid w-full grid-cols-4">
@@ -39,7 +39,7 @@ const ExplainSection: FC = () => {
         />
       </CustomTabsContent>
 
-      <CustomTabsContent value="code">
+      <CustomTabsContent value="diagram">
         <CodeTab
           editorText={codeResult}
           isCodeTabLoading={isExplainCodeImageLoading}
