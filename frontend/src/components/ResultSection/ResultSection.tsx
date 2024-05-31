@@ -1,10 +1,11 @@
 "use client"
 
-import { Button } from "@/components/ui/button"
+import { Button, buttonVariants } from "@/components/ui/button"
 import { AppSlice, useAppStore, useChatStore } from "@/stores"
 import { File, RefreshCcw, TriangleAlert } from "lucide-react"
 import dynamic from "next/dynamic"
 import Image from "next/image"
+import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useEffect, useRef, useState } from "react"
 import { DrawIoEmbedRef, EventExport } from "react-drawio"
@@ -264,7 +265,7 @@ const ResultSection = () => {
                   onError={() => {
                     setLoadImageError(true)
                   }}
-                  src={imageResult as unknown as string}
+                  src={imageResult}
                   alt="Cloud Architecture Diagram"
                   fill
                   objectFit="contain"
@@ -273,17 +274,13 @@ const ResultSection = () => {
               )}
             </div>
             <div className="flex flex-row gap-2">
-              <Button
-                onClick={() => {
-                  drawioRef.current?.exportDiagram({
-                    format: "png"
-                  })
-                }}
-                variant="outline"
-                size="sm"
+              <Link
+                className={buttonVariants({ variant: "outline" })}
+                href={imageResult}
+                download={true}
               >
                 <File className="mr-2 h-4 w-4" /> Export
-              </Button>
+              </Link>
             </div>
           </div>
         </div>
