@@ -1,9 +1,9 @@
 import { RefreshCcw, TriangleAlert } from "lucide-react"
 import React from "react"
-import { Button } from "../ui/button"
+import { Button } from "../../ui/button"
 import { useRouter } from "next/navigation"
 
-const ErrorResult = () => {
+const ErrorImageResult = () => {
   const router = useRouter()
   return (
     <div
@@ -39,4 +39,4 @@ const ErrorResult = () => {
   )
 }
 
-export default ErrorResult
+export default ErrorImageResult
