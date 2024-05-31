@@ -1,10 +1,10 @@
 import { useChatStore } from "@/stores"
-import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu"
 import { FC } from "react"
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuItem
+  DropdownMenuItem,
+  DropdownMenuTrigger
 } from "../../ui/dropdown-menu"
 import { VPBankButton } from "./VPBankButton"
 
