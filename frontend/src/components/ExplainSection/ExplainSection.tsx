@@ -1,107 +1,57 @@
 "use client"
 
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import Editor from "@monaco-editor/react"
-import { useTheme } from "next-themes"
-import ReactMarkdown from "react-markdown"
-import rehypeHighlight from "rehype-highlight"
-import rehypeRaw from "rehype-raw"
-import rehypeSanitize from "rehype-sanitize"
-import remarkGfm from "remark-gfm"
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
+
+import { useAppStore } from "@/stores"
+import { FC } from "react"
+import CodeTab from "./CodeTab"
+import CostTab from "./CostTab"
 import CustomTabsContent from "./CustomTabsContent"
-
-const markdown = `
-<div align="center"><a name="readme-top"></a>
-
-[![][image-banner]][deployment-link]
-
-<br/>
-
-# SyArGPT
-
-An AI Application that generates diagram from user system requirements
-
-</div>
-
-## 👋🏻 Getting Started
-
-### Requirements 
-
-- Generate System Architecture from User requirements
-- Follow AWS Well Architecture
-- Can export result to **drawio** or **Mermaid** 
-- Support **justification/explanation** where user can add more input from first result 
-- Leverage the power of generative AI and 
-    - open knowledge on Internet (for example: architecture blueprint shared by AWS, etc.)
-    - on Intranet 
-- The design output must consider the security, maintainability, scalability,...
-
-## ✨ Features
-
-### "1" Generate diagram from prompt
-### "2" Justify result from system
-### "3" Export result to draw.io or mermaid format
-### "4" Generate explanation/document for diagram
-### "5" Generate code templates based on design
-### "6" Import document
-### "1" Generate diagram from prompt
-### "2" Justify result from system
-### "3" Export result to draw.io or mermaid format
-### "4" Generate explanation/document for diagram
-### "5" Generate code templates based on design
-### "6" Import document
-### "1" Generate diagram from prompt
-### "2" Justify result from system
-### "3" Export result to draw.io or mermaid format
-### "4" Generate explanation/document for diagram
-### "5" Generate code templates based on design
-### "6" Import document
-### "1" Generate diagram from prompt
-### "2" Justify result from system
-### "3" Export result to draw.io or mermaid format
-### "4" Generate explanation/document for diagram
-### "5" Generate code templates based on design
-### "6" Import document
+import ExplainTab from "./ExplainTab"
+import TerraformTab from "./TerraformTab"
 
 
-## ⌨️ Development
-
-### Component Architect
-[![][component-arch]][deployment-link]
-
-TODO
-
-
-[image-banner]: https://github.com/buisihung11/SyArGPT/blob/main/assets/banner.png?raw=true
-[component-arch]: https://github.com/buisihung11/SyArGPT/blob/main/assets/ComponentArchitect.png?raw=true
-[deployment-link]: https://github.com/buisihung11/SyArGPT
-`
-
-const ExplainSection = () => {
-  const { theme } = useTheme()
-  const editorTheme = theme === "light" ? "light" : "vs-dark"
+const ExplainSection: FC = () => {
+  const {
+    isExplainCodeImageLoading,
+    isCostLoading,
+    costResult,
+    codeResult,
+    explainResult
+  } = useAppStore((state) => state)
 
   return (
-    <Tabs defaultValue="explain" className="h-full relative flex flex-col p-4">
-      <TabsList className="grid w-full grid-cols-2">
-        <TabsTrigger value="explain">Explain</TabsTrigger>
-        <TabsTrigger value="password">Code</TabsTrigger>
+    <Tabs
+      defaultValue="diagram"
+      className="h-full relative flex flex-col p-4 max-h-full"
+    >
+      <TabsList className="grid w-full grid-cols-4">
+        <TabsTrigger value="code">Diagram</TabsTrigger>
+        <TabsTrigger value="explain">Explaination</TabsTrigger>
+        <TabsTrigger value="cost">Cost</TabsTrigger>
+        <TabsTrigger value="terraform">Terraform</TabsTrigger>
       </TabsList>
+
       <CustomTabsContent value="explain">
-        <ReactMarkdown
-          rehypePlugins={[rehypeHighlight, rehypeRaw, rehypeSanitize]}
-          remarkPlugins={[remarkGfm]}
-        >
-          {markdown}
-        </ReactMarkdown>
-      </CustomTabsContent>
-      <CustomTabsContent value="password">
-        <Editor
-          height="80vh"
-          defaultLanguage="python"
-          defaultValue="// some comment"
-          theme={editorTheme}
+        <ExplainTab
+          markdown={explainResult}
+          isExplainTabLoading={isExplainCodeImageLoading}
         />
+      </CustomTabsContent>
+
+      <CustomTabsContent value="diagram">
+        <CodeTab
+          editorText={codeResult}
+          isCodeTabLoading={isExplainCodeImageLoading}
+        />
+      </CustomTabsContent>
+
+      <CustomTabsContent value="cost">
+        <CostTab costResult={costResult} isCostTabLoading={isCostLoading} />
+      </CustomTabsContent>
+
+      <CustomTabsContent className="overflow-y-hidden" value="terraform">
+        <TerraformTab />
       </CustomTabsContent>
     </Tabs>
   )
