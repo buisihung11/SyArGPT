@@ -76,13 +76,15 @@ export async function generateTerraformCode(body: { diagramCode: string }) {
         6. The terraform code should be able to be run on AWS.
         7. The terraform code should follow terraform bestpractice.
         8. If there are any password configuraiton needed, use zaq@1234 as the password.
-        Here is the cloud architecture diagram:
+        9. Use AWS Provider with version 5.7.0.
+        10. If there are any aws_db_instance, use db_name instead of name
+        Here is the cloud architecture document:
 
         \`\`\`
-        {{diagram}}
+        {{document}}
         \`\`\`
 
-        Generate the terraform code for this diagram.\n{format_instructions}
+        Generate the terraform code for this document.\n{format_instructions}
         llm: |
         AI:
         `
@@ -92,7 +94,6 @@ export async function generateTerraformCode(body: { diagramCode: string }) {
     const model = new BedrockChat({
       model: "anthropic.claude-3-sonnet-20240229-v1:0", // You can also do e.g. "anthropic.claude-v2"
       region: "us-west-2",
-      // endpointUrl: "custom.amazonaws.com",
       credentials: {
         accessKeyId: process.env.BEDROCK_AWS_ACCESS_KEY_ID!,
         secretAccessKey: process.env.BEDROCK_AWS_SECRET_ACCESS_KEY!
@@ -107,7 +108,7 @@ export async function generateTerraformCode(body: { diagramCode: string }) {
 
     const result = await chain.invoke({
       format_instructions: parser.getFormatInstructions(),
-      diagram: body.diagramCode
+      document: body.diagramCode
     })
 
     return result
