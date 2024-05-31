@@ -95,7 +95,7 @@ export default function TerraformTab() {
         setIsLoadingLog(false)
       }
 
-      readStream()
+      await readStream()
     } catch (error) {
       toast({
         title: "Error",
@@ -129,7 +129,7 @@ export default function TerraformTab() {
 
   return (
     <div className="flex flex-col gap-4 w-full h-full overflow-hidden">
-      <div className="w-full flex flex-row border-b">
+      <div className="w-full h-[48px] flex flex-row border-b flex-none">
         <div className="flex flex-row -ml-4 items-end gap-2 overflow-x-auto px-4 ">
           {codeTemplates.files.map(f => (
             <button
@@ -159,11 +159,11 @@ export default function TerraformTab() {
         </Button>
       </div>
       <div className="flex-1 p-2 flex flex-col gap-2 w-full max-h-full overflow-y-scroll">
-        <div key={selectedFile} className="rounded-lgmx-auto w-full">
+        <div key={selectedFile} className="rounded-lg mx-auto w-full h-full">
           <Editor
             className="rounded-lg"
-            height="40vh"
             language="hcl"
+            height="100%"
             defaultValue={
               codeTemplates.files.find(f => f.name === selectedFile)?.content
             }
@@ -188,7 +188,7 @@ export default function TerraformTab() {
             enableSearch={false}
             selectableLines
             lineClassName="text-xs"
-            text={logs.map(l => l.log).join("\n")}
+            text={logs.map(l => l.log ?? l.error).join("\n")}
           />
         </div>
       ) : null}
