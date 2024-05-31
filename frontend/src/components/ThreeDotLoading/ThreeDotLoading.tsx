@@ -1,10 +1,17 @@
-import React from "react"
+import React, { FC } from "react"
 import { motion } from "framer-motion"
+import { cn } from "@/lib/utils"
 
-export const ThreeDotsWave = () => {
+type ThreeDotsLoadingType = {
+  className?: string
+}
+export const ThreeDotsLoading: FC<ThreeDotsLoadingType> = ({ className }) => {
   return (
     <motion.div
-      className="w-[2rem] h-[2rem] flex justify-around"
+      className={cn(
+        "w-[1rem] h-[1rem] flex items-center justify-around",
+        className
+      )}
       variants={{
         start: {
           transition: {
@@ -30,7 +37,7 @@ export const ThreeDotsWave = () => {
 const Dot = () => {
   return (
     <motion.span
-      className="block w-[0.5rem] h-[0.5rem] dark:bg-white bg-black rounded"
+      className="block w-[0.2rem] h-[0.2rem] dark:bg-white bg-black rounded"
       variants={{
         start: {
           y: "50%"

@@ -1,16 +1,14 @@
 import { useChatStore } from "@/stores"
-import { FC } from "react"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger
 } from "../../ui/dropdown-menu"
+import { vpBankChallenges } from "../defaultPrompt"
 import { VPBankButton } from "./VPBankButton"
 
-export const VPBankChallenges: FC<{ vpBankChallenges: any }> = ({
-  vpBankChallenges
-}) => {
+export const VPBankChallenges = () => {
   const setPrompt = useChatStore(state => state.onInputPrompt)
 
   return (
