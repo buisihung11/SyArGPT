@@ -1,7 +1,5 @@
 "use client"
 
-import { AppSlice, useAppStore } from "@/stores"
-
 import HistorySection from "../HistorySection"
 import ImageResult from "./ImageResult"
 

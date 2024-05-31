@@ -1,4 +1,4 @@
-import { FC, useState } from "react"
+import { useState } from "react"
 
 import { motion } from "framer-motion"
 import { File } from "lucide-react"
@@ -6,12 +6,11 @@ import Image from "next/image"
 import Link from "next/link"
 
 import { AppSlice, useAppStore } from "@/stores"
+import ImageLoading from "@/components/ImageLoading"
 
 import { buttonVariants } from "../../ui/button"
 import ErrorImageResult from "./ErrorImageResult"
 import ImageInitScreen from "./ImageInitScreen"
-import CustomMotionImage from "@/components/CustomMotionImage"
-import ImageLoading from "@/components/ImageLoading"
 
 const MotionImg = motion(Image)
 
