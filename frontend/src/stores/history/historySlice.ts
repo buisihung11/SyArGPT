@@ -15,7 +15,7 @@ export type History = {
 export type HistorySlice = {
   history: History[]
   setHistory: (history: History[]) => void
-  refreshHistory: () => void,
+  refreshHistory: () => void
   updateHistory: (history: History) => void
 }
 
@@ -36,6 +36,7 @@ export const createHistorySlice: StateCreator<
   refreshHistory: () => {
     set(() => ({ ...initialState }))
   },
+  //Todo: remove move this as util findAndUpdate
   updateHistory: history => {
     set(state => {
       const index = state.history.findIndex(h => h.id === history.id)

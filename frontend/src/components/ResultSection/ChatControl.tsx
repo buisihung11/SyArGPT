@@ -78,7 +78,7 @@ const ChatControl = () => {
         currentSessionId: sessionID!
       })
 
-      const newHitory: History = {
+      const newHistory: History = {
         id: v4(),
         prompt,
         imageResult,
@@ -88,7 +88,7 @@ const ChatControl = () => {
         terraformResult: null
       }
 
-      const newHistories: History[] = [...history, newHitory]
+      const newHistories: History[] = [...history, newHistory]
       setHistory(newHistories)
 
       const [{ costResult }, { terraformResult }] = await Promise.all([
@@ -97,13 +97,12 @@ const ChatControl = () => {
       ])
 
       const updatedHistory: History = {
-        ...newHitory,
+        ...newHistory,
         costResult,
         terraformResult
       }
 
       updateHistory(updatedHistory)
-
     } catch (e) {
       toast({
         title: "error",
