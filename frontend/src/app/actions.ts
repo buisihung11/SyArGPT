@@ -77,7 +77,8 @@ export async function generateTerraformCode(body: { diagramCode: string }) {
         7. The terraform code should follow terraform bestpractice.
         8. If there are any password configuraiton needed, use zaq@1234 as the password.
         9. Use AWS Provider with version 5.7.0.
-        10. If there are any aws_db_instance, use db_name instead of name
+        10. If there are any aws_db_instance, replace name property with db_name.
+        11. Add access_key = ${process.env.BEDROCK_AWS_ACCESS_KEY_ID} and secret_key = ${process.env.BEDROCK_AWS_SECRET_ACCESS_KEY} in the provider block.
         Here is the cloud architecture document:
 
         \`\`\`
