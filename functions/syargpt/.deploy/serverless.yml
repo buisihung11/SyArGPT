@@ -30,9 +30,9 @@ plugins:
 custom:
   pythonRequirements:
     usePipenv: false
-    useDownloadCache: false
+    useDownloadCache: true
     fileName: requirements.txt
-    useStaticCache: false
+    useStaticCache: true
     dockerizePip: non-linux
     layer:
       name: ${self:service}-layer

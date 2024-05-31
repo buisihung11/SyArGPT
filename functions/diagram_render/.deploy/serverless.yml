@@ -1,0 +1,32 @@
+service: syargpt-diagram-render
+provider:
+  name: aws
+  stage: ${opt:stage, 'staging'}
+  region: us-west-2
+  memorySize: 2048
+  ecr:
+    images:
+      img:
+        path: ./
+        file: functions/diagram_render/.deploy/Dockerfile
+        platform: linux/amd64
+  logRetentionInDays: 30
+  role: "arn:aws:iam::891377350689:role/Lambda_role"
+  deploymentBucket:
+    name: hdduytran-deploy-bucket
+    maxPreviousDeploymentArtifacts: 10
+
+resources:
+  Description: "SyarGPT diagram render service"
+
+functions:
+  syargpt-diagram-render:
+    name: "syargpt-diagram-render-${opt:stage, 'staging'}"
+    maximumEventAge: 600
+    maximumRetryAttempts: "0"
+    description: "SyarGPT diagram render service"
+    timeout: 900
+    environment:
+      MODEL_ID: "anthropic.claude-3-sonnet-20240229-v1:0"
+    image:
+      name: img

@@ -1,0 +1,186 @@
+digraph "PDF Chat Service" {
+	graph [bb="0,0,597.2,667",
+		fontcolor="#2D3436",
+		fontname="Sans-Serif",
+		fontsize=15,
+		label="PDF Chat Service",
+		lheight=0.25,
+		lp="298.6,13",
+		lwidth=1.58,
+		nodesep=0.60,
+		pad=2.0,
+		rankdir=LR,
+		ranksep=0.75,
+		splines=curved
+	];
+	node [fixedsize=true,
+		fontcolor="#2D3436",
+		fontname="Sans-Serif",
+		fontsize=13,
+		height=1.4,
+		imagescale=true,
+		label="\N",
+		labelloc=b,
+		shape=box,
+		style=rounded,
+		width=1.4
+	];
+	edge [color="#7B8894"];
+	subgraph "cluster_PDF Processing" {
+		graph [bb="8,246,434.4,659",
+			bgcolor="#E5F5FD",
+			fontname="Sans-Serif",
+			fontsize=12,
+			label="PDF Processing",
+			labeljust=l,
+			lheight=0.20,
+			lp="56.5,647.88",
+			lwidth=1.12,
+			pencolor="#AEB6BE",
+			rankdir=LR,
+			shape=box,
+			style=rounded
+		];
+		d1a3f87f0e1747779a33cb59561d9793	[height=2.3,
+			image="C:\Users\DUY\AppData\Local\Programs\Python\Python310\lib\site-packages\resources/aws/storage\simple-storage-service-s3.png",
+			label="SimpleStorageServiceS3
+PDF Bucket",
+			pos="66.4,441",
+			shape=none];
+		ec533bd0329e4ed7a590c9ffd932d283	[height=2.3,
+			image="C:\Users\DUY\AppData\Local\Programs\Python\Python310\lib\site-packages\resources/aws/compute\lambda.png",
+			label="Lambda
+PDF Processor",
+			pos="221.2,441",
+			shape=none];
+		d1a3f87f0e1747779a33cb59561d9793 -> ec533bd0329e4ed7a590c9ffd932d283	[dir=forward,
+			fontcolor="#2D3436",
+			fontname="Sans-Serif",
+			fontsize=13,
+			pos="e,171.22,448.59 116.58,452.89 127.83,453.56 140.67,452.64 159.87,450.14"];
+		af746214b684432fa517aa296ed423ca	[height=2.3,
+			image="C:\Users\DUY\AppData\Local\Programs\Python\Python310\lib\site-packages\resources/aws/ml\comprehend.png",
+			label="Comprehend
+Bedrock Embedding",
+			pos="376,337",
+			shape=none];
+		ec533bd0329e4ed7a590c9ffd932d283 -> af746214b684432fa517aa296ed423ca	[dir=forward,
+			fontcolor="#2D3436",
+			fontname="Sans-Serif",
+			fontsize=13,
+			pos="e,325.68,393.4 271.58,429.77 288.94,424.25 301.49,416.67 317.51,401.49"];
+		e92e48b5a89f45ed9f4a316d5233116c	[height=2.3,
+			image="C:\Users\DUY\AppData\Local\Programs\Python\Python310\lib\site-packages\resources/aws/analytics\glue.png",
+			label="Glue
+Glue Crawler",
+			pos="376,546",
+			shape=none];
+		ec533bd0329e4ed7a590c9ffd932d283 -> e92e48b5a89f45ed9f4a316d5233116c	[dir=forward,
+			fontcolor="#2D3436",
+			fontname="Sans-Serif",
+			fontsize=13,
+			pos="e,325.68,534.53 271.58,497.86 287.99,514.82 300.11,524.12 314.92,530.52"];
+	}
+	subgraph "cluster_Vector Database" {
+		graph [bb="472.4,133,589.2,337",
+			bgcolor="#E5F5FD",
+			fontname="Sans-Serif",
+			fontsize=12,
+			label="Vector Database",
+			labeljust=l,
+			lheight=0.20,
+			lp="523.15,325.88",
+			lwidth=1.19,
+			pencolor="#AEB6BE",
+			rankdir=LR,
+			shape=box,
+			style=rounded
+		];
+		"8129d462ed904763b7ae7c294c9ee60c"	[height=2.3,
+			image="C:\Users\DUY\AppData\Local\Programs\Python\Python310\lib\site-packages\resources/aws/database\dynamodb-table.png",
+			label="DynamodbTable
+Vector Database",
+			pos="530.8,224",
+			shape=none];
+	}
+	subgraph "cluster_Text Storage" {
+		graph [bb="472.4,400,589.2,604",
+			bgcolor="#E5F5FD",
+			fontname="Sans-Serif",
+			fontsize=12,
+			label="Text Storage",
+			labeljust=l,
+			lheight=0.20,
+			lp="514.15,592.88",
+			lwidth=0.94,
+			pencolor="#AEB6BE",
+			rankdir=LR,
+			shape=box,
+			style=rounded
+		];
+		"4e0836452b81422e943c16843bf9f9fb"	[height=2.3,
+			image="C:\Users\DUY\AppData\Local\Programs\Python\Python310\lib\site-packages\resources/aws/storage\simple-storage-service-s3.png",
+			label="SimpleStorageServiceS3
+Text Chunks Bucket",
+			pos="530.8,491",
+			shape=none];
+	}
+	subgraph "cluster_Chat Service" {
+		graph [bb="8,34,279.6,238",
+			bgcolor="#E5F5FD",
+			fontname="Sans-Serif",
+			fontsize=12,
+			label="Chat Service",
+			labeljust=l,
+			lheight=0.20,
+			lp="48.625,226.88",
+			lwidth=0.91,
+			pencolor="#AEB6BE",
+			rankdir=LR,
+			shape=box,
+			style=rounded
+		];
+		b701d435e54841c9b32ca593693a7d05	[height=2.3,
+			image="C:\Users\DUY\AppData\Local\Programs\Python\Python310\lib\site-packages\resources/aws/compute\lambda.png",
+			label="Lambda
+Chat Lambda",
+			pos="221.2,125",
+			shape=none];
+		"21c82dc102604644886ff33207c6eb7b"	[height=2.3,
+			image="C:\Users\DUY\AppData\Local\Programs\Python\Python310\lib\site-packages\resources/aws/integration\eventbridge-default-event-bus-resource.png",
+			label="EventbridgeDefaultEventBusResource
+Event Bus",
+			pos="66.4,125",
+			shape=none];
+		"21c82dc102604644886ff33207c6eb7b" -> b701d435e54841c9b32ca593693a7d05	[dir=forward,
+			fontcolor="#2D3436",
+			fontname="Sans-Serif",
+			fontsize=13,
+			pos="e,171.07,112.05 116.52,107.16 129.08,104.98 141.45,105.79 159.85,109.57"];
+	}
+	af746214b684432fa517aa296ed423ca -> "8129d462ed904763b7ae7c294c9ee60c"	[dir=forward,
+		fontcolor="#2D3436",
+		fontname="Sans-Serif",
+		fontsize=13,
+		pos="e,480.46,268.77 426.26,305 445.9,292.42 460.07,283.13 471.3,275.31"];
+	e92e48b5a89f45ed9f4a316d5233116c -> "4e0836452b81422e943c16843bf9f9fb"	[dir=forward,
+		fontcolor="#2D3436",
+		fontname="Sans-Serif",
+		fontsize=13,
+		pos="e,480.7,532.06 426.32,544 445.5,542.77 458.8,540.81 470.21,536.7"];
+	b701d435e54841c9b32ca593693a7d05 -> af746214b684432fa517aa296ed423ca	[dir=forward,
+		fontcolor="#2D3436",
+		fontname="Sans-Serif",
+		fontsize=13,
+		pos="e,335.09,254.28 271.58,162.16 293.13,180.93 307.28,201.04 329.82,244.11"];
+	b701d435e54841c9b32ca593693a7d05 -> "8129d462ed904763b7ae7c294c9ee60c"	[dir=forward,
+		fontcolor="#2D3436",
+		fontname="Sans-Serif",
+		fontsize=13,
+		pos="e,480.48,181.84 271.2,122.43 377.16,117.57 406.02,122.91 471.83,174.91"];
+	b701d435e54841c9b32ca593693a7d05 -> "4e0836452b81422e943c16843bf9f9fb"	[dir=forward,
+		fontcolor="#2D3436",
+		fontname="Sans-Serif",
+		fontsize=13,
+		pos="e,505.05,408.48 271.54,154.43 428.94,247 459.69,273.85 501.49,397.79"];
+}
