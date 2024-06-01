@@ -15,7 +15,7 @@ import ImageInitScreen from "./ImageInitScreen"
 const MotionImg = motion(Image)
 
 const ImageResult = () => {
-  const { imageResult, codeResult, isExplainCodeImageLoading } = useAppStore(
+  const { imageResult, codeResult, isDiagramGenerating: isExplainCodeImageLoading } = useAppStore(
     (state: AppSlice) => state
   )
   const [viewMode, setViewMode] = useState<"image" | "edit">("image")

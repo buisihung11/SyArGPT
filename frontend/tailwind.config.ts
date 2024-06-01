@@ -93,6 +93,7 @@ const config = {
   plugins: [
     addVariablesForColors,
     require("tailwindcss-animate"),
+    require('@tailwindcss/typography'),
     function ({ matchUtilities, theme }: any) {
       matchUtilities(
         {

@@ -3,3 +3,7 @@ export type AppResponseFromDownStream = Response & {
   explain: string
   image: string
 }
+
+export type AppExplanResponseFromStream = Response & {
+  explain: string
+}

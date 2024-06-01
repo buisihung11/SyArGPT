@@ -11,7 +11,7 @@ const ResultSection = () => {
         <GridBackgroundDemo />
         <ImageResult />
       </div>
-      <div className="h-48 min-h-36 justify-self-end bottom-0 w-full">
+      <div className="h-58 min-h-42 justify-self-end bottom-0 w-full">
         <HistorySection />
       </div>
     </div>

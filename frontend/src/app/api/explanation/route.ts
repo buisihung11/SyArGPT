@@ -2,13 +2,13 @@ import { NextResponse } from "next/server"
 
 import { safeParseJSON } from "@/lib/utils"
 import {
-  AppResponse,
-  AppResponseFromDownStream,
-  RequestWithSessionIdAndMessage
+    AppExplanResponseFromStream,
+    ExplanationResponse,
+    RequestWithSessionIdAndMessage
 } from "@/types"
 
 const url =
-  "https://d5pwmtbqsjjpobgmezncgl3nbm0ejoqr.lambda-url.us-west-2.on.aws/"
+  "https://k3zmjklygabeo4gqvmuiofrgui0awqks.lambda-url.us-west-2.on.aws/"
 
 export const maxDuration = 60
 
@@ -29,22 +29,20 @@ export async function POST(request: RequestWithSessionIdAndMessage) {
       },
       body: JSON.stringify({
         session_id,
-        message
       })
     })
 
     const bodyText = await res.text()
-    const bodyJSON = safeParseJSON<AppResponseFromDownStream>(bodyText)
+    const bodyJSON = safeParseJSON<AppExplanResponseFromStream>(bodyText)
 
     if (!bodyJSON) {
       throw new Error(`Cannot parse json response from ${method} ${res.url}`)
     }
 
-    const { code_block: codeBlock, explain, image } = bodyJSON
+    const { explain } = bodyJSON
 
-    return NextResponse.json<AppResponse>({
-      codeBlock,
-      imageURL: image || null
+    return NextResponse.json<ExplanationResponse>({
+        explain
     })
   } catch (e: any) {
     return NextResponse.json({ error: e.message }, { status: e.status ?? 500 })
