@@ -13,7 +13,7 @@ import {
   useHistoryStore,
   useTerraformStore
 } from "@/stores"
-import { AppResponse, Cost } from "@/types"
+import { AppResponse, Cost, ExplanationResponse } from "@/types"
 import { CornerDownLeft, Loader2 } from "lucide-react"
 import { useEffect } from "react"
 import { v4 } from "uuid"
@@ -30,8 +30,9 @@ const ChatSection = () => {
   const {
     setCostResult,
     setIsCostLoading,
-    isExplainCodeImageLoading,
+    isDiagramGenerating: isExplainCodeImageLoading,
     setExplainResult,
+    setIsExplanationGenerating,
     setCodeResult,
     setImageResult,
     setIsExplainCodeImageLoading
@@ -66,23 +67,21 @@ const ChatSection = () => {
 
       cleanLogs()
       setTerraformLoading(true)
+      setIsExplanationGenerating(true)
       setCostResult(null)
       setIsCostLoading(true)
 
-      const {
-        explain: explainResult,
-        codeBlock: codeResult,
-        imageURL: imageResult
-      } = await fetchAppData({
-        prompt,
-        currentSessionId: sessionID!
-      })
+      const { codeBlock: codeResult, imageURL: imageResult } =
+        await fetchAppData({
+          prompt,
+          currentSessionId: sessionID!
+        })
 
       const newHitory: History = {
         id: v4(),
         prompt,
         imageResult,
-        explainResult,
+        explainResult: undefined,
         codeResult,
         costResult: null,
         terraformResult: null
@@ -91,9 +90,18 @@ const ChatSection = () => {
       const newHistories: History[] = [...history, newHitory]
       setHistory(newHistories)
 
+      const { explain } = await fetchExplanation({
+        currentSessionId: sessionID!
+      })
+
+      updateHistory({
+        ...newHitory,
+        explainResult: explain
+      })
+
       const [{ costResult }, { terraformResult }] = await Promise.all([
-        fetchCost(explainResult),
-        fetchTerraform(explainResult)
+        fetchCost(explain),
+        fetchTerraform(explain)
       ])
 
       const updatedHistory: History = {
@@ -109,6 +117,38 @@ const ChatSection = () => {
         description: (e as Error).message,
         variant: "destructive"
       })
+    }
+  }
+
+  const fetchExplanation = async ({
+    currentSessionId
+  }: {
+    currentSessionId: string
+  }): Promise<ExplanationResponse> => {
+    setIsExplanationGenerating(true)
+    try {
+      const url = `/api/explanation`
+      const method = "POST"
+
+      const res = await fetch(url, {
+        method,
+        headers: {
+          Accept: "application/json"
+        },
+        body: JSON.stringify({
+          session_id: currentSessionId,
+          message: prompt
+        })
+      })
+
+      const resJSON: ExplanationResponse = await res.json()
+
+      setExplainResult(resJSON.explain)
+      return resJSON
+    } catch (error) {
+      throw error
+    } finally {
+      setIsExplanationGenerating(false)
     }
   }
 
@@ -138,10 +178,9 @@ const ChatSection = () => {
 
       const resJSON: AppResponse = await res.json()
 
-      const { codeBlock, explain, imageURL } = resJSON
+      const { codeBlock, imageURL } = resJSON
 
       setCodeResult(codeBlock)
-      setExplainResult(explain)
       setImageResult(imageURL)
 
       return resJSON
@@ -183,23 +222,38 @@ const ChatSection = () => {
   const fetchTerraform = async (
     prompt: string
   ): Promise<{ terraformResult: any }> => {
-    setTerraformLoading(true)
-    setLogs([])
-    const data = await generateTerraformCode({ diagramCode: prompt })
-    setTerraformResult(data)
-    console.log("terraformData", data)
-    setTerraformLoading(false)
+    try {
+      setTerraformLoading(true)
+      setLogs([])
+      const data = await generateTerraformCode({ diagramCode: prompt })
+      setTerraformResult(data)
+      console.log("terraformData", data)
+      setTerraformLoading(false)
 
-    const requestData = {
-      sessionId: sessionID,
-      files: data.files.map((f: any) => ({
-        fileName: f.name,
-        fileContent: f.content
-      }))
-    }
+      const requestData = {
+        sessionId: sessionID,
+        files: data.files.map((f: any) => ({
+          fileName: f.name,
+          fileContent: f.content
+        }))
+      }
 
-    return {
-      terraformResult: data
+      return {
+        terraformResult: data
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Error uploading files",
+        variant: "destructive"
+      })
+      return {
+        terraformResult: {
+          files: []
+        }
+      }
+    } finally {
+      setTerraformLoading(false)
     }
 
     // call to POST localhost:80/update to test the terraform code

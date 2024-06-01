@@ -19,7 +19,8 @@ import ExplainSectionTabItem from "./ExplainSectionTabItem"
 
 const ExplainSection: FC = () => {
   const {
-    isExplainCodeImageLoading,
+    isDiagramGenerating: isExplainCodeImageLoading,
+    isExplanationGenerating,
     isCostLoading,
     costResult,
     codeResult,
@@ -45,7 +46,7 @@ const ExplainSection: FC = () => {
         <TabsTrigger value="explain">
           <ExplainSectionTabItem
             isLoading={isExplainCodeImageLoading}
-            content="Explaination"
+            content="Explanation"
           />
         </TabsTrigger>
         <TabsTrigger value="cost">
@@ -62,7 +63,7 @@ const ExplainSection: FC = () => {
       <CustomTabsContent value="explain">
         <ExplainTab
           markdown={explainResult}
-          isExplainTabLoading={isExplainCodeImageLoading}
+          isExplainTabLoading={isExplainCodeImageLoading || isExplanationGenerating}
         />
       </CustomTabsContent>
 

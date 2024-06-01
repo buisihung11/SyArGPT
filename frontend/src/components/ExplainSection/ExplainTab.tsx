@@ -34,13 +34,16 @@ const ExplainTab: FC<ExplainTabType> = ({ markdown, isExplainTabLoading }) => {
   if (!markdown) {
     return <h1>No markdown found</h1>
   }
+
   return (
-    <ReactMarkdown
-      rehypePlugins={[rehypeHighlight, rehypeRaw, rehypeSanitize]}
-      remarkPlugins={[remarkGfm]}
-    >
-      {markdown}
-    </ReactMarkdown>
+    <div className="prose w-full">
+      <ReactMarkdown
+        rehypePlugins={[rehypeHighlight, rehypeRaw, rehypeSanitize]}
+        remarkPlugins={[remarkGfm]}
+      >
+        {markdown}
+      </ReactMarkdown>
+    </div>
   )
 }
 

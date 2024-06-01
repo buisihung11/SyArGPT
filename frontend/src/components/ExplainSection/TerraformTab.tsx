@@ -40,7 +40,7 @@ export default function TerraformTab() {
     return <TerraformTabSkeleton />
   }
 
-  if (codeTemplates.files.length === 0) {
+  if (codeTemplates?.files?.length === 0) {
     return <div className="flex flex-col gap-4">No code templates found.</div>
   }
 

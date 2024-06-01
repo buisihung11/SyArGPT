@@ -145,16 +145,11 @@ export const vpBankChallenges: PromptInfo[] = [
   {
     name: "Challenge 7 - Architecture Design Generator",
     prompt: `
-        Everyday, there are projects/initiatives/developments which are initiated in the bank. Some of them
-        are complex enough to require serious efforts to create the right design of the solution. The design
-        includes but is not limited to software architecture, integration architecture, data architecture, with
-        consideration about security, maintainability, scalability, availability, etc. This task is often done in
-        collaboration between development teams and architecture team. However, due to limited capacity
-        of the centralized architecture team, some projects might need to wait and could not be processed
+        Everyday, there are projects/initiatives/developments which are initiated in the bank. Some of them are complex enough to require serious efforts to create the right design of the solution. 
+        The design includes but is not limited to software architecture, integration architecture, data architecture, with consideration about security, maintainability, scalability, availability, etc. 
+        This task is often done in collaboration between development teams and architecture team. However, due to limited capacity of the centralized architecture team, some projects might need to wait and could not be processed
         in expected time.
-        To solve this problem, the bank wants to leverage the power of generative AI and open knowledge
-        on Internet (for example: architecture blueprint shared by AWS, etc.) and on Intranet to help teams
-        and architects generate the first draft of designs based on the description of the requirements.
+        To solve this problem, the bank wants to leverage the power of generative AI and open knowledge on Internet (for example: architecture blueprint shared by AWS, etc.) and on Intranet to help teams and architects generate the first draft of designs based on the description of the requirements.
       `
   }
 ]
