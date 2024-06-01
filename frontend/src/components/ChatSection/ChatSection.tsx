@@ -227,7 +227,6 @@ const ChatSection = () => {
       setLogs([])
       const data = await generateTerraformCode({ diagramCode: prompt })
       setTerraformResult(data)
-      console.log("terraformData", data)
       setTerraformLoading(false)
 
       const requestData = {
