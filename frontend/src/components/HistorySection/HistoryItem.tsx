@@ -36,7 +36,7 @@ const HistoryItem: FC<HistoryItemProps> = ({ history, onClick, idx }) => {
             <HistoryImage history={history} />
           </div>
           <p className="line-clamp-5 text-sm font-semibold mb-2">
-            Prompt {history.prompt}
+            {history.prompt}
           </p>
           <p className="text-gray-400 text-xs">2 hours ago</p>
         </TooltipContent>
