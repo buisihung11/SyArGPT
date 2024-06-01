@@ -19,7 +19,7 @@ import { useEffect } from "react"
 import { v4 } from "uuid"
 import { useToast } from "../ui/use-toast"
 
-const ChatControl = () => {
+const ChatSection = () => {
   const { toast } = useToast()
 
   const onInputPrompt = useChatStore(state => state.onInputPrompt)
@@ -103,7 +103,6 @@ const ChatControl = () => {
       }
 
       updateHistory(updatedHistory)
-
     } catch (e) {
       toast({
         title: "error",
@@ -249,4 +248,4 @@ const ChatControl = () => {
   )
 }
 
-export default ChatControl
+export default ChatSection

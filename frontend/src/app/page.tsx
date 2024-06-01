@@ -1,7 +1,7 @@
+import ChatSection from "@/components/ChatSection"
 import ExplainSection from "@/components/ExplainSection/ExplainSection"
 import Header from "@/components/Header"
 import Nav from "@/components/Nav"
-import ChatControl from "@/components/ResultSection/ChatControl"
 import ResultSection from "@/components/ResultSection/ResultSection"
 import {
   ResizableHandle,
@@ -23,7 +23,7 @@ export default function Dashboard() {
           <main className="flex-1 overflow-auto">
             <ResizablePanelGroup direction="horizontal">
               <ResizablePanel minSize={20} defaultSize={20}>
-                <ChatControl />
+                <ChatSection />
               </ResizablePanel>
               <ResizableHandle withHandle />
               <ResizablePanel defaultSize={60}>

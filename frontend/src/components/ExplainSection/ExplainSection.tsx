@@ -2,14 +2,20 @@
 
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
-import { useAppStore } from "@/stores"
+import {
+  AppSlice,
+  TerraformSlice,
+  useAppStore,
+  useTerraformStore
+} from "@/stores"
 import { FC } from "react"
 import CodeTab from "./CodeTab"
 import CostTab from "./CostTab"
 import CustomTabsContent from "./CustomTabsContent"
 import ExplainTab from "./ExplainTab"
 import TerraformTab from "./TerraformTab"
-
+import { ThreeDotsLoading } from "../ThreeDotLoading"
+import ExplainSectionTabItem from "./ExplainSectionTabItem"
 
 const ExplainSection: FC = () => {
   const {
@@ -18,7 +24,11 @@ const ExplainSection: FC = () => {
     costResult,
     codeResult,
     explainResult
-  } = useAppStore((state) => state)
+  } = useAppStore((state: AppSlice) => state)
+
+  const { isLoading: isTerraformLoading } = useTerraformStore(
+    (state: TerraformSlice) => state
+  )
 
   return (
     <Tabs
@@ -26,10 +36,27 @@ const ExplainSection: FC = () => {
       className="h-full relative flex flex-col p-4 max-h-full"
     >
       <TabsList className="grid w-full grid-cols-4">
-        <TabsTrigger value="diagram">Diagram</TabsTrigger>
-        <TabsTrigger value="explain">Explaination</TabsTrigger>
-        <TabsTrigger value="cost">Cost</TabsTrigger>
-        <TabsTrigger value="terraform">Terraform</TabsTrigger>
+        <TabsTrigger value="diagram">
+          <ExplainSectionTabItem
+            isLoading={isExplainCodeImageLoading}
+            content="Diagrams"
+          />
+        </TabsTrigger>
+        <TabsTrigger value="explain">
+          <ExplainSectionTabItem
+            isLoading={isExplainCodeImageLoading}
+            content="Explaination"
+          />
+        </TabsTrigger>
+        <TabsTrigger value="cost">
+          <ExplainSectionTabItem isLoading={isCostLoading} content="Cost" />
+        </TabsTrigger>
+        <TabsTrigger value="terraform">
+          <ExplainSectionTabItem
+            isLoading={isTerraformLoading}
+            content="Terraform"
+          />
+        </TabsTrigger>
       </TabsList>
 
       <CustomTabsContent value="explain">
