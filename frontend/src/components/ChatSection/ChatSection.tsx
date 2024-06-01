@@ -242,7 +242,16 @@ const ChatSection = () => {
         terraformResult: data
       }
     } catch (error) {
-      throw error
+      toast({
+        title: "Error",
+        description: "Error uploading files",
+        variant: "destructive"
+      })
+      return {
+        terraformResult: {
+          files: []
+        }
+      }
     } finally {
       setTerraformLoading(false)
     }
