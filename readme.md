@@ -12,16 +12,16 @@ An AI Application that generates diagram from user system requirements
 
 ## 👋🏻 Getting Started
 
-### Requirements 
+### Requirements
 
-- Generate System Architecture from User requirements
-- Follow AWS Well Architecture
-- Can export result to **drawio** or **Mermaid** 
-- Support **justification/explanation** where user can add more input from first result 
-- Leverage the power of generative AI and 
-    - open knowledge on Internet (for example: architecture blueprint shared by AWS, etc.)
-    - on Intranet 
-- The design output must consider the security, maintainability, scalability,...
+-   Generate System Architecture from User requirements
+-   Follow AWS Well Architecture
+-   Can export result to **drawio** or **Mermaid**
+-   Support **justification/explanation** where user can add more input from first result
+-   Leverage the power of generative AI and
+    -   open knowledge on Internet (for example: architecture blueprint shared by AWS, etc.)
+    -   on Intranet
+-   The design output must consider the security, maintainability, scalability,...
 
 ## ✨ Features
 
@@ -29,23 +29,29 @@ An AI Application that generates diagram from user system requirements
 
 [![][general-process]][deployment-link]
 
+### App Screenshot
+
 [![][app-screenshot]][deployment-link]
 
-
-
 ### `1` Generate diagram from prompt
+
 ### `2` Justify result from system
+
 ### `3` Export result to draw.io or mermaid format
+
 ### `4` Generate explanation/document for diagram
-### `5` Generate code templates (Terraform) based on design
-### `6` Import document
+
+### `5` Generate code templates (Terraform) able to run plan based on design
+
+### `6` Import knowledge base
+
 ### `7` Cost estimation
 
 ## 🧱 Technologies
 
-- **Frontend**: Next.js, TailwindCSS, ShadCN
-- **Backend**: Python, AWS Lambda
-- **Service**: AWS Bedrock, AWS S3, AWS Lambda, AWS API Gateway
+-   **Frontend**: Next.js, TypeScript TailwindCSS, ShadCN
+-   **Backend**: Python, AWS Lambda, TypeScript, LangChain
+-   **Service**: AWS EC2, AWS Bedrock, AWS S3, AWS Lambda, AWS API Gateway
 
 ## ⌨️ Development
 
@@ -54,16 +60,16 @@ An AI Application that generates diagram from user system requirements
 [![][system-arch]][deployment-link]
 
 ### Component Architect
+
 [![][component-arch]][deployment-link]
 
 TODO
 
 ## Contributors
 
-- [buisihung11](https://github.com/buisihung11)
-- [tangthienan1](https://github.com/tangthienan1)
-- [hdduytran](https://github.com/hdduytran)
-
+-   [buisihung11](https://github.com/buisihung11)
+-   [tangthienan1](https://github.com/tangthienan1)
+-   [hdduytran](https://github.com/hdduytran)
 
 [image-banner]: https://github.com/buisihung11/SyArGPT/blob/main/assets/banner.png?raw=true
 [component-arch]: https://github.com/buisihung11/SyArGPT/blob/main/assets/ComponentArchitect.png?raw=true
