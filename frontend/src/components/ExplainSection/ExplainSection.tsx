@@ -45,7 +45,7 @@ const ExplainSection: FC = () => {
         </TabsTrigger>
         <TabsTrigger value="explain">
           <ExplainSectionTabItem
-            isLoading={isExplainCodeImageLoading}
+            isLoading={isExplainCodeImageLoading || isExplanationGenerating}
             content="Explanation"
           />
         </TabsTrigger>
@@ -63,7 +63,9 @@ const ExplainSection: FC = () => {
       <CustomTabsContent value="explain">
         <ExplainTab
           markdown={explainResult}
-          isExplainTabLoading={isExplainCodeImageLoading || isExplanationGenerating}
+          isExplainTabLoading={
+            isExplainCodeImageLoading || isExplanationGenerating
+          }
         />
       </CustomTabsContent>
 
