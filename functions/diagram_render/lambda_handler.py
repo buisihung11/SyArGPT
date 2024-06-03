@@ -24,7 +24,10 @@ def render_diagram(code_block):
     s3_file_name = f"{file_name}.png"
     if not Path(f"{file_path}.png").exists():
         return None
-    s3_client.upload_file(f"{file_path}.png", upload_bucket, s3_file_name)
+    s3_client.upload_file(f"{file_path}.png",
+                          upload_bucket,
+                          s3_file_name,
+                          ExtraArgs={'ContentType': 'image/png'})
     
     return f"https://{upload_bucket}.s3.us-west-2.amazonaws.com/{file_name}.png"
     

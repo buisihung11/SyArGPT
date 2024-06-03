@@ -59,23 +59,39 @@ for line in text:
         continue
     path = line.split(" import ")[0]
     imports = line.split(" import ")[1].split(", ")
+    imports = [imp.strip() for imp in imports]
     if path not in IMPORT_DICT:
         IMPORT_DICT[path] = []
     for imp in imports:
         IMPORT_DICT[path].append(imp)
 
 
+    
 def fix_import_path(code: str) -> str:
     code = code.split("\n")
     code = [line.rstrip() for line in code]
     news_imports = []
     new_code = deepcopy(code)
-    for line in code:
+    for i in range(len(code)):
+        line = code[i]
         if "import " in line:
-            origin_path = line.split(" import ")[0]
-            all_imports = line.split("import ")[1].split(", ")
+            if "(" in line:
+                origin_path = line.split(" import")[0]
+                new_code.remove(line)
+                all_imports = []
+                if ")" not in code[i]:
+                    while True:
+                        i += 1
+                        if ")" in code[i]:
+                            new_code.remove(code[i])
+                            break
+                        all_imports.append(code[i].replace(",", "").strip())
+                        new_code.remove(code[i])
+            else:
+                origin_path = line.split(" import ")[0]
+                all_imports = line.split("import ")[1].split(", ")
+                new_code.remove(line)
             all_imports = [imp.strip() for imp in all_imports]
-            new_code.remove(line)
             for imp in all_imports:
                 is_contained = False
                 for path, true_imp in IMPORT_DICT.items():
@@ -125,5 +141,70 @@ def replace_image_path(code: str) -> str:
     return code
 
 if __name__ == "__main__":
-    code = """bedrock_chat = Custom("Bedrock Chat API", "/tmdsap./sasa/bedrock.png")"""
-    print(replace_image_path(code))
+    code = """
+from diagrams import Cluster, Diagram
+from diagrams.aws.analytics import Athena, Glue, QuickSight
+from diagrams.aws.compute import EC2, ECS, Lambda
+from diagrams.aws.database import DynamoDB, RDS
+from diagrams.aws.integration import EventBridge, StepFunctions
+from diagrams.aws.ml import Comprehend, SageMaker
+from diagrams.aws.network import APIGateway, CloudFront
+from diagrams.aws.storage import S3
+
+with Diagram("Bank Architecture Design", show=False):
+    with Cluster("Data Ingestion"):
+        s3_bucket = S3("Data Lake")
+        glue_crawler = Glue("Glue Crawler")
+        glue_crawler >> s3_bucket
+
+    with Cluster("Data Processing"):
+        glue_job = Glue("Glue ETL Job")
+        glue_job << s3_bucket
+        comprehend = Comprehend("Comprehend")
+        comprehend << s3_bucket
+        sagemaker = SageMaker("SageMaker")
+        sagemaker << s3_bucket
+
+    with Cluster("Data Storage"):
+        rds = RDS("Relational Database")
+        dynamodb = DynamoDB("NoSQL Database")
+        glue_job >> rds
+        glue_job >> dynamodb
+
+    with Cluster("Data Visualization"):
+        quicksight = QuickSight("QuickSight")
+        quicksight << rds
+        quicksight << dynamodb
+
+    with Cluster("Serverless Architecture"):
+        api_gateway = APIGateway("API Gateway")
+        lambda_function = Lambda("Lambda Function")
+        api_gateway >> lambda_function
+        lambda_function >> rds
+        lambda_function >> dynamodb
+
+    with Cluster("Containerized Architecture"):
+        ecs_cluster = ECS("ECS Cluster")
+        ec2_instances = EC2("EC2 Instances")
+        ecs_cluster >> ec2_instances
+        ecs_cluster >> rds
+        ecs_cluster >> dynamodb
+
+    with Cluster("Event-Driven Architecture"):
+        event_bridge = EventBridge("EventBridge")
+        step_function = StepFunctions("Step Functions")
+        event_bridge >> step_function
+        step_function >> lambda_function
+        step_function >> ecs_cluster
+
+    with Cluster("Content Delivery"):
+        cloudfront = CloudFront("CloudFront")
+        cloudfront << s3_bucket
+        cloudfront << api_gateway
+    """
+    code = replace_wrong_methods(code)
+    code = remove_unnecessary_blocks(code)
+    code = fix_import_path(code)
+    code = shorten_import(code)
+    code = replace_wrong_methods(code)
+    print(code)

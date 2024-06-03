@@ -1,0 +1,56 @@
+service: syargpt-explanation
+provider:
+  name: aws
+  stage: ${opt:stage, 'staging'}
+  runtime: python3.11
+  architecture: arm64
+  region: us-west-2
+  memorySize: 1024
+  logRetentionInDays: 30
+  role: "arn:aws:iam::891377350689:role/Lambda_role"
+  deploymentBucket:
+    name: hdduytran-deploy-bucket
+    maxPreviousDeploymentArtifacts: 10
+
+resources:
+  Description: "SyarGPT explaination service"
+
+package:
+  include:
+    - ./core/**
+    - functions/syargpt_explanation/**
+    - "!**/.pytest_cache/**"
+    - "**/__pycache__/**"
+  exclude:
+    - ./**
+
+plugins:
+  - serverless-python-requirementsn
+
+custom:
+  pythonRequirements:
+    usePipenv: false
+    useDownloadCache: true
+    fileName: requirements.txt
+    useStaticCache: true
+    dockerizePip: non-linux
+    layer:
+      name: ${self:service}-layer
+      description: "Python requirements for Lambda layer"
+      compatibleRuntimes:
+        - python3.12
+    noDeploy:
+      - pytest
+
+functions:
+  syargpt-explanation-service:
+    name: "syargpt-explanation-service-${opt:stage, 'staging'}"
+    handler: functions/syargpt_explanation/lambda_handler.lambda_handler
+    maximumEventAge: 600
+    maximumRetryAttempts: "0"
+    description: "SyarGPT explanation service"
+    timeout: 900
+    layers:
+      - Ref: PythonRequirementsLambdaLayer
+    environment:
+      MODEL_ID: "anthropic.claude-3-sonnet-20240229-v1:0"
