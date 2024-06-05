@@ -9,15 +9,23 @@ import {
   ResizablePanelGroup
 } from "@/components/ui/resizable"
 import { TooltipProvider } from "@/components/ui/tooltip"
+import { auth } from "@clerk/nextjs/server"
+import { redirect } from "next/navigation"
 
 export const maxDuration = 60
 
 export default function Dashboard() {
+  const { userId } = auth()
+
+  if (!userId) {
+    return redirect("/auth/sign-in")
+  }
+
   return (
     <TooltipProvider>
       <div className="h-screen w-full pl-[56px]">
         <Nav />
-        <div className="flex flex-col h-full">
+        <div className="flex h-full flex-col">
           <Header />
 
           <main className="flex-1 overflow-auto">
