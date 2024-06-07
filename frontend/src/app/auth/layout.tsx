@@ -37,7 +37,7 @@ export default async function AuthenticatedLayout({
       </div>
       <nav className="container flex h-16 items-center justify-between">
         <Link href="/">
-          <Logo className="min-w-sm" />
+          <Logo />
         </Link>
         <Link
           className="flex h-8 items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-4 text-sm text-white duration-500 hover:bg-white hover:text-black"
