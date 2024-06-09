@@ -47,11 +47,53 @@ An AI Application that generates diagram from user system requirements
 
 ### `7` Cost estimation
 
+### `8` Authentication
+
+- [ ] Setup Clerk, SignIn and SignOut Page
+- [ ] Setup Clerk with Supabase DB
+
 ## 🧱 Technologies
 
 -   **Frontend**: Next.js, TypeScript TailwindCSS, ShadCN
 -   **Backend**: Python, AWS Lambda, TypeScript, LangChain
 -   **Service**: AWS EC2, AWS Bedrock, AWS S3, AWS Lambda, AWS API Gateway
+
+## Setup local
+
+### 1. Authentication
+
+#### 1.1 Clerk
+
+TODO
+
+#### 1.2 Integrate Clerk with Supabase (Optional)
+
+Since we used Clerk as a separate auth library in this project, there are some additional steps need to setup in order to work with Supabase if we want to use the RLS (Row Level Security) of PostgreQL
+
+1. Setup a custom JWT Template for Clerk
+2. Setup Supabase client to use the custom JWT to auth the request
+3. Create RLS policy 
+
+See how to setup Clerk with Supabase [here](https://clerk.com/docs/integrations/databases/supabase)
+
+#### 1.3 Create webhook for Clerk
+
+To create User data in our own database (Supabase), we will use Webhook feature of Clerk to create user data whenever a new user is created within Clerk
+
+See how to setup [here](https://clerk.com/docs/integrations/webhooks/sync-data)
+
+
+### 2. Database
+
+In this project we will use **Supabase** as database provider for PostgreQL and **Prisma** library as DatabaseORM 
+
+#### 2.1 Setup Supabase
+
+TODO
+
+#### 2.2 Setup Prisma
+
+See how to setup Prisma with Supabase [here](https://supabase.com/partners/integrations/prisma) 
 
 ## ⌨️ Development
 

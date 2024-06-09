@@ -1,5 +1,4 @@
 "use client"
-
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {
@@ -9,6 +8,7 @@ import {
   useHistoryStore,
   useTerraformStore
 } from "@/stores"
+import { SignedIn, UserButton } from "@clerk/nextjs"
 import { Share } from "lucide-react"
 import { v4 } from "uuid"
 
@@ -44,19 +44,23 @@ const Header = () => {
       <Badge variant="outline">
         <p className="text-xs text-muted-foreground">Session ID: {sessionId}</p>
       </Badge>
-      <div className="ml-auto gap-1.5 text-sm">
+      <div className="ml-auto flex flex-row items-center gap-2 text-sm">
         <Button
           onClick={handleNewGeneration}
           size="sm"
-          className="mr-2 gap-1.5 text-sm"
+          className="mr-2 text-sm"
         >
           New Generation
         </Button>
 
-        <Button variant="outline" size="sm" className="ml-auto gap-1.5 text-sm">
+        <Button variant="outline" size="sm" className="ml-auto text-sm">
           <Share className="size-3" />
           Share
         </Button>
+
+        <SignedIn>
+          <UserButton />
+        </SignedIn>
       </div>
     </header>
   )
