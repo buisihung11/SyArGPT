@@ -47,11 +47,26 @@ An AI Application that generates diagram from user system requirements
 
 ### `7` Cost estimation
 
+### `8` Authentication
+
+- [ ] Setup Clerk, SignIn and SignOut Page
+- [ ] Setup Clerk with Supabase DB
+
 ## 🧱 Technologies
 
 -   **Frontend**: Next.js, TypeScript TailwindCSS, ShadCN
 -   **Backend**: Python, AWS Lambda, TypeScript, LangChain
 -   **Service**: AWS EC2, AWS Bedrock, AWS S3, AWS Lambda, AWS API Gateway
+
+## Setup local
+
+### 1. Authentication
+
+#### 1.1 Clerk
+#### 1.2 Supabase
+#### 1.3 Integrate Clerk with Supabase
+
+See how to setup Clerk with Supabase [here](https://clerk.com/docs/integrations/databases/supabase) 
 
 ## ⌨️ Development
 
