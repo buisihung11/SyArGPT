@@ -13,6 +13,11 @@ const nextConfig = {
         protocol: "https",
         hostname: "syargpt-media-bucket.s3.us-west-2.amazonaws.com",
         port: ""
+      },
+      {
+        protocol: "https",
+        hostname: "img.clerk.com",
+        port: ""
       }
     ]
   }
