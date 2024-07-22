@@ -10,7 +10,6 @@ export async function POST(req: Request) {
   console.log(
     "WEBHOOK_SECRET",
     WEBHOOK_SECRET,
-    process.env.CLERK_WEBHOOK_SECRET
   )
 
   if (!WEBHOOK_SECRET) {

@@ -2,19 +2,36 @@
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger
+} from "@/components/ui/dropdown-menu"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger
+} from "@/components/ui/tooltip"
+import { useUser } from "@/lib/serverHook"
+import {
   HistorySlice,
   useAppStore,
   useChatStore,
   useHistoryStore,
   useTerraformStore
 } from "@/stores"
-import { SignedIn, UserButton } from "@clerk/nextjs"
+import { SignedIn, useUser as useClerkUser } from "@clerk/nextjs"
 import { Share } from "lucide-react"
+import Image from "next/image"
 import { v4 } from "uuid"
 
 const Header = () => {
-  const sessionId = useAppStore(state => state.sessionId)
-  const setSessionId = useAppStore(state => state.setSessionId)
+  const { user: clerkUser } = useClerkUser()
+  const { user } = useUser()
+
+  const { sessionId, setSessionId } = useAppStore(state => state)
 
   const refreshCostState = useAppStore(state => state.refreshCostState)
   const refreshExplainCodeImageState = useAppStore(
@@ -59,7 +76,60 @@ const Header = () => {
         </Button>
 
         <SignedIn>
-          <UserButton />
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="outline"
+                size="icon"
+                className="overflow-hidden rounded-full"
+              >
+                {clerkUser?.hasImage && (
+                  <Image
+                    src={clerkUser?.imageUrl}
+                    width={36}
+                    height={36}
+                    alt="Avatar"
+                    className="overflow-hidden rounded-full"
+                  />
+                )}
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>
+                <div className="flex items-center gap-4">
+                  <div className="">
+                    {clerkUser?.fullName}
+                    <p className="text-xs text-muted-foreground">
+                      {clerkUser?.primaryEmailAddress?.emailAddress ?? "N/A"}
+                    </p>
+                  </div>
+                  <div>
+                    <Tooltip>
+                      <TooltipTrigger>
+                        <Button
+                          className="rounded-full"
+                          variant="outline"
+                          size="sm"
+                        >
+                          {user?.aiLimit} Credits
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p className="text-sm font-normal">
+                          Credits are used to generate code explanations
+                        </p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </div>
+                </div>
+              </DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>Settings</DropdownMenuItem>
+              <DropdownMenuItem>Support</DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>Logout</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </SignedIn>
       </div>
     </header>
