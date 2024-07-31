@@ -1,10 +1,13 @@
 import { NextResponse } from "next/server"
+import { google } from "@ai-sdk/google"
+import { anthropic } from '@ai-sdk/anthropic';
+import { generateText, streamText } from "ai"
 
 import { safeParseJSON } from "@/lib/utils"
 import {
-    AppExplanResponseFromStream,
-    ExplanationResponse,
-    RequestWithSessionIdAndMessage
+  AppExplanResponseFromStream,
+  ExplanationResponse,
+  RequestWithSessionIdAndMessage
 } from "@/types"
 
 const url =
@@ -12,39 +15,21 @@ const url =
 
 export const maxDuration = 60
 
-export async function POST(request: RequestWithSessionIdAndMessage) {
+export async function POST(request: Request) {
   try {
-    const reqJSON = await request.json()
-    const { session_id, message } = reqJSON
+    const { prompt }: { prompt: string } = await request.json();
 
-    const method = "POST"
+    const anthropicModel = anthropic('claude-3-sonnet-20240229')
 
-    const res = await fetch(url, {
-      method,
-      mode: "cors",
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "*"
-      },
-      body: JSON.stringify({
-        session_id,
-      })
+    const result = await streamText({
+      model: google("models/gemini-1.5-flash"),
+      system: "You are a helpful assistant.",
+      prompt
     })
 
-    const bodyText = await res.text()
-    const bodyJSON = safeParseJSON<AppExplanResponseFromStream>(bodyText)
-
-    if (!bodyJSON) {
-      throw new Error(`Cannot parse json response from ${method} ${res.url}`)
-    }
-
-    const { explain } = bodyJSON
-
-    return NextResponse.json<ExplanationResponse>({
-        explain
-    })
+    return result.toDataStreamResponse()
   } catch (e: any) {
+    console.error(e)
     return NextResponse.json({ error: e.message }, { status: e.status ?? 500 })
   }
 }
