@@ -22,13 +22,14 @@ import {
   useHistoryStore,
   useTerraformStore
 } from "@/stores"
-import { SignedIn, useUser as useClerkUser } from "@clerk/nextjs"
+import { SignedIn, useUser as useClerkUser, useClerk } from "@clerk/nextjs"
 import { Share } from "lucide-react"
 import Image from "next/image"
 import { v4 } from "uuid"
 
 const Header = () => {
   const { user: clerkUser } = useClerkUser()
+  const { signOut } = useClerk()
   const { user } = useUser()
 
   const { sessionId, setSessionId } = useAppStore(state => state)
@@ -127,7 +128,13 @@ const Header = () => {
               <DropdownMenuItem>Settings</DropdownMenuItem>
               <DropdownMenuItem>Support</DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>Logout</DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => {
+                  signOut()
+                }}
+              >
+                Logout
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </SignedIn>
