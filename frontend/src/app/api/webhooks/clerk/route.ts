@@ -7,10 +7,7 @@ export async function POST(req: Request) {
   // You can find this in the Clerk Dashboard -> Webhooks -> choose the endpoint
   const WEBHOOK_SECRET = process.env.CLERK_WEBHOOK_SECRET
 
-  console.log(
-    "WEBHOOK_SECRET",
-    WEBHOOK_SECRET,
-  )
+  console.log("WEBHOOK_SECRET", WEBHOOK_SECRET)
 
   if (!WEBHOOK_SECRET) {
     throw new Error(
@@ -59,10 +56,10 @@ export async function POST(req: Request) {
   const { id, email_addresses, last_name, first_name } = evt.data as UserJSON
   const eventType = evt.type
 
-  const userEmail = email_addresses.at(0)?.email_address
-
   switch (eventType) {
     case "user.created":
+      const userEmail = email_addresses.at(0)?.email_address
+
       let existingUser = await prisma.user.findUnique({
         where: { email: userEmail }
       })
