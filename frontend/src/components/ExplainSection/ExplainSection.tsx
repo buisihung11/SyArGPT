@@ -4,18 +4,19 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 import {
   AppSlice,
+  HistorySlice,
   TerraformSlice,
   useAppStore,
+  useHistoryStore,
   useTerraformStore
 } from "@/stores"
 import { FC } from "react"
 import CodeTab from "./CodeTab"
 import CostTab from "./CostTab"
 import CustomTabsContent from "./CustomTabsContent"
+import ExplainSectionTabItem from "./ExplainSectionTabItem"
 import ExplainTab from "./ExplainTab"
 import TerraformTab from "./TerraformTab"
-import { ThreeDotsLoading } from "../ThreeDotLoading"
-import ExplainSectionTabItem from "./ExplainSectionTabItem"
 
 const ExplainSection: FC = () => {
   const {
@@ -23,18 +24,26 @@ const ExplainSection: FC = () => {
     isExplanationGenerating,
     isCostLoading,
     costResult,
-    codeResult,
     explainResult
   } = useAppStore((state: AppSlice) => state)
+
+  const { currentHistory } = useHistoryStore((state: HistorySlice) => state)
+  const { codeResult } = currentHistory || {}
 
   const { isLoading: isTerraformLoading } = useTerraformStore(
     (state: TerraformSlice) => state
   )
 
+  console.log(
+    "isExplainCodeImageLoading",
+    isExplainCodeImageLoading,
+    currentHistory?.codeResult
+  )
+
   return (
     <Tabs
       defaultValue="diagram"
-      className="h-full relative flex flex-col p-4 max-h-full"
+      className="relative flex h-full max-h-full flex-col p-4"
     >
       <TabsList className="grid w-full grid-cols-4">
         <TabsTrigger value="diagram">
@@ -60,19 +69,18 @@ const ExplainSection: FC = () => {
         </TabsTrigger>
       </TabsList>
 
+      <CustomTabsContent value="diagram">
+        <CodeTab
+          editorText={codeResult}
+        />
+      </CustomTabsContent>
+
       <CustomTabsContent value="explain">
         <ExplainTab
           markdown={explainResult}
           isExplainTabLoading={
             isExplainCodeImageLoading || isExplanationGenerating
           }
-        />
-      </CustomTabsContent>
-
-      <CustomTabsContent value="diagram">
-        <CodeTab
-          editorText={codeResult}
-          isCodeTabLoading={isExplainCodeImageLoading}
         />
       </CustomTabsContent>
 

@@ -17,8 +17,8 @@ import {
 import HistoryItem from "./HistoryItem"
 
 const HistorySection = () => {
-  const { history } = useHistoryStore((state: HistorySlice) => state)
-  const { setExplainResult, setCodeResult, setCostResult, setImageResult } =
+  const { histories: history } = useHistoryStore((state: HistorySlice) => state)
+  const { setExplainResult, setCostResult, setImageResult } =
     useAppStore((state: AppSlice) => state)
   const { onInputPrompt } = useChatStore((state: ChatSlice) => state)
   const { setCode } = useTerraformStore((state: TerraformSlice) => state)
@@ -34,7 +34,6 @@ const HistorySection = () => {
     } = history
 
     setExplainResult(explainResult)
-    setCodeResult(codeResult)
     setCostResult(costResult)
     setImageResult(imageResult)
     onInputPrompt(prompt)

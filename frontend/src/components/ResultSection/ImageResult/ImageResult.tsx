@@ -15,9 +15,8 @@ import ImageInitScreen from "./ImageInitScreen"
 const MotionImg = motion(Image)
 
 const ImageResult = () => {
-  const { imageResult, codeResult, isDiagramGenerating: isExplainCodeImageLoading } = useAppStore(
-    (state: AppSlice) => state
-  )
+  const { imageResult, isDiagramGenerating: isExplainCodeImageLoading } =
+    useAppStore((state: AppSlice) => state)
   const [viewMode, setViewMode] = useState<"image" | "edit">("image")
   const [isLoadImageError, setIsLoadImageError] = useState(false)
 
@@ -25,7 +24,7 @@ const ImageResult = () => {
     return <ImageLoading />
   }
 
-  if ((!imageResult && codeResult) || isLoadImageError) {
+  if (isLoadImageError) {
     return <ErrorImageResult />
   }
 
@@ -39,11 +38,11 @@ const ImageResult = () => {
 
   return (
     <div
-      className={`flex-1 p-4 flex flex-col gap-2 h-full items-center w-full justify-center ${
+      className={`flex h-full w-full flex-1 flex-col items-center justify-center gap-2 p-4 ${
         viewMode !== "image" && "hidden"
       }`}
     >
-      <div className="bg-muted shadow-md w-full h-full max-w-[800px] mx-auto relative">
+      <div className="relative mx-auto h-full w-full max-w-[800px] bg-muted shadow-md">
         <Image
           onError={() => {
             setIsLoadImageError(true)
@@ -52,7 +51,7 @@ const ImageResult = () => {
           alt="Cloud Architecture Diagram"
           fill
           objectFit="contain"
-          className="rounded-md object-cover cursor-pointer"
+          className="cursor-pointer rounded-md object-cover"
         />
       </div>
       <Link
