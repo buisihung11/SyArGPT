@@ -13,14 +13,17 @@ export type History = {
 }
 
 export type HistorySlice = {
-  history: History[]
-  setHistory: (history: History[]) => void
+  histories: History[]
+  setHistories: (history: History[]) => void
   refreshHistory: () => void,
-  updateHistory: (history: History) => void
+  updateHistory: (history: History) => void,
+  currentHistory: History | null,
+  setCurrentHistory: (history: History) => void
 }
 
 const initialState = {
-  history: []
+  histories: [],
+  currentHistory: null
 }
 
 export const createHistorySlice: StateCreator<
@@ -30,17 +33,20 @@ export const createHistorySlice: StateCreator<
   HistorySlice
 > = (set, get) => ({
   ...initialState,
-  setHistory: history => {
-    set(state => ({ history }))
+  setHistories: history => {
+    set(state => ({ histories: history }))
+  },
+  setCurrentHistory: history => {
+    set(() => ({ currentHistory: history }))
   },
   refreshHistory: () => {
     set(() => ({ ...initialState }))
   },
   updateHistory: history => {
     set(state => {
-      const index = state.history.findIndex(h => h.id === history.id)
-      state.history[index] = history
-      return { history: state.history }
+      const index = state.histories.findIndex(h => h.id === history.id)
+      state.histories[index] = history
+      return { histories: state.histories }
     })
   }
 })
