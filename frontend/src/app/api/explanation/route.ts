@@ -1,33 +1,28 @@
-import { NextResponse } from "next/server"
-import { google } from "@ai-sdk/google"
-import { anthropic } from '@ai-sdk/anthropic';
-import { generateText, streamText } from "ai"
+import { streamObject } from "ai"
+import { NextRequest, NextResponse } from "next/server"
 
-import { safeParseJSON } from "@/lib/utils"
-import {
-  AppExplanResponseFromStream,
-  ExplanationResponse,
-  RequestWithSessionIdAndMessage
-} from "@/types"
-
-const url =
-  "https://k3zmjklygabeo4gqvmuiofrgui0awqks.lambda-url.us-west-2.on.aws/"
+import { registry } from "@/lib/model/registry"
+import { explainationSchema } from "@/types"
 
 export const maxDuration = 60
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   try {
-    const { prompt }: { prompt: string } = await request.json();
+    const prompt = await request.json()
 
-    const anthropicModel = anthropic('claude-3-sonnet-20240229')
+    // const model = registry.languageModel("google:models/gemini-1.5-flash-latest")
+    const model = registry.languageModel("anthropic:claude-3-sonnet-20240229")
 
-    const result = await streamText({
-      model: google("models/gemini-1.5-flash"),
-      system: "You are a helpful assistant.",
+    const result = await streamObject({
+      model: model,
+      system: `You are aws expert who is helping user to understand the system architect that is given in the Python Diagrams library format\n
+      Please describe components and services to use in the provided architecture
+      `,
+      schema: explainationSchema,
       prompt
     })
 
-    return result.toDataStreamResponse()
+    return result.toTextStreamResponse()
   } catch (e: any) {
     console.error(e)
     return NextResponse.json({ error: e.message }, { status: e.status ?? 500 })

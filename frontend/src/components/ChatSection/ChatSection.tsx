@@ -1,6 +1,6 @@
 "use client"
 
-import { useCompletion, experimental_useObject as useObject } from "ai/react"
+import { experimental_useObject as useObject } from "ai/react"
 
 import { generateTerraformCode } from "@/app/actions"
 import { Button } from "@/components/ui/button"
@@ -15,7 +15,7 @@ import {
   useHistoryStore,
   useTerraformStore
 } from "@/stores"
-import { AppResponse, Cost, ExplanationResponse, diagramSchema } from "@/types"
+import { diagramSchema, explainationSchema } from "@/types"
 import { CornerDownLeft, Loader2 } from "lucide-react"
 import { useEffect } from "react"
 import { v4 } from "uuid"
@@ -33,10 +33,9 @@ const ChatSection = () => {
     setCostResult,
     setIsCostLoading,
     isDiagramGenerating: isExplainCodeImageLoading,
-    setExplainResult,
     setIsExplanationGenerating,
     setImageResult,
-    setIsDiagramGenerating,
+    setIsDiagramGenerating
   } = useAppStore((state: AppSlice) => state)
 
   const {
@@ -47,7 +46,6 @@ const ChatSection = () => {
     currentHistory
   } = useHistoryStore((state: HistorySlice) => state)
 
-  const terraformResult = useTerraformStore(state => state.result)
   const setLogs = useTerraformStore(state => state.setLogs)
   const setTerraformLoading = useTerraformStore(state => state.setIsLoading)
   const setTerraformResult = useTerraformStore(state => state.setCode)
@@ -57,10 +55,12 @@ const ChatSection = () => {
     setSessionID(v4())
   }, [setSessionID])
 
-  const { completion, complete } = useCompletion({
+  const { object: explainationObject, submit: submitExplanation } = useObject({
     api: "/api/explanation",
-    onResponse: response => {
-      console.log("response", response)
+    schema: explainationSchema,
+    onFinish: ({ object }) => {
+      console.log("explaination", object?.explaination)
+      setIsExplanationGenerating(false)
     }
   })
 
@@ -70,13 +70,19 @@ const ChatSection = () => {
     onFinish: ({ object }) => {
       console.log("diagram", object?.diagram)
       setIsDiagramGenerating(false)
+      submitExplanation(object?.diagram)
     }
   })
 
   useEffect(() => {
     if (!currentHistory) return
+    currentHistory.explainResult = explainationObject?.explaination
+    updateHistory({ ...currentHistory })
+  }, [explainationObject?.explaination, currentHistory, updateHistory])
+
+  useEffect(() => {
+    if (!currentHistory) return
     currentHistory.codeResult = object?.diagram
-    console.log("currentHistory", currentHistory.codeResult)
     updateHistory({ ...currentHistory })
   }, [object?.diagram, currentHistory, updateHistory])
 
@@ -117,17 +123,6 @@ const ChatSection = () => {
       setHistory(newHistories)
       setCurrentHistory(newHitory)
 
-      // TODO: Fetch explanation
-
-      // const { explain } = await fetchExplanation({
-      //   currentSessionId: sessionID!
-      // })
-
-      // updateHistory({
-      //   ...newHitory,
-      //   explainResult: explain
-      // })
-
       // const [{ costResult }, { terraformResult }] = await Promise.all([
       //   fetchCost(explain),
       //   fetchTerraform(explain)
@@ -146,105 +141,6 @@ const ChatSection = () => {
         description: (e as Error).message,
         variant: "destructive"
       })
-    }
-  }
-
-  const fetchExplanation = async ({
-    currentSessionId
-  }: {
-    currentSessionId: string
-  }): Promise<ExplanationResponse> => {
-    setIsExplanationGenerating(true)
-    try {
-      const url = `/api/explanation`
-      const method = "POST"
-
-      const res = await fetch(url, {
-        method,
-        headers: {
-          Accept: "application/json"
-        },
-        body: JSON.stringify({
-          session_id: currentSessionId,
-          message: prompt
-        })
-      })
-
-      const resJSON: ExplanationResponse = await res.json()
-
-      setExplainResult(resJSON.explain)
-      return resJSON
-    } catch (error) {
-      throw error
-    } finally {
-      setIsExplanationGenerating(false)
-    }
-  }
-
-  const fetchAppData = async ({
-    prompt,
-    currentSessionId
-  }: {
-    prompt: string
-    currentSessionId: string
-  }): Promise<AppResponse> => {
-    try {
-      setIsDiagramGenerating(true)
-
-      const url = `/api/appData`
-      const method = "POST"
-
-      const res = await fetch(url, {
-        method,
-        headers: {
-          Accept: "application/json"
-        },
-        body: JSON.stringify({
-          session_id: currentSessionId,
-          message: prompt
-        })
-      })
-
-      const resJSON: AppResponse = await res.json()
-
-      const { codeBlock, imageURL } = resJSON
-
-      // setCodeResult(codeBlock)
-      setImageResult(imageURL)
-
-      return resJSON
-    } catch (error) {
-      throw error
-    } finally {
-      setIsDiagramGenerating(false)
-    }
-  }
-
-  const fetchCost = async (prompt: string): Promise<{ costResult: Cost }> => {
-    try {
-      setIsCostLoading(true)
-
-      const url = `/api/cost`
-      const method = "POST"
-
-      const res = await fetch(url, {
-        method,
-        headers: {
-          Accept: "application/json"
-        },
-        body: JSON.stringify({
-          message: prompt
-        })
-      })
-
-      const resJSON: Cost = await res.json()
-
-      setCostResult(resJSON)
-      return { costResult: resJSON }
-    } catch (error) {
-      throw error
-    } finally {
-      setIsCostLoading(false)
     }
   }
 

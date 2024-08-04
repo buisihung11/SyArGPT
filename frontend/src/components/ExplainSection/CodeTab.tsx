@@ -16,7 +16,6 @@ const CodeTab: FC<CodeTabType> = ({ editorText, isGenerating }) => {
 
   useEffect(() => {
     editorRef.current?.setValue(editorText)
-    console.log("editorText", editorText)
   }, [editorText])
 
   if (isGenerating && !editorText) {

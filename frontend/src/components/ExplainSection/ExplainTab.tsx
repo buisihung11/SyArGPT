@@ -12,7 +12,7 @@ type ExplainTabType = {
 }
 
 const ExplainTab: FC<ExplainTabType> = ({ markdown, isExplainTabLoading }) => {
-  if (isExplainTabLoading) {
+  if (isExplainTabLoading && !markdown) {
     return (
       <div className="flex h-[50vh] items-center justify-center">
         <div className="flex flex-col items-center gap-4">

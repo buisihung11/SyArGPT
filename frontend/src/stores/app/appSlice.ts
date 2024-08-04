@@ -6,7 +6,6 @@ export type ExplainCodeImageSlice = {
   isDiagramGenerating: boolean
   isExplanationGenerating: boolean
 
-  setExplainResult: (explainResult?: string) => void
   setImageResult: (imageResult?: string | null) => void
   setIsDiagramGenerating: (isExplainCodeImageLoading: boolean) => void
   setIsExplanationGenerating: (isExplanationGenerating: boolean) => void
@@ -27,9 +26,6 @@ export const createExplainCodeImageSlice: StateCreator<
   ExplainCodeImageSlice
 > = (set, get) => ({
   ...initialState,
-  setExplainResult: (explainResult?: string) => {
-    set(state => ({ explainResult }))
-  },
   setImageResult: (imageResult?: string | null) => {
     set(state => ({ imageResult }))
   },

@@ -24,11 +24,10 @@ const ExplainSection: FC = () => {
     isExplanationGenerating,
     isCostLoading,
     costResult,
-    explainResult
   } = useAppStore((state: AppSlice) => state)
 
   const { currentHistory } = useHistoryStore((state: HistorySlice) => state)
-  const { codeResult } = currentHistory || {}
+  const { codeResult, explainResult } = currentHistory || {}
 
   const { isLoading: isTerraformLoading } = useTerraformStore(
     (state: TerraformSlice) => state
