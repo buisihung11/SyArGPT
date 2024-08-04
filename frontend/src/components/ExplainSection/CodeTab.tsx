@@ -1,18 +1,25 @@
+import { Skeleton } from "@/components/ui/skeleton"
 import Editor from "@monaco-editor/react"
 import { useTheme } from "next-themes"
-import { FC } from "react"
-import { Skeleton } from "../ui/skeleton"
+import { FC, useEffect, useRef } from "react"
 
 type CodeTabType = {
   editorText?: string
-  isCodeTabLoading: boolean
+  isGenerating?: boolean
 }
 
-const CodeTab: FC<CodeTabType> = ({ editorText, isCodeTabLoading }) => {
+const CodeTab: FC<CodeTabType> = ({ editorText, isGenerating }) => {
   const { theme } = useTheme()
   const editorTheme = theme === "light" ? "light" : "vs-dark"
+  const editorRef = useRef<any>(null)
 
-  if (isCodeTabLoading) {
+
+  useEffect(() => {
+    editorRef.current?.setValue(editorText)
+    console.log("editorText", editorText)
+  }, [editorText])
+
+  if (isGenerating && !editorText) {
     return (
       <div className="flex h-[50vh] items-center justify-center">
         <div className="flex flex-col items-center gap-4">
@@ -31,6 +38,10 @@ const CodeTab: FC<CodeTabType> = ({ editorText, isCodeTabLoading }) => {
     )
   }
 
+  const handleEditorDidMount = (editor: any, monaco: any) => {
+    editorRef.current = editor
+  }
+
   if (!editorText) {
     return <h1>No code found</h1>
   }
@@ -41,6 +52,7 @@ const CodeTab: FC<CodeTabType> = ({ editorText, isCodeTabLoading }) => {
       defaultLanguage="python"
       defaultValue={editorText}
       theme={editorTheme}
+      onMount={handleEditorDidMount}
     />
   )
 }

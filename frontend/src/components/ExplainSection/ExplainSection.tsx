@@ -20,7 +20,7 @@ import TerraformTab from "./TerraformTab"
 
 const ExplainSection: FC = () => {
   const {
-    isDiagramGenerating: isExplainCodeImageLoading,
+    isDiagramGenerating,
     isExplanationGenerating,
     isCostLoading,
     costResult,
@@ -34,12 +34,6 @@ const ExplainSection: FC = () => {
     (state: TerraformSlice) => state
   )
 
-  console.log(
-    "isExplainCodeImageLoading",
-    isExplainCodeImageLoading,
-    currentHistory?.codeResult
-  )
-
   return (
     <Tabs
       defaultValue="diagram"
@@ -48,13 +42,13 @@ const ExplainSection: FC = () => {
       <TabsList className="grid w-full grid-cols-4">
         <TabsTrigger value="diagram">
           <ExplainSectionTabItem
-            isLoading={isExplainCodeImageLoading}
+            isLoading={isDiagramGenerating}
             content="Diagrams"
           />
         </TabsTrigger>
         <TabsTrigger value="explain">
           <ExplainSectionTabItem
-            isLoading={isExplainCodeImageLoading || isExplanationGenerating}
+            isLoading={isDiagramGenerating || isExplanationGenerating}
             content="Explanation"
           />
         </TabsTrigger>
@@ -70,17 +64,13 @@ const ExplainSection: FC = () => {
       </TabsList>
 
       <CustomTabsContent value="diagram">
-        <CodeTab
-          editorText={codeResult}
-        />
+        <CodeTab editorText={codeResult} isGenerating={isDiagramGenerating} />
       </CustomTabsContent>
 
       <CustomTabsContent value="explain">
         <ExplainTab
           markdown={explainResult}
-          isExplainTabLoading={
-            isExplainCodeImageLoading || isExplanationGenerating
-          }
+          isExplainTabLoading={isDiagramGenerating || isExplanationGenerating}
         />
       </CustomTabsContent>
 
