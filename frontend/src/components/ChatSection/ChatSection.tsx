@@ -1,5 +1,7 @@
 "use client"
 
+import { useCompletion, experimental_useObject as useObject } from "ai/react"
+
 import { generateTerraformCode } from "@/app/actions"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
@@ -13,7 +15,7 @@ import {
   useHistoryStore,
   useTerraformStore
 } from "@/stores"
-import { AppResponse, Cost, ExplanationResponse } from "@/types"
+import { AppResponse, Cost, ExplanationResponse, diagramSchema } from "@/types"
 import { CornerDownLeft, Loader2 } from "lucide-react"
 import { useEffect } from "react"
 import { v4 } from "uuid"
@@ -33,14 +35,17 @@ const ChatSection = () => {
     isDiagramGenerating: isExplainCodeImageLoading,
     setExplainResult,
     setIsExplanationGenerating,
-    setCodeResult,
     setImageResult,
-    setIsExplainCodeImageLoading
+    setIsDiagramGenerating,
   } = useAppStore((state: AppSlice) => state)
 
-  const { history, setHistory, updateHistory } = useHistoryStore(
-    (state: HistorySlice) => state
-  )
+  const {
+    histories: history,
+    setHistories: setHistory,
+    updateHistory,
+    setCurrentHistory,
+    currentHistory
+  } = useHistoryStore((state: HistorySlice) => state)
 
   const terraformResult = useTerraformStore(state => state.result)
   const setLogs = useTerraformStore(state => state.setLogs)
@@ -51,6 +56,29 @@ const ChatSection = () => {
   useEffect(() => {
     setSessionID(v4())
   }, [setSessionID])
+
+  const { completion, complete } = useCompletion({
+    api: "/api/explanation",
+    onResponse: response => {
+      console.log("response", response)
+    }
+  })
+
+  const { object, submit } = useObject({
+    api: "/api/architecture",
+    schema: diagramSchema,
+    onFinish: ({ object }) => {
+      console.log("diagram", object?.diagram)
+      setIsDiagramGenerating(false)
+    }
+  })
+
+  useEffect(() => {
+    if (!currentHistory) return
+    currentHistory.codeResult = object?.diagram
+    console.log("currentHistory", currentHistory.codeResult)
+    updateHistory({ ...currentHistory })
+  }, [object?.diagram, currentHistory, updateHistory])
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     try {
@@ -67,50 +95,51 @@ const ChatSection = () => {
 
       cleanLogs()
       setTerraformLoading(true)
+      setIsDiagramGenerating(true)
       setIsExplanationGenerating(true)
-      setCostResult(null)
       setIsCostLoading(true)
 
-      const { codeBlock: codeResult, imageURL: imageResult } =
-        await fetchAppData({
-          prompt,
-          currentSessionId: sessionID!
-        })
+      setCostResult(null)
+
+      submit(input)
 
       const newHitory: History = {
         id: v4(),
         prompt,
-        imageResult,
+        imageResult: null,
         explainResult: undefined,
-        codeResult,
+        codeResult: undefined,
         costResult: null,
         terraformResult: null
       }
 
       const newHistories: History[] = [...history, newHitory]
       setHistory(newHistories)
+      setCurrentHistory(newHitory)
 
-      const { explain } = await fetchExplanation({
-        currentSessionId: sessionID!
-      })
+      // TODO: Fetch explanation
 
-      updateHistory({
-        ...newHitory,
-        explainResult: explain
-      })
+      // const { explain } = await fetchExplanation({
+      //   currentSessionId: sessionID!
+      // })
 
-      const [{ costResult }, { terraformResult }] = await Promise.all([
-        fetchCost(explain),
-        fetchTerraform(explain)
-      ])
+      // updateHistory({
+      //   ...newHitory,
+      //   explainResult: explain
+      // })
 
-      const updatedHistory: History = {
-        ...newHitory,
-        costResult,
-        terraformResult
-      }
+      // const [{ costResult }, { terraformResult }] = await Promise.all([
+      //   fetchCost(explain),
+      //   fetchTerraform(explain)
+      // ])
 
-      updateHistory(updatedHistory)
+      // const updatedHistory: History = {
+      //   ...newHitory,
+      //   costResult,
+      //   terraformResult
+      // }
+
+      // updateHistory(updatedHistory)
     } catch (e) {
       toast({
         title: "error",
@@ -160,7 +189,7 @@ const ChatSection = () => {
     currentSessionId: string
   }): Promise<AppResponse> => {
     try {
-      setIsExplainCodeImageLoading(true)
+      setIsDiagramGenerating(true)
 
       const url = `/api/appData`
       const method = "POST"
@@ -180,14 +209,14 @@ const ChatSection = () => {
 
       const { codeBlock, imageURL } = resJSON
 
-      setCodeResult(codeBlock)
+      // setCodeResult(codeBlock)
       setImageResult(imageURL)
 
       return resJSON
     } catch (error) {
       throw error
     } finally {
-      setIsExplainCodeImageLoading(false)
+      setIsDiagramGenerating(false)
     }
   }
 
@@ -261,12 +290,12 @@ const ChatSection = () => {
 
   return (
     <div
-      className="rounded-lg bg-background h-full"
+      className="h-full rounded-lg bg-background"
       x-chunk="dashboard-03-chunk-1"
     >
-      <form className="flex flex-col h-full gap-4 " onSubmit={handleSubmit}>
-        <div className="p-4 flex-1">
-          <h4 className="scroll-m-20 text-sm font-semibold tracking-tight mb-2">
+      <form className="flex h-full flex-col gap-4" onSubmit={handleSubmit}>
+        <div className="flex-1 p-4">
+          <h4 className="mb-2 scroll-m-20 text-sm font-semibold tracking-tight">
             Describe your prompt
           </h4>
           <Label htmlFor="message" className="sr-only">
@@ -276,17 +305,17 @@ const ChatSection = () => {
             value={prompt}
             id="message"
             placeholder="Type your requirements here..."
-            className="resize-none h-full border p-3 focus-visible:ring-0 shadow-none flex-1"
+            className="h-full flex-1 resize-none border p-3 shadow-none focus-visible:ring-0"
             onChange={e => onInputPrompt(e.target.value)}
           />
         </div>
 
-        <div className="p-4 w-full">
+        <div className="w-full p-4">
           <Button
             disabled={isExplainCodeImageLoading}
             type="submit"
             size="sm"
-            className="ml-auto gap-1.5 w-full cursor-pointer"
+            className="ml-auto w-full cursor-pointer gap-1.5"
           >
             Send Message
             {isExplainCodeImageLoading ? (
